@@ -1,28 +1,28 @@
 import Foundation
 
-public struct Optic<Optics: LensOptic>: LensOptic {
-	public typealias Whole = Optics.Whole
-	public typealias NewWhole = Optics.NewWhole
-	public typealias Part = Optics.Part
-	public typealias NewPart = Optics.NewPart
-	
-	public let optics: Optics
-	
-	@inlinable
-	public init(
-		@LensBuilder with build: () -> Optics
-	) {
-		self.optics = build()
-	}
-	
-	public func get(_ whole: Whole) -> Part {
-		optics.get(whole)
-	}
-	
-	public func update(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
-		optics.update(whole, f)
-	}
-}
+//public struct Optic<Optics: LensOptic>: LensOptic {
+//	public typealias Whole = Optics.Whole
+//	public typealias NewWhole = Optics.NewWhole
+//	public typealias Part = Optics.Part
+//	public typealias NewPart = Optics.NewPart
+//	
+//	public let optics: Optics
+//	
+//	@inlinable
+//	public init(
+//		@LensBuilder with build: () -> Optics
+//	) {
+//		self.optics = build()
+//	}
+//	
+//	public func get(_ whole: Whole) -> Part {
+//		optics.get(whole)
+//	}
+//	
+//	public func update(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
+//		optics.update(whole, f)
+//	}
+//}
 
 
 public struct LensCombination<LHS: LensOptic, RHS: LensOptic>: LensOptic
