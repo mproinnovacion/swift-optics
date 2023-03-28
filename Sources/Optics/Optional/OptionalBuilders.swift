@@ -2,7 +2,7 @@ import Foundation
 
 @resultBuilder
 public enum OptionalBuilder {
-	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> OptionalLiftOptic<O> {
+	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> OptionalLiftLensOptic<O> {
 		.init(optic: optic)
 	}
 	
@@ -14,8 +14,8 @@ public enum OptionalBuilder {
 		optic
 	}
 	
-	public static func buildPartialBlock<O0: OptionalOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, OptionalLiftOptic<O1>> {
-		CombineOptionals(lhs: o0, rhs: OptionalLiftOptic(optic: o1))
+	public static func buildPartialBlock<O0: OptionalOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, OptionalLiftLensOptic<O1>> {
+		CombineOptionals(lhs: o0, rhs: OptionalLiftLensOptic(optic: o1))
 	}
 	
 	public static func buildPartialBlock<O0: OptionalOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, OptionalLiftPrismOptic<O1>> {
@@ -27,7 +27,7 @@ public enum OptionalBuilder {
 	}
 }
 
-public struct OptionalLiftOptic<O: LensOptic>: OptionalOptic {
+public struct OptionalLiftLensOptic<O: LensOptic>: OptionalOptic {
 	let lens: O
 	
 	public typealias Whole = O.Whole
