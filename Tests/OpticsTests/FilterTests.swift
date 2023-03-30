@@ -4,7 +4,7 @@ import XCTest
 
 class FilterTests: XCTestCase {
 	func testFilter() {
-		let odd = Map {
+		let odd = MapArray {
 			Filter {
 				$0.0 % 2 == 0
 			} with: {
@@ -14,9 +14,9 @@ class FilterTests: XCTestCase {
 					}
 				}
 			}
-		} to: {
-			$0.1
-		} from: { original, updated in
+		} from: { (indexed: (Int, Person)) -> Person in
+			indexed.1
+		} to: { (original, updated) -> (Int, Person) in
 			(original.0, updated)
 		}
  		

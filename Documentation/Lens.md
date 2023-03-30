@@ -2,7 +2,7 @@
 
 ## Protocol: LensOptic
 
-Protocol that represents a WritableKeyPath. A WritableKeyPath conforms to this protocol.
+Protocol that represents a value that has a property that can be read and modified. A WritableKeyPath conforms to this protocol.
 
 Functions:
 

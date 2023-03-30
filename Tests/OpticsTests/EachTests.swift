@@ -6,7 +6,6 @@ class EachTests: XCTestCase {
 	func testEach() {
 		let people = Lens {
 			\Company.employees
-//			\Company.freelance
 		}
 
 		var uppercased = company
@@ -35,6 +34,33 @@ class EachTests: XCTestCase {
 		XCTAssertEqual(
 			names.getAll(uppercased),
 			[ "Mike", "LOUIS", "JESSICA" ]
+		)
+	}
+	
+	func testEachOptional() {
+		struct Group {
+			var children: [String]?
+		}
+		
+		let optic = Optionally {
+			\Group.children
+			[String]?.optic()
+		}.each()
+		
+		var group = Group(
+			children: [ "one", "two", "three" ]
+		)
+		
+		XCTAssertEqual(
+			optic.getAll(group),
+			[ "one", "two", "three" ]
+		)
+		
+		optic.updateAll(&group, { $0 = $0.uppercased() })
+		
+		XCTAssertEqual(
+			optic.getAll(group),
+			[ "ONE", "TWO", "THREE" ]
 		)
 	}
 }
