@@ -2,7 +2,7 @@
 
 ## Protocol: LensOptic
 
-Protocol that represents a value that has a property that can be read and modified. A WritableKeyPath conforms to this protocol.
+Protocol that represents a property of a struct, such that it can be read and modified. A WritableKeyPath conforms to this protocol.
 
 Functions:
 
@@ -12,7 +12,7 @@ update(Whole, (Part) -> NewPart) -> NewWhole
 set(Whole, NewPart) -> NewWhole
 ```
 
-## Combinators.
+## Combinators
 
 ### Lens
 
