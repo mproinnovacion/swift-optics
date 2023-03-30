@@ -12,7 +12,7 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	
 	@inlinable
 	public init(
-		@OptionalBuilder with build: () -> O
+		@OptionalOpticBuilder with build: () -> O
 	) {
 		self.optic = build()
 	}

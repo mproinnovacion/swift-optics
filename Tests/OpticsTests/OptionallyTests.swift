@@ -40,4 +40,47 @@ class OptionallyTests: XCTestCase {
 			"John"
 		)
 	}
+	
+	func testMap() {
+		let advisor = Optionally {
+			\Company.advisor
+			Prism {
+				/Failable<Person>?.some
+				/Failable<Person>.valid
+			}
+		}
+			
+		let advisorNameShouted = Optionally {
+			advisor
+			\Person.name
+		}.map { string in
+			string + "!"
+		} to: { string in
+			string.replacingOccurrences(of: "!", with: "")
+		}
+
+		var updated = advisor.trySet(company, to: john)
+		
+		XCTAssertEqual(
+			advisorNameShouted.tryGet(updated),
+			"John!"
+		)
+		
+		updated = advisorNameShouted.trySet(updated, to: "Tony")
+		
+		XCTAssertEqual(
+			advisorNameShouted.tryGet(updated),
+			"Tony!"
+		)
+		
+		switch updated.advisor {
+			case let .valid(person):
+				XCTAssertEqual(
+					person.name,
+					"Tony"
+				)
+			default:
+				XCTFail("Invalid advisor")
+		}
+	}
 }

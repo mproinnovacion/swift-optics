@@ -10,7 +10,7 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 	
 	@inlinable
 	public init(
-		@OptionalBuilder with build: () -> Optics
+		@OptionalOpticBuilder with build: () -> Optics
 	) {
 		self.optics = build()
 	}

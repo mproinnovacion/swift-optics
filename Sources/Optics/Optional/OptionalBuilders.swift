@@ -1,7 +1,7 @@
 import Foundation
 
 @resultBuilder
-public enum OptionalBuilder {
+public enum OptionalOpticBuilder {
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> OptionalLiftLensOptic<O> {
 		.init(optic: optic)
 	}
