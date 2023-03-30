@@ -61,3 +61,20 @@ Lens {
 	\Company.employees
 }.each()
 ```
+
+### Concat
+
+Concats multiple ArrayOptics where all the types match into a single ArrayOptic. For example:
+
+```
+let people = Concat {
+	Each {
+		\Company.employees
+	}
+	Each {
+		\Company.freelance
+	}
+}
+```
+
+This will combine all the company employees and freelance into a single array.

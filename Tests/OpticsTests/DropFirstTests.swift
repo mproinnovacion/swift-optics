@@ -2,29 +2,29 @@ import Foundation
 import XCTest
 import Optics
 
-class DroppingFirstTests: XCTestCase {
-	func testDroppingFirst() {
+class DropFirstTests: XCTestCase {
+	func testDropFirst() {
 		let people = Lens {
 				\Company.employees
 		}
 		
 		XCTAssertEqual(
 			people
-				.droppingFirst(1)
+				.dropFirst(1)
 				.get(company),
 			[ louis, jessica ]
 		)
 		
 		XCTAssertEqual(
 			people
-				.droppingFirst(2)
+				.dropFirst(2)
 				.get(company),
 			[ jessica ]
 		)
 		
 		XCTAssertEqual(
 			people
-				.droppingFirst(20)
+				.dropFirst(20)
 				.get(company),
 			[ ]
 		)
@@ -32,7 +32,7 @@ class DroppingFirstTests: XCTestCase {
 		var updated = company
 		
 		people
-			.droppingFirst()
+			.dropFirst()
 			.set(&updated, to: [ john ])
 		
 		XCTAssertEqual(

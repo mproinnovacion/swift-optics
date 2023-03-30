@@ -12,7 +12,7 @@ class EachTests: XCTestCase {
 		
 		let namesExceptFirst = Each {
 			Lens {
-				people.droppingFirst(1)
+				people.dropFirst(1)
 				\Person.name
 			}
 		}
