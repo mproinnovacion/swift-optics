@@ -1,6 +1,7 @@
 import Foundation
-import Optics
 import XCTest
+
+import Optics
 
 class EnumeratedTests: XCTestCase {
 	func testEnumerated() {

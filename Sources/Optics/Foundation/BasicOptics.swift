@@ -2,19 +2,19 @@ import Foundation
 import CasePaths
 
 extension Array {
-	public static func optic<NewElement>() -> ArrayDefaultOptic<Element, NewElement> {
+	public static func optic() -> ArrayDefaultOptic<Element, Element> {
 		.init()
 	}
 }
 
 extension Set {
-	public static func optic<NewElement>() -> SetDefaultOptic<Element, NewElement> {
+	public static func optic() -> SetDefaultOptic<Element, Element> {
 		.init()
 	}
 }
 
 extension Dictionary {
-	public static func valuesOptic<NewValue>() -> DictionaryValuesOptic<Key, Value, NewValue> {
+	public static func valuesOptic() -> DictionaryValuesOptic<Key, Value, Value> {
 		.init()
 	}
 }

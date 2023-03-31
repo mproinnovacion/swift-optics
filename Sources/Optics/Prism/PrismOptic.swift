@@ -47,21 +47,31 @@ extension PrismOptic where Body: PrismOptic, Body.Whole == Whole, Body.Part == P
 
 extension PrismOptic {
 	@inlinable
-	func tryUpdate(
+	public func tryUpdate(
 		_ whole: inout Whole,
 		_ f: @escaping (inout Part) -> Void
 	) {
-		guard var part = extract(from: whole) else {
-			return
-		}
-		
-		f(&part)
-		
-		whole = embed(part)
+		whole = tryUpdate(whole, { part in
+			var copy = part
+			f(&copy)
+			return copy
+		})
 	}
 	
 	@inlinable
-	func trySet(
+	public func tryUpdate(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> Part
+	) -> Whole {
+		guard let part = extract(from: whole) else {
+			return whole
+		}
+		
+		return embed(f(part))
+	}
+	
+	@inlinable
+	public func trySet(
 		_ whole: inout Whole,
 		to newValue: Part
 	) {
