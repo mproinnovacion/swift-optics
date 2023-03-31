@@ -27,3 +27,27 @@ let optic = Optionally {
 	}
 }
 ```
+
+### First
+
+Produces an OptionalOptic from a LensOptic of an Array by selecting the first element.
+
+```
+let firstEmployee = First {
+	Lens {
+		\Company.employees
+	}
+}
+```
+
+### Last
+
+Produces an OptionalOptic from a LensOptic of an Array by selecting the last element.
+
+```
+let lastEmployee = Last {
+	Lens {
+		\Company.employees
+	}
+}
+```
