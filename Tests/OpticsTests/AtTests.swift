@@ -6,7 +6,6 @@ class AtTests: XCTestCase {
 	func testAt() {
 		let people = Lens {
 			\Company.employees
-//			\Company.freelance
 		}
 		
 		let person = At(2) {

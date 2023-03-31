@@ -6,7 +6,6 @@ class FirstTests: XCTestCase {
 	func testFirst() {
 		let people = Lens {
 			\Company.employees
-//			\Company.freelance
 		}
 		
 		let first = First {

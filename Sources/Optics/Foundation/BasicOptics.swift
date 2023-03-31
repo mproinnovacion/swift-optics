@@ -7,6 +7,12 @@ extension Array {
 	}
 }
 
+extension Set {
+	public static func optic<NewElement>() -> SetDefaultOptic<Element, NewElement> {
+		.init()
+	}
+}
+
 extension Dictionary {
 	public static func valuesOptic<NewValue>() -> DictionaryValuesOptic<Key, Value, NewValue> {
 		.init()

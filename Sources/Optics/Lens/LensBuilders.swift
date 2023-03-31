@@ -23,62 +23,54 @@ extension LensOptic {
 	}
 }
 
-public struct Lens<L: LensOptic>: LensOptic {
-	public typealias Whole = L.Whole
-	public typealias NewWhole = L.NewWhole
-	public typealias Part = L.Part
-	public typealias NewPart = L.NewPart
+public struct LensCombination<LHS: LensOptic, RHS: LensOptic>: LensOptic
+where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
+	let lhs: LHS
+	let rhs: RHS
 	
-	public let lens: L
+	public typealias Whole = LHS.Whole
+	public typealias NewWhole = LHS.NewWhole
+	public typealias Part = RHS.Part
+	public typealias NewPart = RHS.NewPart
 	
-	@inlinable
-	public init(
-		@LensBuilder with build: () -> L
-	) {
-		self.lens = build()
+	public func get(_ whole: LHS.Whole) -> RHS.Part {
+		rhs.get(lhs.get(whole))
 	}
 	
-	public func get(_ whole: L.Whole) -> L.Part {
-		lens.get(whole)
-	}
-	
-	public func update(_ whole: L.Whole, _ f: @escaping (L.Part) -> L.NewPart) -> L.NewWhole {
-		lens.update(whole, f)
+	public func update(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.update(whole) { lhsPart in
+			rhs.update(lhsPart, f)
+		}
 	}
 }
 
-//public struct ConcatLenses<LHS: Lens, RHS: Lens>: Lens
-//where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
-//	let lhs: LHS
-//	let rhs: RHS
-//	
-//	public typealias Whole = LHS.Whole
-//	public typealias Part = LHS.Part
-//	
-//	public func get(_ whole: Whole) -> Part {
-//		lhs.get(whole) + rhs.get(whole)
-//	}
-//	
-//	public func update(
-//		_ whole: inout Whole,
-//		_ f: @escaping (inout Part) -> Void
-//	) -> Void {
-////		let numLeft = lhs.get(whole).count
-//		
-//		lhs.update(&whole, f)
-//		rhs.update(&whole, f)
-//	}
-//}
-
-
-//@resultBuilder
-//public enum ConcatLensesBuilder {
-//	public static func buildPartialBlock<O: Lens>(first optic: O) -> O {
-//		optic
-//	}
-//	
-//	public static func buildPartialBlock<O0: Lens, O1: Lens, Element>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, O1, Element> {
-//		ConcatLenses(lhs: o0, rhs: o1)
-//	}
-//}
-
+public struct LensEachCombinator<LHS: LensOptic, RHS: LensOptic>: LensOptic
+where LHS.Part == [RHS.Whole], LHS.NewPart == [RHS.NewWhole] {
+	let lhs: LHS
+	let rhs: RHS
+	
+	public typealias Whole = LHS.Whole
+	public typealias NewWhole = LHS.NewWhole
+	public typealias Part = [RHS.Part]
+	public typealias NewPart = [RHS.NewPart]
+	
+	public func get(_ whole: LHS.Whole) -> [RHS.Part] {
+		lhs.get(whole).map(rhs.get)
+	}
+	
+	public func update(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.update(whole) { rhsWholes in
+			let rhsParts: [RHS.NewPart] = f(rhsWholes.map(rhs.get))
+			
+			return zip(rhsWholes, rhsParts).map { whole, newPart in
+				rhs.update(whole, { _ in newPart })
+			}
+		}
+	}
+}

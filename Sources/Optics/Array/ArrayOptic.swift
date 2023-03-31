@@ -64,19 +64,6 @@ extension ArrayOptic where NewPart == Part, NewWhole == Whole {
 	}
 }
 
-//extension ArrayOptic {
-//	func map<Whole0, NewWhole0>(
-//		to: @escaping (Whole0) -> Whole,
-//		from: (NewWhole) -> NewWhole0
-//	) -> some ArrayOptic<Whole0, Part, NewWhole0, NewPart> {
-//		Map(
-//			{ self },
-//			from: from,
-//			to: to
-//		)
-//	}
-//}
-
 public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	public typealias Whole = Array<Element>
 	public typealias NewWhole = Array<NewElement>
@@ -92,6 +79,24 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		whole.map(f)
+	}
+}
+
+public struct SetDefaultOptic<Element: Hashable, NewElement: Hashable>: ArrayOptic {
+	public typealias Whole = Set<Element>
+	public typealias NewWhole = Set<NewElement>
+	public typealias Part = Element
+	public typealias NewPart = NewElement
+
+	public func getAll(_ whole: Whole) -> [Part] {
+		Array(whole)
+	}
+
+	public func updateAll(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		Set(whole.map(f))
 	}
 }
 

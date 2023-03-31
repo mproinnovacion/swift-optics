@@ -68,6 +68,15 @@ extension LensOptic {
 	}
 }
 
+extension LensOptic {
+	public func each<Element, NewElement>() -> Each<Self, Element, NewElement>
+	where Part == [Element], NewPart == [NewElement] {
+		Each {
+			self
+		}
+	}
+}
+
 extension KeyPath: Getter {
 	public func get(_ whole: Root) -> Value {
 		whole[keyPath: self]
@@ -87,3 +96,4 @@ extension WritableKeyPath: LensOptic {
 		return result
 	}
 }
+

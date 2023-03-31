@@ -10,7 +10,7 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 	
 	@inlinable
 	public init(
-		@OptionalBuilder with build: () -> Optics
+		@OptionalOpticBuilder with build: () -> Optics
 	) {
 		self.optics = build()
 	}
@@ -28,5 +28,14 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 	
 	public func trySet(_ whole: Whole, to newValue: NewPart) -> NewWhole {
 		optics.trySet(whole, to: newValue)
+	}
+}
+
+extension OptionalOptic {
+	public func each<Element, NewElement>() -> EachOptional<Self, Element, NewElement>
+	where Part == [Element], NewPart == [NewElement] {
+		EachOptional {
+			self
+		}
 	}
 }
