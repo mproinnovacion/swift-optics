@@ -32,10 +32,12 @@ extension PrismOptic where Body == Never {
 }
 
 extension PrismOptic where Body: PrismOptic, Body.Whole == Whole, Body.Part == Part {
+	@inlinable
 	public func extract(from whole: Whole) -> Part? {
 		self.body.extract(from: whole)
 	}
 	
+	@inlinable
 	public func embed(
 		_ part: Part
 	) -> Whole {
@@ -44,6 +46,7 @@ extension PrismOptic where Body: PrismOptic, Body.Whole == Whole, Body.Part == P
 }
 
 extension PrismOptic {
+	@inlinable
 	func tryUpdate(
 		_ whole: inout Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -57,6 +60,7 @@ extension PrismOptic {
 		whole = embed(part)
 	}
 	
+	@inlinable
 	func trySet(
 		_ whole: inout Whole,
 		to newValue: Part
@@ -73,10 +77,12 @@ public struct PrismOptionalOptic<Wrapped>: PrismOptic {
 	public typealias Whole = Optional<Wrapped>
 	public typealias Part = Wrapped
 
+	@inlinable
 	public func embed(_ part: Wrapped) -> Optional<Wrapped> {
 		.some(part)
 	}
 	
+	@inlinable
 	public func extract(from whole: Optional<Wrapped>) -> Wrapped? {
 		whole
 	}

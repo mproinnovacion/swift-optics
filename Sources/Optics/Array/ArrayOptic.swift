@@ -100,10 +100,12 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	public typealias Part = Element
 	public typealias NewPart = NewElement
 
+	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {
 		whole
 	}
 
+	@inlinable
 	public func updateAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
@@ -138,10 +140,12 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 	public typealias Part = Value
 	public typealias NewPart = NewValue
 
+	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {
 		Array(whole.values)
 	}
 
+	@inlinable
 	public func updateAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart

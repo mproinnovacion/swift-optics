@@ -20,6 +20,7 @@ public protocol Setter {
 }
 
 extension Setter {
+	@inlinable
 	public func update(
 		_ whole: inout Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -59,10 +60,11 @@ extension LensOptic where Body == Never {
 
 extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
 	
+	@inlinable
 	public func get(_ whole: Whole) -> Part {
 		self.body.get(whole)
 	}
-	
+	@inlinable
 	public func update(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
@@ -74,6 +76,7 @@ extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Par
 public typealias SimpleLensOptic<Whole, Part> = LensOptic<Whole, Part, Whole, Part>
 
 extension LensOptic {
+	@inlinable
 	public func `set`(
 		_ whole: inout Whole,
 		to newValue: NewPart
@@ -83,6 +86,7 @@ extension LensOptic {
 		}
 	}
 	
+	@inlinable
 	public func setting(
 		_ whole: Whole,
 		to newValue: Part
@@ -93,6 +97,7 @@ extension LensOptic {
 		return copy
 	}
 	
+	@inlinable
 	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -105,6 +110,7 @@ extension LensOptic {
 }
 
 extension LensOptic {
+	@inlinable
 	public func each<Element, NewElement>() -> Each<Self, Element, NewElement>
 	where Part == [Element], NewPart == [NewElement] {
 		Each {
@@ -114,6 +120,7 @@ extension LensOptic {
 }
 
 extension KeyPath: Getter {
+	@inlinable
 	public func get(_ whole: Root) -> Value {
 		whole[keyPath: self]
 	}
@@ -123,6 +130,7 @@ extension WritableKeyPath: LensOptic {
 	public typealias NewWhole = Root
 	public typealias NewPart = Value
 	
+	@inlinable
 	public func update(
 		_ whole: Root,
 		_ f: @escaping (Value) -> Value

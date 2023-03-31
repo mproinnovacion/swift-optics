@@ -85,6 +85,7 @@ extension Date {
 		}
 	}
 	
+	@inlinable
 	public static func minuteOptic(
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
