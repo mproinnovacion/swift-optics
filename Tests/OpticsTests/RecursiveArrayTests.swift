@@ -5,20 +5,20 @@ import CasePaths
 
 import Optics
 
-enum Item {
+fileprivate enum Item {
 	case group(Group)
 	case leaf(String)
 }
 
-struct Group {
+fileprivate struct Group {
 	var items: [Item]
 }
 
-struct GroupLeafsOptic: ArrayOptic {
-	typealias Whole = Group
-	typealias Part = String
-	typealias NewWhole = Group
-	typealias NewPart = String
+fileprivate struct GroupLeafsOptic: ArrayOptic {
+	fileprivate typealias Whole = Group
+	fileprivate typealias Part = String
+	fileprivate typealias NewWhole = Group
+	fileprivate typealias NewPart = String
 	
 	var body: some SimpleArrayOptic<Group, String> {
 		Many {

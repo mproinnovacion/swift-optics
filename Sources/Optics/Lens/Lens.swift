@@ -33,7 +33,43 @@ extension Setter {
 	}
 }
 
-public protocol LensOptic<Whole, Part, NewWhole, NewPart>: Getter, Setter {}
+public protocol LensOptic<Whole, Part, NewWhole, NewPart>: Getter, Setter {
+	associatedtype _Body
+	
+	typealias Body = _Body
+
+	@LensBuilder
+	var body: Body { get }
+}
+
+extension LensOptic where Body == Never {
+	/// A non-existent body.
+	///
+	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
+	@_transparent
+	public var body: Body {
+		fatalError(
+  """
+  '\(Self.self)' has no body. …
+  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  """
+		)
+	}
+}
+
+extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+	
+	public func get(_ whole: Whole) -> Part {
+		self.body.get(whole)
+	}
+	
+	public func update(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.update(whole, f)
+	}
+}
 
 public typealias SimpleLensOptic<Whole, Part> = LensOptic<Whole, Part, Whole, Part>
 

@@ -5,12 +5,58 @@ public protocol OptionalOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype NewWhole
 	associatedtype Part
 	associatedtype NewPart
+	
+	associatedtype _Body
+	
+	typealias Body = _Body
 		
 	func tryGet(_ whole: Whole) -> Part?
 	
 	func tryUpdate(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole
 	
 	func trySet(_ whole: Whole, to: NewPart) -> NewWhole
+	
+	
+	@OptionalOpticBuilder
+	var body: Body { get }
+}
+
+extension OptionalOptic where Body == Never {
+	/// A non-existent body.
+	///
+	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
+	@_transparent
+	public var body: Body {
+		fatalError(
+  """
+  '\(Self.self)' has no body. …
+  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  """
+		)
+	}
+}
+
+extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+	@inlinable
+	public func tryGet(_ whole: Whole) -> Part? {
+		self.body.tryGet(whole)
+	}
+	
+	@inlinable
+	public func tryUpdate(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.tryUpdate(whole, f)
+	}
+	
+	@inlinable
+	public func trySet(
+		_ whole: Whole,
+		to newPart: NewPart
+	) -> NewWhole {
+		self.body.trySet(whole, to: newPart)
+	}
 }
 
 public typealias SimpleOptionalOptic<Whole, Part> = OptionalOptic<Whole, Part, Whole, Part>
