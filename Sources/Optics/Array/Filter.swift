@@ -14,7 +14,7 @@ where O.NewPart == O.Part, O.NewWhole == O.Whole {
 	@inlinable
 	public init(
 		filter: @escaping (Part) -> Bool,
-		@ArrayOpticBuilder with build: () -> O
+		@ArrayOpticBuilder<Whole, Part, NewWhole, NewPart> with build: () -> O
 	) {
 		self.filter = filter
 		self.optic = build()

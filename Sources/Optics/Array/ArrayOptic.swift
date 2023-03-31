@@ -6,6 +6,9 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype NewWhole
 	associatedtype Part
 	associatedtype NewPart
+	associatedtype _Body
+	
+	typealias Body = _Body
 		
 	func getAll(_ whole: Whole) -> [Part]
 	
@@ -13,6 +16,39 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole
+	
+	@ArrayOpticBuilder<Whole, Part, NewWhole, NewPart>
+	var body: Body { get }
+}
+
+extension ArrayOptic where Body == Never {
+	/// A non-existent body.
+	///
+	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
+	@_transparent
+	public var body: Body {
+		fatalError(
+  """
+  '\(Self.self)' has no body. …
+  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  """
+		)
+	}
+}
+
+
+extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+	
+	public func getAll(_ whole: Whole) -> [Part] {
+		self.body.getAll(whole)
+	}
+	
+	public func updateAll(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.updateAll(whole, f)
+	}
 }
 
 public typealias SimpleArrayOptic<Whole, Part> = ArrayOptic<Whole, Part, Whole, Part>
