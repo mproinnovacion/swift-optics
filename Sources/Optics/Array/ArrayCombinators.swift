@@ -11,7 +11,7 @@ public struct Many<Optics: ArrayOptic>: ArrayOptic {
 	
 	@inlinable
 	public init(
-		@ArrayOpticBuilder<Whole, Part, NewWhole, NewPart> with build: () -> Optics
+		@ArrayOpticBuilder with build: () -> Optics
 	) {
 		self.optics = build()
 	}

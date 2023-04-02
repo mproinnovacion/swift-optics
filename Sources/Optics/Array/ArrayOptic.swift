@@ -17,8 +17,7 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole
 	
-	@ArrayOpticBuilder<Whole, Part, NewWhole, NewPart>
-	var body: Body { get }
+	@ArrayOpticBuilder var body: Body { get }
 }
 
 extension ArrayOptic where Body == Never {

@@ -19,19 +19,19 @@ class FilterTests: XCTestCase {
 		} to: { (original, updated) -> (Int, Person) in
 			(original.0, updated)
 		}
- 		
+
 		XCTAssertEqual(
 			odd.getAll(company),
 			[ john, mike ]
 		)
-		
+
 		var local = company
 		local = odd.updateAll(local, { person in
 			var result = person
 			result.name = result.name.uppercased()
 			return result
 		})
-		
+
 		let oddNames = Many {
 			odd
 			\Person.name

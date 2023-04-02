@@ -19,7 +19,7 @@ fileprivate struct GroupLeafsOptic: ArrayOptic {
 	fileprivate typealias Part = String
 	fileprivate typealias NewWhole = Group
 	fileprivate typealias NewPart = String
-	
+
 	var body: some SimpleArrayOptic<Group, String> {
 		Many {
 			Lens {
@@ -54,12 +54,12 @@ class RecursiveArrayTests: XCTestCase {
 			])),
 			.leaf("leaf3")
 		])
-		
+
 		XCTAssertEqual(
 			GroupLeafsOptic().getAll(group),
 			[ "leaf0", "leaf1", "leaf2", "leaf3" ]
 		)
-		
+
 		XCTAssertEqual(
 			GroupLeafsOptic().getAll(
 				GroupLeafsOptic().updateAll(group, { $0 + "!" })

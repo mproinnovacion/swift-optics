@@ -194,7 +194,7 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 //
 
 @resultBuilder
-public enum ArrayOpticBuilder<Whole, Part, NewWhole, NewPart> {
+public enum ArrayOpticBuilder {
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> ArrayLensLiftOptic<O> {
 		.init(lens: optic)
 	}

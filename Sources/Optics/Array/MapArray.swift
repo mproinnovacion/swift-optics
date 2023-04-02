@@ -12,7 +12,7 @@ public struct MapArray<O: ArrayOptic, MappedPart, MappedNewPart>: ArrayOptic {
 	
 	@inlinable
 	public init(
-		@ArrayOpticBuilder<Whole, Part, NewWhole, NewPart> _ build: () -> O,
+		@ArrayOpticBuilder _ build: () -> O,
 		from: @escaping (O.Part) -> MappedPart,
 		to: @escaping (O.Part, MappedNewPart) -> O.NewPart
 	) {
@@ -23,7 +23,7 @@ public struct MapArray<O: ArrayOptic, MappedPart, MappedNewPart>: ArrayOptic {
 	
 	@inlinable
 	public init(
-		@ArrayOpticBuilder<Whole, Part, NewWhole, NewPart> _ build: () -> O,
+		@ArrayOpticBuilder _ build: () -> O,
 		from: @escaping (O.Part) -> MappedPart,
 		to: @escaping (MappedNewPart) -> O.NewPart
 	) {
