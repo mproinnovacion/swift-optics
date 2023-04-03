@@ -6,6 +6,9 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype NewWhole
 	associatedtype Part
 	associatedtype NewPart
+	associatedtype _Body
+	
+	typealias Body = _Body
 		
 	func getAll(_ whole: Whole) -> [Part]
 	
@@ -13,11 +16,45 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole
+	
+	@ArrayOpticBuilder var body: Body { get }
+}
+
+extension ArrayOptic where Body == Never {
+	/// A non-existent body.
+	///
+	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
+	@_transparent
+	public var body: Body {
+		fatalError(
+  """
+  '\(Self.self)' has no body. …
+  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  """
+		)
+	}
+}
+
+extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+	
+	@inlinable
+	public func getAll(_ whole: Whole) -> [Part] {
+		self.body.getAll(whole)
+	}
+	
+	@inlinable
+	public func updateAll(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.updateAll(whole, f)
+	}
 }
 
 public typealias SimpleArrayOptic<Whole, Part> = ArrayOptic<Whole, Part, Whole, Part>
 
 extension ArrayOptic {
+	@inlinable
 	public func updateAll(
 		_ whole: inout Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -32,23 +69,14 @@ extension ArrayOptic {
 }
 
 extension ArrayOptic where NewPart == Part, NewWhole == Whole {
-//	func updateAll(
-//		_ whole: inout Whole,
-//		_ f: @escaping (inout Part) -> Void
-//	) -> Void {
-//		whole = self.updateAll(whole) { part in
-//			var copy = part
-//			f(&copy)
-//			return copy
-//		}
-//	}
-	
+	@inlinable
 	public func setAll(_ whole: inout Whole, to part: Part) -> Void {
 		self.updateAll(&whole) { value in
 			value = part
 		}
 	}
 	
+	@inlinable
 	public func updatingAll(_ whole: Whole, _ f: @escaping (inout Part) -> Void) -> Whole {
 		self.updateAll(whole) { part in
 			var copy = part
@@ -57,6 +85,7 @@ extension ArrayOptic where NewPart == Part, NewWhole == Whole {
 		}
 	}
 
+	@inlinable
 	public func settingAll(_ whole: Whole, to part: Part) -> Whole {
 		var copy = whole
 		self.setAll(&copy, to: part)
@@ -70,10 +99,12 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	public typealias Part = Element
 	public typealias NewPart = NewElement
 
+	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {
 		whole
 	}
 
+	@inlinable
 	public func updateAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
@@ -88,10 +119,12 @@ public struct SetDefaultOptic<Element: Hashable, NewElement: Hashable>: ArrayOpt
 	public typealias Part = Element
 	public typealias NewPart = NewElement
 
+	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {
 		Array(whole)
 	}
 
+	@inlinable
 	public func updateAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
@@ -106,10 +139,12 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 	public typealias Part = Value
 	public typealias NewPart = NewValue
 
+	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {
 		Array(whole.values)
 	}
 
+	@inlinable
 	public func updateAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart

@@ -20,6 +20,7 @@ public protocol Setter {
 }
 
 extension Setter {
+	@inlinable
 	public func update(
 		_ whole: inout Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -33,11 +34,49 @@ extension Setter {
 	}
 }
 
-public protocol LensOptic<Whole, Part, NewWhole, NewPart>: Getter, Setter {}
+public protocol LensOptic<Whole, Part, NewWhole, NewPart>: Getter, Setter {
+	associatedtype _Body
+	
+	typealias Body = _Body
+
+	@LensBuilder
+	var body: Body { get }
+}
+
+extension LensOptic where Body == Never {
+	/// A non-existent body.
+	///
+	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
+	@_transparent
+	public var body: Body {
+		fatalError(
+  """
+  '\(Self.self)' has no body. …
+  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  """
+		)
+	}
+}
+
+extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+	
+	@inlinable
+	public func get(_ whole: Whole) -> Part {
+		self.body.get(whole)
+	}
+	@inlinable
+	public func update(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.update(whole, f)
+	}
+}
 
 public typealias SimpleLensOptic<Whole, Part> = LensOptic<Whole, Part, Whole, Part>
 
 extension LensOptic {
+	@inlinable
 	public func `set`(
 		_ whole: inout Whole,
 		to newValue: NewPart
@@ -47,6 +86,7 @@ extension LensOptic {
 		}
 	}
 	
+	@inlinable
 	public func setting(
 		_ whole: Whole,
 		to newValue: Part
@@ -57,6 +97,7 @@ extension LensOptic {
 		return copy
 	}
 	
+	@inlinable
 	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -69,6 +110,7 @@ extension LensOptic {
 }
 
 extension LensOptic {
+	@inlinable
 	public func each<Element, NewElement>() -> Each<Self, Element, NewElement>
 	where Part == [Element], NewPart == [NewElement] {
 		Each {
@@ -78,6 +120,7 @@ extension LensOptic {
 }
 
 extension KeyPath: Getter {
+	@inlinable
 	public func get(_ whole: Root) -> Value {
 		whole[keyPath: self]
 	}
@@ -87,6 +130,7 @@ extension WritableKeyPath: LensOptic {
 	public typealias NewWhole = Root
 	public typealias NewPart = Value
 	
+	@inlinable
 	public func update(
 		_ whole: Root,
 		_ f: @escaping (Value) -> Value
