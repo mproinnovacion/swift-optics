@@ -242,6 +242,13 @@ public enum ArrayOpticBuilder {
 	public static func buildPartialBlock<O0: ArrayOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineArrayOptional<O0, O1> {
 		CombineArrayOptional(lhs: o0, rhs: o1)
 	}
+	
+	public static func buildPartialBlock<O0: ArrayOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineArrayOptional<O0, OptionalLiftPrismOptic<O1>> {
+		CombineArrayOptional(
+			lhs: o0,
+			rhs: OptionalLiftPrismOptic(prism: o1)
+		)
+	}
 }
 //
 //@resultBuilder
