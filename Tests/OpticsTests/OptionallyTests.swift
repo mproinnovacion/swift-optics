@@ -83,4 +83,39 @@ class OptionallyTests: XCTestCase {
 				XCTFail("Invalid advisor")
 		}
 	}
+	
+	func testStatement() {
+		let advisor = Optionally {
+			if true {
+				\Company.advisor
+				Prism {
+					/Failable<Person>?.some
+					/Failable<Person>.valid
+				}
+			}
+		}
+		
+		let updated = advisor.trySet(company, to: john)
+		
+		let includeAdvisor = false
+		let noAdvisor = Optionally {
+			if includeAdvisor {
+				\Company.advisor
+				Prism {
+					/Failable<Person>?.some
+					/Failable<Person>.valid
+				}
+			}
+		}
+		
+		XCTAssertEqual(
+			advisor.tryGet(updated),
+			john
+		)
+		
+		XCTAssertEqual(
+			noAdvisor.tryGet(updated),
+			nil
+		)
+	}
 }

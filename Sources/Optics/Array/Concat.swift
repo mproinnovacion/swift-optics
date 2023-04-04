@@ -54,6 +54,12 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 
 @resultBuilder
 public enum ConcatLensesBuilder {
+	public static func buildOptional<O: ArrayOptic>(
+		_ optic: O?
+	) -> ArrayOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
+		ArrayOpticFromOptional(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> ArrayLensLiftOptic<O> {
 		ArrayLensLiftOptic(lens: optic)
 	}

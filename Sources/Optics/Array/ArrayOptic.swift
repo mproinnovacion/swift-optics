@@ -153,6 +153,29 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 	}
 }
 
+public struct ArrayOpticFromOptional<Whole, Part, NewPart, O: ArrayOptic>: ArrayOptic
+where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewPart {
+	public typealias NewWhole = O.NewWhole
+	
+	public let optic: O?
+	
+	public init(optic: O?) {
+		self.optic = optic
+	}
+	
+	public func getAll(_ whole: Whole) -> [Part] {
+		optic?.getAll(whole) ?? []
+	}
+	
+	public func updateAll(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
+		guard let optic = self.optic else {
+			return whole
+		}
+		
+		return optic.updateAll(whole, f)
+	}
+}
+
 public struct ArrayLensLiftOptic<O: LensOptic>: ArrayOptic {
 	let lens: O
 	

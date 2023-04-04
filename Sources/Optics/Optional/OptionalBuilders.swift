@@ -2,6 +2,12 @@ import Foundation
 
 @resultBuilder
 public enum OptionalOpticBuilder {
+	public static func buildOptional<O: OptionalOptic>(
+		_ optic: O?
+	) -> OptionalOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
+		OptionalOpticFromOptional(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> OptionalLiftLensOptic<O> {
 		.init(optic: optic)
 	}
@@ -24,6 +30,35 @@ public enum OptionalOpticBuilder {
 	
 	public static func buildPartialBlock<O0: OptionalOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, O1> {
 		CombineOptionals(lhs: o0, rhs: o1)
+	}
+}
+
+public struct OptionalOpticFromOptional<Whole, Part, NewPart, O: OptionalOptic>: OptionalOptic
+where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Whole {
+	let optic: O?
+	
+	public typealias NewWhole = O.NewWhole
+	
+	public init(optic: O?) {
+		self.optic = optic
+	}
+	
+	public func tryGet(_ whole: Whole) -> Part? {
+		optic?.tryGet(whole)
+	}
+	
+	public func tryUpdate(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic?.tryUpdate(whole, f) ?? whole
+	}
+	
+	public func trySet(
+		_ whole: Whole,
+		to newValue: NewPart
+	) -> NewWhole {
+		optic?.trySet(whole, to: newValue) ?? whole
 	}
 }
 
