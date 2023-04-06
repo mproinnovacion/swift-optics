@@ -118,4 +118,14 @@ extension URL {
 			[URLQueryItem]?.optic()
 		}
 	}
+	
+	public static func absoluteStringOptic() -> some SimpleOptionalOptic<URL, String> {
+		Optionally {
+			\URL.self
+		}.flatMap { url in
+			url.absoluteString
+		} to: { string in
+			URL(string: string)
+		}
+	}
 }
