@@ -149,6 +149,12 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 
 @resultBuilder
 public enum EachOpticBuilder {
+	public static func buildOptional<O: ArrayOptic>(
+		_ optic: O?
+	) -> ArrayOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
+		ArrayOpticFromOptional(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> ArrayLensLiftOptic<O> {
 		.init(lens: optic)
 	}

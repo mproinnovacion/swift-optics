@@ -33,6 +33,12 @@ public struct AnyOf<P: OptionalOptic>: OptionalOptic {
 
 @resultBuilder
 public enum AnyOfBuilder {
+	public static func buildOptional<O: PrismOptic>(
+		_ optic: O?
+	) -> OptionalOpticFromPrismOptional<O.Whole, O.Part, O> {
+		.init(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> O {
 		optic
 	}

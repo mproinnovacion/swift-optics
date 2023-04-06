@@ -43,4 +43,16 @@ class AnyOfTests: XCTestCase {
 			20
 		)
 	}
+	
+//	func testStatement() {
+//		let optic = AnyOf {
+//			/State<Int>.loadedLocal
+//			
+//			if true {
+//				/State<Int>.loadedRemote
+//			}
+//		}
+//		
+//		
+//	}
 }

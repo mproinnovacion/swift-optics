@@ -2,7 +2,7 @@ import Foundation
 
 extension Date {
 	private static var allComponents: Set<Calendar.Component> {
-		[.era, .day, .month, .year, .hour, .minute, .second, .nanosecond]
+		[.era, .weekday, .day, .month, .year, .hour, .minute, .second, .nanosecond]
 	}
 	
 	public static func componentsOptic(
@@ -49,6 +49,36 @@ extension Date {
 			componentsOptic(calendar: calendar, timeZone: timeZone)
 			\DateComponents.day
 			Int?.optic()
+		}
+	}
+	
+	private static func componentsWeekdayOptic(
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Int> {
+		Optionally {
+			componentsOptic(calendar: calendar, timeZone: timeZone)
+			\DateComponents.weekday
+			Int?.optic()
+		}
+	}
+	
+	public static func weekdayOptic(
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Int> {
+		OptionalRawOptic { date in
+			componentsWeekdayOptic(calendar: calendar, timeZone: timeZone).tryGet(date)
+		} tryUpdate: { date, update in
+			guard let weekday = componentsWeekdayOptic(calendar: calendar, timeZone: timeZone).tryGet(date) else {
+				return date
+			}
+			
+			let updated = update(weekday)
+			
+			return calendar.date(bySetting: .weekday, value: updated, of: date) ?? date
+		} trySet: { date, weekday in
+			calendar.date(bySetting: .weekday, value: weekday, of: date) ?? date
 		}
 	}
 	

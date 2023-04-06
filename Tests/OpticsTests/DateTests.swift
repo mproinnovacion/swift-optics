@@ -34,5 +34,21 @@ class DateTests: XCTestCase {
 			),
 			1971
 		)
+		
+		XCTAssertEqual(
+			Date.weekdayOptic().tryGet(date),
+			5
+		)
+		
+		dump(
+			Date.weekdayOptic().trySet(date, to: 2).timeIntervalSince1970
+		)
+		
+		XCTAssertEqual(
+			Date.dayOptic().tryGet(
+				Date.weekdayOptic().trySet(date, to: 2)
+			),
+			5
+		)
 	}
 }

@@ -53,10 +53,6 @@ class LensTests: XCTestCase {
 			\Person.name
 		}
 
-		dump(
-			names.getAll(company)
-		)
-
 		XCTAssertEqual(
 			names.getAll(company),
 			[ "Mike", "Louis", "Jessica", "John", "Joe", "Mike" ]
