@@ -39,7 +39,17 @@ public enum AnyOfBuilder {
 		.init(optic: optic)
 	}
 	
+	public static func buildOptional<O: OptionalOptic>(
+		_ optic: O?
+	) -> OptionalOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
+		.init(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> O {
+		optic
+	}
+	
+	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> O {
 		optic
 	}
 	
@@ -51,6 +61,19 @@ public enum AnyOfBuilder {
 	public static func buildPartialBlock<O0: OptionalOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> AnyOfOptionalPrism<O0, O1>
 	where O0.Whole == O1.Whole, O0.Part == O1.Part {
 		AnyOfOptionalPrism(lhs: o0, rhs: o1)
+	}
+	
+	public static func buildPartialBlock<O0: PrismOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> AnyOfOptionals<OptionalOpticFromPrismOptional<O0.Whole, O0.Part, O0>, O1>
+	where O0.Whole == O1.Whole, O0.Part == O1.Part {
+		AnyOfOptionals(
+			lhs: OptionalOpticFromPrismOptional(optic: o0),
+			rhs: o1
+		)
+	}
+	
+	public static func buildPartialBlock<O0: OptionalOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> AnyOfOptionals<O0, O1>
+	where O0.Whole == O1.Whole, O0.Part == O1.Part {
+		AnyOfOptionals(lhs: o0, rhs: o1)
 	}
 }
 
@@ -79,6 +102,48 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 		}
 		rhs.tryUpdate(&result) { part in
 			part = f(part)
+		}
+		
+		return result
+	}
+
+	public func trySet(
+		_ whole: LHS.Whole,
+		to newValue: RHS.Part
+	) -> LHS.Whole {
+		var copy = whole
+		lhs.trySet(&copy, to: newValue)
+		rhs.trySet(&copy, to: newValue)
+		return copy
+	}
+}
+
+public struct AnyOfOptionals<LHS: OptionalOptic, RHS: OptionalOptic>: OptionalOptic
+where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewWhole == LHS.Whole, LHS.NewPart == LHS.Part, RHS.NewWhole == RHS.Whole, RHS.NewPart == RHS.Part {
+	let lhs: LHS
+	let rhs: RHS
+
+	public typealias Whole = LHS.Whole
+	public typealias NewWhole = Whole
+	public typealias Part = RHS.Part
+	public typealias NewPart = Part
+
+	public func tryGet(_ whole: LHS.Whole) -> RHS.Part? {
+		lhs.tryGet(whole) ?? rhs.tryGet(whole)
+	}
+	
+	public func tryUpdate(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		var result = whole
+		
+		result = lhs.tryUpdate(result) { part in
+			f(part)
+		}
+		
+		result = rhs.tryUpdate(result) { part in
+			f(part)
 		}
 		
 		return result

@@ -1,5 +1,15 @@
 import Foundation
 
+public enum Weekday: Int {
+	case monday = 2
+	case tuesday = 3
+	case wednesday = 4
+	case thursday = 5
+	case friday = 6
+	case saturday = 7
+	case sunday = 1
+}
+
 extension Date {
 	private static var allComponents: Set<Calendar.Component> {
 		[.era, .weekday, .day, .month, .year, .hour, .minute, .second, .nanosecond]
@@ -87,7 +97,7 @@ extension Date {
 		)
 	}
 	
-	public static func weekdayOptic(
+	public static func weekdayValueOptic(
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
@@ -97,6 +107,20 @@ extension Date {
 			 calendar: calendar,
 			 timeZone: timeZone
 		)
+	}
+	
+	public static func weekdayOptic(
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Weekday> {
+		weekdayValueOptic(
+			calendar: calendar,
+			timeZone: timeZone
+		).flatMap { value in
+			Weekday(rawValue: value)
+		} to: { day in
+			day.rawValue
+		}
 	}
 	
 	public static func monthOptic(

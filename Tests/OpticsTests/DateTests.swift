@@ -37,18 +37,18 @@ class DateTests: XCTestCase {
 		
 		XCTAssertEqual(
 			Date.weekdayOptic().tryGet(date),
-			5
+			.thursday
 		)
 		
 		dump(
-			Date.weekdayOptic().trySet(date, to: 2).timeIntervalSince1970
+			Date.weekdayOptic().trySet(date, to: .tuesday).timeIntervalSince1970
 		)
 		
 		XCTAssertEqual(
 			Date.dayOptic().tryGet(
-				Date.weekdayOptic().trySet(date, to: 2)
+				Date.weekdayOptic().trySet(date, to: .tuesday)
 			),
-			5
+			6
 		)
 	}
 }
