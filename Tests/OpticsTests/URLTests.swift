@@ -112,5 +112,19 @@ class URLTests: XCTestCase {
 			).absoluteString,
 			"https://user:password@www.google.com/path?item1=1&item2=2"
 		)
+		
+		XCTAssertEqual(
+			URL.absoluteStringOptic().tryGet(url),
+			"https://user:password@www.google.com/path?item=true"
+		)
+		
+		XCTAssertEqual(
+			URL.absoluteStringOptic().tryGet(
+				URL.absoluteStringOptic().tryUpdate(url, { urlString in
+					urlString + "&blah=true"
+				})
+			),
+			"https://user:password@www.google.com/path?item=true&blah=true"
+		)
 	}
 }

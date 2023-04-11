@@ -83,6 +83,27 @@ extension PrismOptic {
 
 extension CasePath: PrismOptic {}
 
+public struct PrismRawOptic<Whole, Part>: PrismOptic {
+	var _extract: (Whole) -> Part?
+	var _embed: (Part) -> Whole
+	
+	public init(
+		extract: @escaping (Whole) -> Part?,
+		embed: @escaping (Part) -> Whole
+	) {
+		self._extract = extract
+		self._embed = embed
+	}
+	
+	public func extract(from whole: Whole) -> Part? {
+		_extract(whole)
+	}
+	
+	public func embed(_ part: Part) -> Whole {
+		_embed(part)
+	}
+}
+
 public struct PrismOptionalOptic<Wrapped>: PrismOptic {
 	public typealias Whole = Optional<Wrapped>
 	public typealias Part = Wrapped
@@ -95,5 +116,43 @@ public struct PrismOptionalOptic<Wrapped>: PrismOptic {
 	@inlinable
 	public func extract(from whole: Optional<Wrapped>) -> Wrapped? {
 		whole
+	}
+}
+
+public struct OptionalOpticFromPrismOptional<Whole, Part, O: PrismOptic>: OptionalOptic
+where Whole == O.Whole, Part == O.Part {
+	let optic: O?
+	
+	public typealias NewWhole = Whole
+	public typealias NewPart = Part
+	
+	public init(optic: O?) {
+		self.optic = optic
+	}
+	
+	public func tryGet(
+		_ whole: Whole
+	) -> Part? {
+		self.optic?.extract(from: whole)
+	}
+	
+	public func tryUpdate(
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		guard let part = self.optic?.extract(from: whole) else {
+			return whole
+		}
+		
+		let newPart = f(part)
+		
+		return self.optic?.embed(newPart) ?? whole
+	}
+	
+	public func trySet(
+		_ whole: Whole,
+		to newPart: NewPart
+	) -> NewWhole {
+		self.optic?.embed(newPart) ?? whole
 	}
 }

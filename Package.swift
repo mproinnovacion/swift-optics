@@ -30,6 +30,9 @@ let package = Package(
 			dependencies: [
 				"Optics",
 				.product(name: "CasePaths", package: "swift-case-paths")
+			],
+			resources: [
+				.copy("model.json")
 			]
 		)
 	]

@@ -1,0 +1,31 @@
+{
+	"name": "Root",
+	"date": 1680768416,
+	"children": [
+		{
+			"name": "Child 1",
+			"date": 20,
+			"children": [],
+			"items": [
+				{
+					"name": "Item 1.1",
+					"created": 11
+				}
+			]
+		}
+	],
+	"items": [
+		{
+			"name": "Item 1",
+			"created": 1
+		},
+		{
+			"name": "Item 2",
+			"created": 2
+		},
+		{
+			"name": "Item 3",
+			"created": 3
+		}
+	]
+}
