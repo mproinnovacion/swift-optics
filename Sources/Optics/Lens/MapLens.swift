@@ -38,12 +38,12 @@ public struct MapLens<O: LensOptic, MappedPart, MappedNewPart>: LensOptic {
 		from(optic.get(whole))
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		optic.update(whole) { oPart in
-			to(oPart, f(from(oPart)))
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try optic.updating(whole) { oPart in
+			to(oPart, try f(from(oPart)))
 		}
 	}
 }

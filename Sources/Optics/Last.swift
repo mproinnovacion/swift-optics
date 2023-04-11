@@ -19,26 +19,26 @@ public struct Last<L: LensOptic, Element>: OptionalOptic where L.Part == [Elemen
 		lens.get(whole).last
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole) { elements in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole) { elements in
 			guard let last = elements.last else {
 				return elements
 			}
 			
 			var result = elements
-			result[result.endIndex.advanced(by: -1)] = f(last)
+			result[result.endIndex.advanced(by: -1)] = try f(last)
 			return result
 		}
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}

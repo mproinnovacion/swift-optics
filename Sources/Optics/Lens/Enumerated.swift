@@ -20,12 +20,13 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 		lens.get(whole)
 	}
 	
-	public func update(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
-		lens.update(whole, f)
+	public func updating(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole, f)
 	}
 }
-
-
 
 public struct EnumeratedLens<L: LensOptic, Element, NewElement>: LensOptic
 where L.Part == [Element], L.NewPart == [NewElement] {
@@ -44,9 +45,12 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 		lens.get(whole).enumerated().map { ($0.offset, $0.element) }
 	}
 	
-	public func update(_ whole: L.Whole, _ f: @escaping ([(Array.Index, Element)]) -> [(Array.Index, NewElement)]) -> L.NewWhole {
-		lens.update(whole) { array in
-			f(
+	public func updating(
+		_ whole: L.Whole,
+		_ f: @escaping ([(Array.Index, Element)]) throws -> [(Array.Index, NewElement)]
+	) rethrows -> L.NewWhole {
+		try lens.updating(whole) { array in
+			try f(
 				array.enumerated().map { ($0.offset, $0.element) }
 			).map {$0.1 }
 		}

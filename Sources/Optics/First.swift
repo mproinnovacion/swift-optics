@@ -19,26 +19,26 @@ public struct First<L: LensOptic, Element>: OptionalOptic where L.Part == [Eleme
 		lens.get(whole).first
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole) { elements in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole) { elements in
 			guard elements.count > 0 else {
 				return elements
 			}
 			
 			var result = elements
-			result[0] = f(result[0])
+			result[0] = try f(result[0])
 			return result
 		}
 	}
 
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}

@@ -12,10 +12,12 @@ public protocol OptionalOptic<Whole, Part, NewWhole, NewPart> {
 		
 	func tryGet(_ whole: Whole) -> Part?
 	
-	func tryUpdate(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole
+	func tryUpdating(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole
 	
-	func trySet(_ whole: Whole, to: NewPart) -> NewWhole
-	
+	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
 	
 	@OptionalOpticBuilder
 	var body: Body { get }
@@ -30,7 +32,7 @@ extension OptionalOptic where Body == Never {
 		fatalError(
   """
   '\(Self.self)' has no body. …
-  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  Do not access an OptionalOptic's 'body' property directly, as it may not exist.
   """
 		)
 	}
@@ -43,19 +45,19 @@ extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Par
 	}
 	
 	@inlinable
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		self.body.tryUpdate(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try self.body.tryUpdating(whole, f)
 	}
 	
 	@inlinable
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newPart: NewPart
 	) -> NewWhole {
-		self.body.trySet(whole, to: newPart)
+		self.body.trySetting(whole, to: newPart)
 	}
 }
 
@@ -65,25 +67,25 @@ extension OptionalOptic {
 	@inlinable
 	public func tryUpdate(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) -> Void
-	) -> Void
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows -> Void
 	where Part == NewPart, Whole == NewWhole {
-		whole = self.tryUpdate(whole, { part in
+		whole = try self.tryUpdating(whole, { part in
 			var copy = part
-			f(&copy)
+			try f(&copy)
 			return copy
 		})
 	}
 	
 	@inlinable
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (inout Part) -> Void
-	) -> Whole
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows -> Whole
 	where Part == NewPart, Whole == NewWhole {
-		self.tryUpdate(whole) { part in
+		try self.tryUpdating(whole) { part in
 			var result = part
-			f(&result)
+			try f(&result)
 			return result
 		}
 	}
@@ -103,8 +105,8 @@ extension OptionalOptic {
 	public func trySet(
 		_ whole: inout Whole,
 		to newPart: NewPart
-	)  where Part == NewPart, Whole == NewWhole {
-		whole = self.trySet(whole, to: newPart)
+	) where Part == NewPart, Whole == NewWhole {
+		whole = self.trySetting(whole, to: newPart)
 	}
 	
 	@inlinable
@@ -120,17 +122,17 @@ extension OptionalOptic {
 
 public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	public let _tryGet: (Whole) -> Part?
-	public let _tryUpdate: (Whole, @escaping (Part) -> NewPart) -> NewWhole
-	public let _trySet: (Whole, NewPart) -> NewWhole
+	public let _tryUpdating: (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+	public let _trySetting: (Whole, NewPart) -> NewWhole
 	
 	public init(
 		tryGet: @escaping (Whole) -> Part?,
-		tryUpdate: @escaping (Whole, @escaping (Part) -> NewPart) -> NewWhole,
-		trySet: @escaping (Whole, NewPart) -> NewWhole
+		tryUpdating: @escaping (Whole, @escaping (Part) throws -> NewPart) -> NewWhole,
+		trySetting: @escaping (Whole, NewPart) -> NewWhole
 	) {
 		self._tryGet = tryGet
-		self._tryUpdate = tryUpdate
-		self._trySet = trySet
+		self._tryUpdating = tryUpdating
+		self._trySetting = trySetting
 	}
 	
 	@inlinable
@@ -139,19 +141,19 @@ public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	}
 
 	@inlinable
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		_tryUpdate(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		_tryUpdating(whole, f)
 	}
 	
 	@inlinable
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		_trySet(whole, newValue)
+		_trySetting(whole, newValue)
 	}
 }
 
@@ -167,24 +169,24 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 	}
 
 	@inlinable
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		switch whole {
 			case let .some(value):
-				return .some(f(value))
+				return .some(try f(value))
 			case .none:
 				return .none
 		}
 	}
 	
 	@inlinable
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}
@@ -208,18 +210,21 @@ public struct OptionalLiftPrismOptic<P: PrismOptic>: OptionalOptic {
 	}
 	
 	@inlinable
-	public func tryUpdate(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
+	public func tryUpdating(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		guard var value = prism.extract(from: whole) else {
 			return whole
 		}
 		
-		value = f(value)
+		value = try f(value)
 		
 		return prism.embed(value)
 	}
 	
 	@inlinable
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {

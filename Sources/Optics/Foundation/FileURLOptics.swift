@@ -1,17 +1,19 @@
 import Foundation
 
 extension URL {
-	public static func fileOptic() -> some SimpleOptionalOptic<URL, Data> {
-		OptionalRawOptic { url in
-			try? Data(contentsOf: url, options: [])
-		} tryUpdate: { url, update in
-			let data = try? Data(contentsOf: url, options: [])
+	public static func fileOptic() -> some SimpleThrowingOptic<URL, Data> {
+		ThrowingRawOptic { url in
+			try Data(contentsOf: url, options: [])
+		} update: { url, update in
+			let data = try Data(contentsOf: url, options: [])
 			
-			try? data.map(update)?.write(to: url)
+			let updated = try update(data)
+			
+			try updated.write(to: url)
 			
 			return url
-		} trySet: { url, newData in
-			try? newData.write(to: url)
+		} set: { url, newData in
+			try newData.write(to: url)
 			return url
 		}
 	}

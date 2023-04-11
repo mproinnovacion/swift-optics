@@ -49,25 +49,25 @@ extension PrismOptic {
 	@inlinable
 	public func tryUpdate(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) -> Void
-	) {
-		whole = tryUpdate(whole, { part in
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows {
+		whole = try tryUpdating(whole, { part in
 			var copy = part
-			f(&copy)
+			try f(&copy)
 			return copy
 		})
 	}
 	
 	@inlinable
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> Part
-	) -> Whole {
+		_ f: @escaping (Part) throws -> Part
+	) rethrows -> Whole {
 		guard let part = extract(from: whole) else {
 			return whole
 		}
 		
-		return embed(f(part))
+		return embed(try f(part))
 	}
 	
 	@inlinable

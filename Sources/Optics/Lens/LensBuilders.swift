@@ -37,12 +37,12 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 		rhs.get(lhs.get(whole))
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lhs.update(whole) { lhsPart in
-			rhs.update(lhsPart, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lhs.updating(whole) { lhsPart in
+			try rhs.updating(lhsPart, f)
 		}
 	}
 }
@@ -61,15 +61,15 @@ where LHS.Part == [RHS.Whole], LHS.NewPart == [RHS.NewWhole] {
 		lhs.get(whole).map(rhs.get)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lhs.update(whole) { rhsWholes in
-			let rhsParts: [RHS.NewPart] = f(rhsWholes.map(rhs.get))
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lhs.updating(whole) { rhsWholes in
+			let rhsParts: [RHS.NewPart] = try f(rhsWholes.map(rhs.get))
 			
 			return zip(rhsWholes, rhsParts).map { whole, newPart in
-				rhs.update(whole, { _ in newPart })
+				rhs.updating(whole, { _ in newPart })
 			}
 		}
 	}

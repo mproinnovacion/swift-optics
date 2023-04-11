@@ -66,7 +66,7 @@ class FileOpticsTests: XCTestCase {
 		
 		try FileManager.default.copyItem(at: assetUrl, to: targetUrl)
 		
-		let datesOptic = Many {
+		let datesOptic = ManyThrowing {
 			URL.fileOptic()
 			Group.codableOptic()
 			GroupDatesOptic()
