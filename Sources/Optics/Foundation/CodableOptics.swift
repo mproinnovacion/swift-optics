@@ -20,13 +20,13 @@ extension Decodable where Self: Encodable {
 	) -> some SimpleThrowingOptic<Data, Self> {
 		ThrowingRawOptic { data in
 			try decoder.decode(Self.self, from: data)
-		} update: { data, update in
+		} updating: { data, update in
 			let object = try decoder.decode(Self.self, from: data)
 			
 			let updated = try update(object)
 			
 			return try encoder.encode(updated)
-		} set: { data, newObject in
+		} setting: { data, newObject in
 			try encoder.encode(newObject)
 		}
 	}

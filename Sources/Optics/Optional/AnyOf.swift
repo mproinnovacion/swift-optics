@@ -19,15 +19,18 @@ public struct AnyOf<P: OptionalOptic>: OptionalOptic {
 		self.optics.tryGet(whole)
 	}
 	
-	public func tryUpdate(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
-		self.optics.tryUpdate(whole, f)
+	public func tryUpdating(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try self.optics.tryUpdating(whole, f)
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		optics.trySet(whole, to: newValue)
+		optics.trySetting(whole, to: newValue)
 	}
 }
 
@@ -91,23 +94,23 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 		lhs.extract(from: whole) ?? rhs.extract(from: whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		var result = whole
 		
-		lhs.tryUpdate(&result) { part in
-			part = f(part)
+		try lhs.tryUpdate(&result) { part in
+			part = try f(part)
 		}
-		rhs.tryUpdate(&result) { part in
-			part = f(part)
+		try rhs.tryUpdate(&result) { part in
+			part = try f(part)
 		}
 		
 		return result
 	}
 
-	public func trySet(
+	public func trySetting(
 		_ whole: LHS.Whole,
 		to newValue: RHS.Part
 	) -> LHS.Whole {
@@ -132,24 +135,24 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewWhole == LHS.Whole, L
 		lhs.tryGet(whole) ?? rhs.tryGet(whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		var result = whole
 		
-		result = lhs.tryUpdate(result) { part in
-			f(part)
+		result = try lhs.tryUpdating(result) { part in
+			try f(part)
 		}
 		
-		result = rhs.tryUpdate(result) { part in
-			f(part)
+		result = try rhs.tryUpdating(result) { part in
+			try f(part)
 		}
 		
 		return result
 	}
 
-	public func trySet(
+	public func trySetting(
 		_ whole: LHS.Whole,
 		to newValue: RHS.Part
 	) -> LHS.Whole {
@@ -174,21 +177,21 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == LHS.Part, LHS
 		lhs.tryGet(whole) ?? rhs.extract(from: whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: LHS.Whole,
-		_ f: @escaping (RHS.Part) -> RHS.Part
-	) -> NewWhole {
+		_ f: @escaping (RHS.Part) throws -> RHS.Part
+	) rethrows -> NewWhole {
 		var result = whole
-		lhs.tryUpdate(&result) { part in
-			part = f(part)
+		try lhs.tryUpdate(&result) { part in
+			part = try f(part)
 		}
-		rhs.tryUpdate(&result) { part in
-			part = f(part)
+		try rhs.tryUpdate(&result) { part in
+			part = try f(part)
 		}
 		return result
 	}
 	
-	public func trySet(_ whole: LHS.Whole, to newValue: RHS.Part) -> LHS.NewWhole {
+	public func trySetting(_ whole: LHS.Whole, to newValue: RHS.Part) -> LHS.NewWhole {
 		var copy = whole
 		lhs.trySet(&copy, to: newValue)
 		rhs.trySet(&copy, to: newValue)

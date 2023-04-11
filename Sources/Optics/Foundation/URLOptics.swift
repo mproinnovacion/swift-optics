@@ -6,7 +6,7 @@ extension URL {
 	) -> some SimpleOptionalOptic<URL, URLComponents> {
 		OptionalRawOptic { url in
 			URLComponents(url: url, resolvingAgainstBaseURL: resolvingAgainstBaseURL)
-		} tryUpdate: { url, update in
+		} tryUpdating: { url, update in
 			guard
 				var components = URLComponents(
 					url: url,
@@ -16,9 +16,9 @@ extension URL {
 				return url
 			}
 			
-			components = update(components)
+			components = (try? update(components)) ?? components
 			return components.url ?? url
-		} trySet: { url, newComponents in
+		} trySetting: { url, newComponents in
 			newComponents.url ?? url
 		}
 	}

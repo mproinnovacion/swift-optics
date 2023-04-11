@@ -19,17 +19,17 @@ public struct Throwing<O: ThrowingOptic>: ThrowingOptic {
 		try optic.get(whole)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: O.Whole,
 		_ f: @escaping (O.Part) throws -> O.NewPart
 	) throws -> O.NewWhole {
-		try optic.update(whole, f)
+		try optic.updating(whole, f)
 	}
 	
-	public func set(
+	public func setting(
 		_ whole: O.Whole,
 		to newPart: O.NewPart
 	) throws -> O.NewWhole {
-		try optic.set(whole, to: newPart)
+		try optic.setting(whole, to: newPart)
 	}
 }

@@ -51,7 +51,7 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 		return try optic.get(whole)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
@@ -59,10 +59,10 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 			throw(ThrowingError.noData)
 		}
 		
-		return try optic.update(whole, f)
+		return try optic.updating(whole, f)
 	}
 	
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
@@ -70,7 +70,7 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 			throw(ThrowingError.noData)
 		}
 		
-		return try optic.set(whole, to: newValue)
+		return try optic.setting(whole, to: newValue)
 	}
 }
 
@@ -90,20 +90,20 @@ public struct ThrowingLiftLensOptic<O: LensOptic>: ThrowingOptic where O.Part ==
 		lens.get(whole)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		lens.update(whole) { part in
+		lens.updating(whole) { part in
 			(try? f(part)) ?? part
 		}
 	}
 	
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try update(whole) { _ in
+		try updating(whole) { _ in
 			newValue
 		}
 	}
@@ -131,7 +131,7 @@ public struct ThrowingLiftPrismOptic<P: PrismOptic>: ThrowingOptic {
 	}
 	
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart) throws -> NewWhole {
 		guard var value = prism.extract(from: whole) else {
@@ -144,7 +144,7 @@ public struct ThrowingLiftPrismOptic<P: PrismOptic>: ThrowingOptic {
 	}
 	
 	@inlinable
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
@@ -175,21 +175,21 @@ where O.NewPart == O.Part {
 	}
 	
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		optic.tryUpdate(whole) { part in
+		optic.tryUpdating(whole) { part in
 			(try? f(part)) ?? part
 		}
 	}
 	
 	@inlinable
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		optic.trySet(whole, to: newValue)
+		optic.trySetting(whole, to: newValue)
 	}
 }
 
@@ -213,21 +213,21 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 		return try rhs.get(part)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try lhs.update(whole) { lhsPart in
-			try rhs.update(lhsPart, f)
+		try lhs.updating(whole) { lhsPart in
+			try rhs.updating(lhsPart, f)
 		}
 	}
 	
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try lhs.update(whole) { part in
-			try rhs.set(part, to: newValue)
+		try lhs.updating(whole) { part in
+			try rhs.setting(part, to: newValue)
 		}
 	}
 }

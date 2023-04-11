@@ -59,14 +59,14 @@ class OptionallyTests: XCTestCase {
 			string.replacingOccurrences(of: "!", with: "")
 		}
 
-		var updated = advisor.trySet(company, to: john)
+		var updated = advisor.trySetting(company, to: john)
 		
 		XCTAssertEqual(
 			advisorNameShouted.tryGet(updated),
 			"John!"
 		)
 		
-		updated = advisorNameShouted.trySet(updated, to: "Tony")
+		updated = advisorNameShouted.trySetting(updated, to: "Tony")
 		
 		XCTAssertEqual(
 			advisorNameShouted.tryGet(updated),
@@ -95,7 +95,7 @@ class OptionallyTests: XCTestCase {
 			}
 		}
 		
-		let updated = advisor.trySet(company, to: john)
+		let updated = advisor.trySetting(company, to: john)
 		
 		let includeAdvisor = false
 		let noAdvisor = Optionally {

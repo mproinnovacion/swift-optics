@@ -19,8 +19,11 @@ public struct Zip<L: LensOptic>: LensOptic {
 		lens.get(whole)
 	}
 	
-	public func update(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
-		lens.update(whole, f)
+	public func updating(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole, f)
 	}
 }
 
@@ -52,19 +55,19 @@ where LHS.Whole == RHS.Whole, LHS.NewWhole == RHS.NewWhole, LHS.NewWhole == LHS.
 		)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		let lhsPart = lhs.get(whole)
 		let rhsPart = rhs.get(whole)
 		
-		let updated = lhs.update(whole) { lhsPart in
-			f((lhsPart, rhsPart)).0
+		let updated = try lhs.updating(whole) { lhsPart in
+			try f((lhsPart, rhsPart)).0
 		}
 				
-		return rhs.update(updated) { rhsPart in
-			f((lhsPart, rhsPart)).1
+		return try rhs.updating(updated) { rhsPart in
+			try f((lhsPart, rhsPart)).1
 		}
 	}
 }

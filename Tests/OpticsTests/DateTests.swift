@@ -13,7 +13,7 @@ class DateTests: XCTestCase {
 		
 		XCTAssertEqual(
 			Date.dayOptic().tryGet(
-				Date.dayOptic().trySet(date, to: 2)
+				Date.dayOptic().trySetting(date, to: 2)
 			),
 			2
 		)
@@ -30,7 +30,7 @@ class DateTests: XCTestCase {
 		
 		XCTAssertEqual(
 			Date.yearOptic().tryGet(
-				Date.yearOptic().tryUpdate(date, { $0 + 1 })
+				Date.yearOptic().tryUpdating(date, { $0 + 1 })
 			),
 			1971
 		)
@@ -41,12 +41,12 @@ class DateTests: XCTestCase {
 		)
 		
 		dump(
-			Date.weekdayOptic().trySet(date, to: .tuesday).timeIntervalSince1970
+			Date.weekdayOptic().trySetting(date, to: .tuesday).timeIntervalSince1970
 		)
 		
 		XCTAssertEqual(
 			Date.dayOptic().tryGet(
-				Date.weekdayOptic().trySet(date, to: .tuesday)
+				Date.weekdayOptic().trySetting(date, to: .tuesday)
 			),
 			6
 		)

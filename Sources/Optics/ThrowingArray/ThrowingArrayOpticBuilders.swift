@@ -16,8 +16,16 @@ public enum ThrowingArrayOpticBuilder {
 		.init(prism: optic)
 	}
 	
-	public static func buildPartialBlock<O: ThrowingArrayOptic>(first optic: O) -> ThrowingArrayLiftOptionalOptic<O> {
+	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> ThrowingArrayLiftOptionalOptic<O> {
 		.init(optic: optic)
+	}
+	
+	public static func buildPartialBlock<O: ThrowingOptic>(first optic: O) -> ThrowingArrayLiftThrowingOptic<O> {
+		.init(optic: optic)
+	}
+	
+	public static func buildPartialBlock<O: ThrowingArrayOptic>(first optic: O) -> O {
+		optic
 	}
 	
 	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, ThrowingArrayLiftLensOptic<O1>> {
@@ -32,11 +40,15 @@ public enum ThrowingArrayOpticBuilder {
 		CombineThrowingArray(lhs: o0, rhs: ThrowingArrayLiftOptionalOptic(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: ArrayOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, O1> {
-		CombineThrowingArray(lhs: o0, rhs: o1)
+	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: ArrayOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, ThrowingArrayLiftArrayOptic<O1>> {
+		CombineThrowingArray(lhs: o0, rhs: .init(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: ThrowingOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, O1> {
+	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: ThrowingOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0,  ThrowingArrayLiftThrowingOptic<O1>> {
+		CombineThrowingArray(lhs: o0, rhs: .init(optic: o1))
+	}
+	
+	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: ThrowingArrayOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, O1> {
 		CombineThrowingArray(lhs: o0, rhs: o1)
 	}
 }
@@ -154,6 +166,33 @@ where O.NewPart == O.Part {
 		optic.tryUpdating(whole) { part in
 			(try? f(part)) ?? part
 		}
+	}
+}
+
+public struct ThrowingArrayLiftThrowingOptic<O: ThrowingOptic>: ThrowingArrayOptic
+where O.NewPart == O.Part {
+	public typealias Whole = O.Whole
+	public typealias NewWhole = O.NewWhole
+	public typealias Part = O.Part
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	
+	public init(optic: O) {
+		self.optic = optic
+	}
+	
+	@inlinable
+	public func getAll(_ whole: Whole) throws -> [Part] {
+		[try optic.get(whole)]
+	}
+	
+	@inlinable
+	public func updatingAll(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try optic.updating(whole, f)
 	}
 }
 

@@ -16,9 +16,15 @@ public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart> {
 		
 	func get(_ whole: Whole) throws -> Part
 	
-	func update(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) throws -> NewWhole
+	func updating(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole
 	
-	func set(_ whole: Whole, to: NewPart) throws -> NewWhole
+	func setting(
+		_ whole: Whole,
+		to: NewPart
+	) throws -> NewWhole
 	
 	
 	@ThrowingOpticBuilder
@@ -47,19 +53,19 @@ extension ThrowingOptic where Body: ThrowingOptic, Body.Whole == Whole, Body.Par
 	}
 	
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.body.update(whole, f)
+		try self.body.updating(whole, f)
 	}
 	
 	@inlinable
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newPart: NewPart
 	) throws -> NewWhole {
-		try self.body.set(whole, to: newPart)
+		try self.body.setting(whole, to: newPart)
 	}
 }
 
@@ -69,25 +75,25 @@ extension ThrowingOptic {
 	@inlinable
 	public func update(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) -> Void
-	) throws -> Void
+		_ f: @escaping (inout Part) throws -> Void
+	) throws
 	where Part == NewPart, Whole == NewWhole {
-		whole = try self.update(whole, { part in
+		whole = try self.updating(whole, { part in
 			var copy = part
-			f(&copy)
+			try f(&copy)
 			return copy
 		})
 	}
 	
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (inout Part) -> Void
+		_ f: @escaping (inout Part) throws -> Void
 	) throws -> Whole
 	where Part == NewPart, Whole == NewWhole {
-		try self.update(whole) { part in
+		try self.updating(whole) { part in
 			var result = part
-			f(&result)
+			try f(&result)
 			return result
 		}
 	}
@@ -95,11 +101,11 @@ extension ThrowingOptic {
 	@inlinable
 	public func update(
 		_ whole: inout Whole,
-		_ f: @escaping (Part) -> NewPart
-	) throws -> Void
+		_ f: @escaping (Part) throws -> NewPart
+	) throws
 	where Part == NewPart, Whole == NewWhole {
 		try self.update(&whole) { part in
-			part = f(part)
+			part = try f(part)
 		}
 	}
 	
@@ -108,7 +114,7 @@ extension ThrowingOptic {
 		_ whole: inout Whole,
 		to newPart: NewPart
 	) throws where Part == NewPart, Whole == NewWhole {
-		whole = try self.set(whole, to: newPart)
+		whole = try self.setting(whole, to: newPart)
 	}
 	
 	@inlinable
@@ -124,17 +130,17 @@ extension ThrowingOptic {
 
 public struct ThrowingRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingOptic {
 	public let _get: (Whole) throws -> Part
-	public let _update: (Whole, @escaping (Part) throws -> NewPart) throws -> NewWhole
-	public let _set: (Whole, NewPart) throws -> NewWhole
+	public let _updating: (Whole, @escaping (Part) throws -> NewPart) throws -> NewWhole
+	public let _setting: (Whole, NewPart) throws -> NewWhole
 	
 	public init(
 		get: @escaping (Whole) throws -> Part,
-		update: @escaping (Whole, @escaping (Part) throws -> NewPart) throws -> NewWhole,
-		set: @escaping (Whole, NewPart) throws -> NewWhole
+		updating: @escaping (Whole, @escaping (Part) throws -> NewPart) throws -> NewWhole,
+		setting: @escaping (Whole, NewPart) throws -> NewWhole
 	) {
 		self._get = get
-		self._update = update
-		self._set = set
+		self._updating = updating
+		self._setting = setting
 	}
 	
 	@inlinable
@@ -143,37 +149,36 @@ public struct ThrowingRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingOptic {
 	}
 
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try _update(whole, f)
+		try _updating(whole, f)
 	}
 	
 	@inlinable
-	public func set(
+	public func setting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try _set(whole, newValue)
+		try _setting(whole, newValue)
 	}
 }
 
 extension OptionalOptic {
-	public func throwing() -> ThrowingRawOptic<Whole, Part, NewWhole, NewPart>
-	where NewPart == Part {
+	public func throwing() -> ThrowingRawOptic<Whole, Part, NewWhole, NewPart> {
 		ThrowingRawOptic { whole in
 			guard let part = self.tryGet(whole) else {
 				throw(ThrowingError.noData)
 			}
 			
 			return part
-		} update: { whole, update in
-			tryUpdate(whole) { part in
-				(try? update(part)) ?? part
+		} updating: { whole, update in
+			try tryUpdating(whole) { part in
+				try update(part)
 			}
-		} set: { whole, newPart in
-			trySet(whole, to: newPart)
+		} setting: { whole, newPart in
+			trySetting(whole, to: newPart)
 		}
 	}
 }

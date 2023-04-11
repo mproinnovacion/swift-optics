@@ -26,7 +26,7 @@ public struct SplitByOptic: LensOptic {
 	) rethrows -> NewWhole {
 		let components = whole.components(separatedBy: separator)
 		return String(
-			f(components).joined(separator: separator)
+			try f(components).joined(separator: separator)
 		)
 	}
 }

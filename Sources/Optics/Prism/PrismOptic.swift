@@ -136,20 +136,20 @@ where Whole == O.Whole, Part == O.Part {
 		self.optic?.extract(from: whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		guard let part = self.optic?.extract(from: whole) else {
 			return whole
 		}
 		
-		let newPart = f(part)
+		let newPart = try f(part)
 		
 		return self.optic?.embed(newPart) ?? whole
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newPart: NewPart
 	) -> NewWhole {

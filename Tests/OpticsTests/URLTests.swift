@@ -13,7 +13,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.schemeOptic().trySet(url, to: "ftp").absoluteString,
+			URL.schemeOptic().trySetting(url, to: "ftp").absoluteString,
 			"ftp://user:password@www.google.com/path?item=true"
 		)
 		
@@ -24,7 +24,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.hostOptic().trySet(url, to: "www.tyris-software.com").absoluteString,
+			URL.hostOptic().trySetting(url, to: "www.tyris-software.com").absoluteString,
 			"https://user:password@www.tyris-software.com/path?item=true"
 		)
 		
@@ -35,7 +35,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.userOptic().trySet(url, to: "john").absoluteString,
+			URL.userOptic().trySetting(url, to: "john").absoluteString,
 			"https://john:password@www.google.com/path?item=true"
 		)
 		
@@ -46,7 +46,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.passwordOptic().trySet(url, to: "secret").absoluteString,
+			URL.passwordOptic().trySetting(url, to: "secret").absoluteString,
 			"https://user:secret@www.google.com/path?item=true"
 		)
 		
@@ -57,7 +57,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.portOptic().trySet(url, to: 12).absoluteString,
+			URL.portOptic().trySetting(url, to: 12).absoluteString,
 			"https://user:password@www.google.com:12/path?item=true"
 		)
 		
@@ -68,7 +68,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.pathOptic().trySet(url, to: "newpath").absoluteString,
+			URL.pathOptic().trySetting(url, to: "newpath").absoluteString,
 			"https://user:password@www.google.com/newpath?item=true"
 		)
 		
@@ -79,7 +79,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.queryOptic().trySet(url, to: "item1=false").absoluteString,
+			URL.queryOptic().trySetting(url, to: "item1=false").absoluteString,
 			"https://user:password@www.google.com/path?item1=false"
 		)
 		
@@ -90,7 +90,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.fragmentOptic().trySet(url, to: "fragment").absoluteString,
+			URL.fragmentOptic().trySetting(url, to: "fragment").absoluteString,
 			"https://user:password@www.google.com/path?item=true#fragment"
 		)
 		
@@ -103,7 +103,7 @@ class URLTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			URL.queryItemsOptic().trySet(
+			URL.queryItemsOptic().trySetting(
 				url,
 				to: [
 					URLQueryItem(name: "item1", value: "1"),
@@ -120,7 +120,7 @@ class URLTests: XCTestCase {
 		
 		XCTAssertEqual(
 			URL.absoluteStringOptic().tryGet(
-				URL.absoluteStringOptic().tryUpdate(url, { urlString in
+				URL.absoluteStringOptic().tryUpdating(url, { urlString in
 					urlString + "&blah=true"
 				})
 			),
