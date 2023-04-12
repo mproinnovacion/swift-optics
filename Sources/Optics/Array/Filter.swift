@@ -37,3 +37,27 @@ where O.NewPart == O.Part, O.NewWhole == O.Whole {
 		}
 	}
 }
+
+extension LensOptic {
+	public func filterIndexed<Element>(
+		_ filter: @escaping (Int, Element) -> Bool
+	) -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
+	where Part == [Element], NewPart == Part, NewWhole == Whole {
+		Enumerated { self }
+			.each()
+			.filter(filter)			
+			.map { pair in
+				pair.1
+			} to: { current, updated in
+				(current.0, updated)
+			}
+	}
+}
+
+extension ArrayOptic {
+	public func filter(
+		_ filter: @escaping (Part) -> Bool
+	) -> Filter<Self> where NewPart == Part {
+		Filter(filter: filter, with: { self })
+	}
+}

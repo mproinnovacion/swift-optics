@@ -42,6 +42,13 @@ class AnyOfTests: XCTestCase {
 			),
 			20
 		)
+		
+		XCTAssertEqual(
+			optic.tryGet(
+				optic.tryUpdating(remote) { $0 + 1 }
+			),
+			15
+		)
 	}
 	
 	func testStatement() {
