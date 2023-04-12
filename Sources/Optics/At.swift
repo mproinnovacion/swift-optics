@@ -29,26 +29,26 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 		return results[self.index]
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole) { elements in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole) { elements in
 			guard elements.count > self.index else {
 				return elements
 			}
 			
 			var result = elements
-			result[self.index] = f(result[self.index])
+			result[self.index] = try f(result[self.index])
 			return result
 		}
 	}
 
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}

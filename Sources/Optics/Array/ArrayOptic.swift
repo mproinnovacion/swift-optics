@@ -12,10 +12,10 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 		
 	func getAll(_ whole: Whole) -> [Part]
 	
-	func updateAll(
+	func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole
 	
 	@ArrayOpticBuilder var body: Body { get }
 }
@@ -43,11 +43,11 @@ extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == P
 	}
 	
 	@inlinable
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		self.body.updateAll(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try self.body.updatingAll(whole, f)
 	}
 }
 
@@ -57,12 +57,12 @@ extension ArrayOptic {
 	@inlinable
 	public func updateAll(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) -> Void
-	) -> Void
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows -> Void
 	where NewWhole == Whole, NewPart == Part {
-		whole = self.updateAll(whole) { part in
+		whole = try self.updatingAll(whole) { part in
 			var copy = part
-			f(&copy)
+			try f(&copy)
 			return copy
 		}
 	}
@@ -77,10 +77,13 @@ extension ArrayOptic where NewPart == Part, NewWhole == Whole {
 	}
 	
 	@inlinable
-	public func updatingAll(_ whole: Whole, _ f: @escaping (inout Part) -> Void) -> Whole {
-		self.updateAll(whole) { part in
+	public func updatingAll(
+		_ whole: Whole,
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows -> Whole {
+		try self.updatingAll(whole) { part in
 			var copy = part
-			f(&copy)
+			try f(&copy)
 			return copy
 		}
 	}
@@ -105,11 +108,11 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	}
 
 	@inlinable
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		whole.map(f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try whole.map(f)
 	}
 }
 
@@ -125,11 +128,11 @@ public struct SetDefaultOptic<Element: Hashable, NewElement: Hashable>: ArrayOpt
 	}
 
 	@inlinable
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		Set(whole.map(f))
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		Set(try whole.map(f))
 	}
 }
 
@@ -145,11 +148,37 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 	}
 
 	@inlinable
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		whole.mapValues(f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try whole.mapValues(f)
+	}
+}
+
+public struct ArrayOpticFromOptional<Whole, Part, NewPart, O: ArrayOptic>: ArrayOptic
+where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewPart {
+	public typealias NewWhole = O.NewWhole
+	
+	public let optic: O?
+	
+	public init(optic: O?) {
+		self.optic = optic
+	}
+	
+	public func getAll(_ whole: Whole) -> [Part] {
+		optic?.getAll(whole) ?? []
+	}
+	
+	public func updatingAll(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		guard let optic = self.optic else {
+			return whole
+		}
+		
+		return try optic.updatingAll(whole, f)
 	}
 }
 
@@ -165,11 +194,11 @@ public struct ArrayLensLiftOptic<O: LensOptic>: ArrayOptic {
 		[lens.get(whole)]
 	}
 	
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole, f)
 	}
 }
 
@@ -185,10 +214,10 @@ public struct ArrayOptionalLiftOptic<O: OptionalOptic>: ArrayOptic {
 		[optic.tryGet(whole)].compactMap { $0 }
 	}
 	
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		optic.tryUpdate(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try optic.tryUpdating(whole, f)
 	}
 }

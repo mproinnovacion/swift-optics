@@ -20,11 +20,11 @@ public struct Concat<Optics: ArrayOptic>: ArrayOptic {
 		lens.getAll(whole)
 	}
 	
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.updateAll(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updatingAll(whole, f)
 	}
 }
 
@@ -42,18 +42,24 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 		lhs.getAll(whole) + rhs.getAll(whole)
 	}
 	
-	public func updateAll(
+	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		var result = whole
-		result = lhs.updateAll(result, f)
-		return rhs.updateAll(result, f)
+		result = try lhs.updatingAll(result, f)
+		return try rhs.updatingAll(result, f)
 	}
 }
 
 @resultBuilder
 public enum ConcatLensesBuilder {
+	public static func buildOptional<O: ArrayOptic>(
+		_ optic: O?
+	) -> ArrayOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
+		ArrayOpticFromOptional(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> ArrayLensLiftOptic<O> {
 		ArrayLensLiftOptic(lens: optic)
 	}

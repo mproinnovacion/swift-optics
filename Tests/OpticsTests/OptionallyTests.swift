@@ -59,14 +59,14 @@ class OptionallyTests: XCTestCase {
 			string.replacingOccurrences(of: "!", with: "")
 		}
 
-		var updated = advisor.trySet(company, to: john)
+		var updated = advisor.trySetting(company, to: john)
 		
 		XCTAssertEqual(
 			advisorNameShouted.tryGet(updated),
 			"John!"
 		)
 		
-		updated = advisorNameShouted.trySet(updated, to: "Tony")
+		updated = advisorNameShouted.trySetting(updated, to: "Tony")
 		
 		XCTAssertEqual(
 			advisorNameShouted.tryGet(updated),
@@ -82,5 +82,40 @@ class OptionallyTests: XCTestCase {
 			default:
 				XCTFail("Invalid advisor")
 		}
+	}
+	
+	func testStatement() {
+		let advisor = Optionally {
+			if true {
+				\Company.advisor
+				Prism {
+					/Failable<Person>?.some
+					/Failable<Person>.valid
+				}
+			}
+		}
+		
+		let updated = advisor.trySetting(company, to: john)
+		
+		let includeAdvisor = false
+		let noAdvisor = Optionally {
+			if includeAdvisor {
+				\Company.advisor
+				Prism {
+					/Failable<Person>?.some
+					/Failable<Person>.valid
+				}
+			}
+		}
+		
+		XCTAssertEqual(
+			advisor.tryGet(updated),
+			john
+		)
+		
+		XCTAssertEqual(
+			noAdvisor.tryGet(updated),
+			nil
+		)
 	}
 }

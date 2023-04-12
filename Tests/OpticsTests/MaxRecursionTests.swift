@@ -19,28 +19,36 @@ fileprivate struct GroupLeafsOptic: ArrayOptic {
 	fileprivate typealias Part = String
 	fileprivate typealias NewWhole = Group
 	fileprivate typealias NewPart = String
+	
+	var maxRecursion: Int
+	
+	init(maxRecursion: Int) {
+		self.maxRecursion = maxRecursion
+	}
 
 	var body: some SimpleArrayOptic<Group, String> {
-		Many {
-			Lens {
-				\Group.items
-			}.each()
-
-			Concat {
-				Many {
-					/Item.leaf
-				}
-
-				Many {
-					/Item.group
-					Self()
+		if self.maxRecursion > 0 {
+			Many {
+				Lens {
+					\Group.items
+				}.each()
+				
+				Concat {
+					Many {
+						/Item.leaf
+					}
+					
+					Many {
+						/Item.group
+						Self(maxRecursion: maxRecursion - 1)
+					}
 				}
 			}
 		}
 	}
 }
 
-class RecursiveArrayTests: XCTestCase {
+class MaxRecursionTests: XCTestCase {
 	func testRecursive() {
 		let group = Group(items: [
 			.group(.init(items: [
@@ -56,15 +64,26 @@ class RecursiveArrayTests: XCTestCase {
 		])
 
 		XCTAssertEqual(
-			GroupLeafsOptic().getAll(group),
+			GroupLeafsOptic(maxRecursion: 0).getAll(group),
+			[]
+		)
+		
+		XCTAssertEqual(
+			GroupLeafsOptic(maxRecursion: 1).getAll(group),
+			[ "leaf3" ]
+		)
+		
+		XCTAssertEqual(
+			GroupLeafsOptic(maxRecursion: 4).getAll(group),
 			[ "leaf0", "leaf1", "leaf2", "leaf3" ]
 		)
 
 		XCTAssertEqual(
-			GroupLeafsOptic().getAll(
-				GroupLeafsOptic().updatingAll(group, { $0 + "!" })
+			GroupLeafsOptic(maxRecursion: 4).getAll(
+				GroupLeafsOptic(maxRecursion: 1)
+					.updatingAll(group, { $0 + "!" })
 			),
-			[ "leaf0!", "leaf1!", "leaf2!", "leaf3!" ]
+			[ "leaf0", "leaf1", "leaf2", "leaf3!" ]
 		)
 	}
 }

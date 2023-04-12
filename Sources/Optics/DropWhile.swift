@@ -23,15 +23,15 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 		Array(optic.get(whole).drop(while: condition))
 	}
 
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		optic.update(whole) { elements in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try optic.updating(whole) { elements in
 			let toUpdate = Array(elements.drop(while: condition))
 			let toKeep = elements.prefix(elements.count - toUpdate.count)
 			
-			let updated = f(toUpdate)
+			let updated = try f(toUpdate)
 			return toKeep + updated
 		}
 	}

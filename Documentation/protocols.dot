@@ -1,0 +1,23 @@
+digraph protocols {
+	rank1 [style=invisible];
+	rank2 [style=invisible];
+
+	rank1 -> rank2 [color=white];
+
+	
+
+	LensOptic -> Getter [style=dotted, arrowhead=open];
+	LensOptic -> Setter [style=dotted, arrowhead=open];
+	PrismOptic -> OptionalOptic [label="optional"];
+	LensOptic -> ArrayOptic [label="each"];
+	LensOptic -> ThrowingOptic [label="throwing"];
+	PrismOptic -> ThrowingOptic [label="throwing"];
+	OptionalOptic -> ThrowingOptic [label="throwing"];
+	ArrayOptic -> ThrowingArrayOptic [label="throwing"];
+
+	{ rank = min; Getter ; Setter }
+	{
+		rank = same;
+		rank2 -> LensOptic -> PrismOptic [ style=invis ];
+	}
+}

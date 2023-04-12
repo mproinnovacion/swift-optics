@@ -19,7 +19,10 @@ public struct Lens<L: LensOptic>: LensOptic {
 		lens.get(whole)
 	}
 	
-	public func update(_ whole: L.Whole, _ f: @escaping (L.Part) -> L.NewPart) -> L.NewWhole {
-		lens.update(whole, f)
+	public func updating(
+		_ whole: L.Whole,
+		_ f: @escaping (L.Part) throws -> L.NewPart
+	) rethrows -> L.NewWhole {
+		try lens.updating(whole, f)
 	}
 }

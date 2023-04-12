@@ -19,15 +19,15 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 		optics.tryGet(whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		optics.tryUpdate(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try optics.tryUpdating(whole, f)
 	}
 	
-	public func trySet(_ whole: Whole, to newValue: NewPart) -> NewWhole {
-		optics.trySet(whole, to: newValue)
+	public func trySetting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
+		optics.trySetting(whole, to: newValue)
 	}
 }
 

@@ -13,22 +13,22 @@ public protocol Setter {
 	associatedtype Part
 	associatedtype NewPart
 	
-	func update(
+	func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole
 }
 
 extension Setter {
 	@inlinable
 	public func update(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) -> Void
-	) -> Void
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows -> Void
 	where NewWhole == Whole, NewPart == Part {
-		whole = self.update(whole) { part in
+		whole = try self.updating(whole) { part in
 			var copy = part
-			f(&copy)
+			try f(&copy)
 			return copy
 		}
 	}
@@ -52,7 +52,7 @@ extension LensOptic where Body == Never {
 		fatalError(
   """
   '\(Self.self)' has no body. …
-  Do not access an ArrayOptic's 'body' property directly, as it may not exist.
+  Do not access a LensOptic's 'body' property directly, as it may not exist.
   """
 		)
 	}
@@ -65,11 +65,11 @@ extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Par
 		self.body.get(whole)
 	}
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		self.body.update(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try self.body.updating(whole, f)
 	}
 }
 
@@ -100,11 +100,11 @@ extension LensOptic {
 	@inlinable
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (inout Part) -> Void
-	) -> Whole
+		_ f: @escaping (inout Part) throws -> Void
+	) rethrows -> Whole
 	where NewWhole == Whole, NewPart == Part {
 		var copy = whole
-		self.update(&copy, f)
+		try self.update(&copy, f)
 		return copy
 	}
 }
@@ -131,12 +131,12 @@ extension WritableKeyPath: LensOptic {
 	public typealias NewPart = Value
 	
 	@inlinable
-	public func update(
+	public func updating(
 		_ whole: Root,
-		_ f: @escaping (Value) -> Value
-	) -> Root {
+		_ f: @escaping (Value) throws -> Value
+	) rethrows -> Root {
 		var result = whole
-		result[keyPath: self] = f(result[keyPath: self])
+		result[keyPath: self] = try f(result[keyPath: self])
 		return result
 	}
 }

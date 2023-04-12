@@ -1,8 +1,18 @@
 import Foundation
 
+public enum Weekday: Int {
+	case monday = 2
+	case tuesday = 3
+	case wednesday = 4
+	case thursday = 5
+	case friday = 6
+	case saturday = 7
+	case sunday = 1
+}
+
 extension Date {
 	private static var allComponents: Set<Calendar.Component> {
-		[.era, .day, .month, .year, .hour, .minute, .second, .nanosecond]
+		[.era, .weekday, .day, .month, .year, .hour, .minute, .second, .nanosecond]
 	}
 	
 	public static func componentsOptic(
@@ -14,16 +24,17 @@ extension Date {
 				allComponents,
 				from: date
 			)
-		} tryUpdate: { date, update in
-			var components = calendar.dateComponents(
+		} tryUpdating: { date, update in
+			let components = calendar.dateComponents(
 				allComponents,
 				from: date
 			)
 			
-			components = update(components)
+			let updated = try? update(components)
 			
-			return calendar.date(from: components) ?? date
-		} trySet: { date, newComponents in
+			return updated
+				.flatMap(calendar.date(from:)) ?? date
+		} trySetting: { date, newComponents in
 			var components = calendar.dateComponents(
 				allComponents,
 				from: date
@@ -41,14 +52,77 @@ extension Date {
 		}
 	}
 	
-	public static func dayOptic(
+	private static func componentOptic(
+		_ path: WritableKeyPath<DateComponents, Int?>,
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
 		Optionally {
 			componentsOptic(calendar: calendar, timeZone: timeZone)
-			\DateComponents.day
+			path
 			Int?.optic()
+		}
+	}
+	
+	public static func componentOptic(
+		_ path: WritableKeyPath<DateComponents, Int?>,
+		component: Calendar.Component,
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Int> {
+		OptionalRawOptic { date in
+			componentOptic(path, calendar: calendar, timeZone: timeZone)
+				.tryGet(date)
+		} tryUpdating: { date, update in
+			guard
+				let value = componentOptic(path, calendar: calendar, timeZone: timeZone)
+					.tryGet(date),
+				let updated = try? update(value)
+			else {
+				return date
+			}
+			
+			return calendar.date(bySetting: component, value: updated, of: date) ?? date
+		} trySetting: { date, value in
+			calendar.date(bySetting: component, value: value, of: date) ?? date
+		}
+	}
+	
+	public static func dayOptic(
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Int> {
+		componentOptic(
+			\DateComponents.day,
+			 component: .day,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
+	}
+	
+	public static func weekdayValueOptic(
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Int> {
+		componentOptic(
+			\DateComponents.weekday,
+			 component: .weekday,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
+	}
+	
+	public static func weekdayOptic(
+		calendar: Calendar = .autoupdatingCurrent,
+		timeZone: TimeZone = .autoupdatingCurrent
+	) -> some SimpleOptionalOptic<Date, Weekday> {
+		weekdayValueOptic(
+			calendar: calendar,
+			timeZone: timeZone
+		).flatMap { value in
+			Weekday(rawValue: value)
+		} to: { day in
+			day.rawValue
 		}
 	}
 	
@@ -56,33 +130,36 @@ extension Date {
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
-		Optionally {
-			componentsOptic(calendar: calendar, timeZone: timeZone)
-			\DateComponents.month
-			Int?.optic()
-		}
+		componentOptic(
+			\DateComponents.month,
+			 component: .month,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
 	}
 	
 	public static func yearOptic(
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
-		Optionally {
-			componentsOptic(calendar: calendar, timeZone: timeZone)
-			\DateComponents.year
-			Int?.optic()
-		}
+		componentOptic(
+			\DateComponents.year,
+			 component: .year,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
 	}
 	
 	public static func hourOptic(
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
-		Optionally {
-			componentsOptic(calendar: calendar, timeZone: timeZone)
-			\DateComponents.hour
-			Int?.optic()
-		}
+		componentOptic(
+			\DateComponents.hour,
+			 component: .hour,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
 	}
 	
 	@inlinable
@@ -90,21 +167,23 @@ extension Date {
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
-		Optionally {
-			componentsOptic(calendar: calendar, timeZone: timeZone)
-			\DateComponents.minute
-			Int?.optic()
-		}
+		componentOptic(
+			\DateComponents.minute,
+			 component: .minute,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
 	}
 	
 	public static func secondOptic(
 		calendar: Calendar = .autoupdatingCurrent,
 		timeZone: TimeZone = .autoupdatingCurrent
 	) -> some SimpleOptionalOptic<Date, Int> {
-		Optionally {
-			componentsOptic(calendar: calendar, timeZone: timeZone)
-			\DateComponents.second
-			Int?.optic()
-		}
+		componentOptic(
+			\DateComponents.second,
+			 component: .second,
+			 calendar: calendar,
+			 timeZone: timeZone
+		)
 	}
 }

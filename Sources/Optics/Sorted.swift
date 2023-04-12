@@ -29,17 +29,17 @@ where L.Part == [SortPropertyOptic.Whole], SortPropertyOptic.Part: Comparable, L
 		}
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole) { (parts: Part) -> NewPart in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole) { (parts: Part) -> NewPart in
 			let sortedIndexed = parts.enumerated().sorted {
 				self.by.get($0.1) < self.by.get($1.1)
 			}
 			
 			let indices = sortedIndexed.map { index, _ in index }
-			let updated = f(sortedIndexed.map { _, item in item })
+			let updated = try f(sortedIndexed.map { _, item in item })
 			
 			let updatedOriginalSortingTrimmed = zip(indices, updated)
 				.sorted(by: { $0.0 < $1.0 }).map { $0.1 }
