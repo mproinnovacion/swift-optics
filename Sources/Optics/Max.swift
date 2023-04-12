@@ -25,11 +25,11 @@ where L.Part == [Element], Sorted.Whole == Element, Sorted.Part: Comparable, L.N
 		}
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole) { elements in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole) { elements in
 			guard elements.count > 0 else {
 				return elements
 			}
@@ -43,16 +43,16 @@ where L.Part == [Element], Sorted.Whole == Element, Sorted.Part: Comparable, L.N
 			}
 			
 			var result = elements
-			result[index] = f(result[index])
+			result[index] = try f(result[index])
 			return result
 		}
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}

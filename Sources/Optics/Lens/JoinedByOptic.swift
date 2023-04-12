@@ -20,12 +20,12 @@ public struct JoinedByOptic: LensOptic {
 		whole.joined(separator: separator)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
 		let string = whole.joined(separator: separator)
-		return f(string).components(separatedBy: separator)
+		return try f(string).components(separatedBy: separator)
 	}
 }
 

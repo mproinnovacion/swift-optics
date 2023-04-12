@@ -24,16 +24,17 @@ extension Date {
 				allComponents,
 				from: date
 			)
-		} tryUpdate: { date, update in
-			var components = calendar.dateComponents(
+		} tryUpdating: { date, update in
+			let components = calendar.dateComponents(
 				allComponents,
 				from: date
 			)
 			
-			components = update(components)
+			let updated = try? update(components)
 			
-			return calendar.date(from: components) ?? date
-		} trySet: { date, newComponents in
+			return updated
+				.flatMap(calendar.date(from:)) ?? date
+		} trySetting: { date, newComponents in
 			var components = calendar.dateComponents(
 				allComponents,
 				from: date
@@ -72,15 +73,17 @@ extension Date {
 		OptionalRawOptic { date in
 			componentOptic(path, calendar: calendar, timeZone: timeZone)
 				.tryGet(date)
-		} tryUpdate: { date, update in
-			guard let value = componentOptic(path, calendar: calendar, timeZone: timeZone).tryGet(date) else {
+		} tryUpdating: { date, update in
+			guard
+				let value = componentOptic(path, calendar: calendar, timeZone: timeZone)
+					.tryGet(date),
+				let updated = try? update(value)
+			else {
 				return date
 			}
 			
-			let updated = update(value)
-			
 			return calendar.date(bySetting: component, value: updated, of: date) ?? date
-		} trySet: { date, value in
+		} trySetting: { date, value in
 			calendar.date(bySetting: component, value: value, of: date) ?? date
 		}
 	}

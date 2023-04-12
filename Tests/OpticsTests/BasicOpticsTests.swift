@@ -17,7 +17,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			[Int].optic().updateAll(array, { $0 * 2 }),
+			[Int].optic().updatingAll(array, { $0 * 2 }),
 			[2,4,6]
 		)
 	}
@@ -31,7 +31,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			Set<Int>.optic().updateAll(set, { $0 * 2 }),
+			Set<Int>.optic().updatingAll(set, { $0 * 2 }),
 			Set([2,4,6])
 		)
 	}
@@ -49,7 +49,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			[String: Int].valuesOptic().updateAll(dic, { $0 * 2 }),
+			[String: Int].valuesOptic().updatingAll(dic, { $0 * 2 }),
 			[
 				"0": 2,
 				"1": 4,
@@ -68,7 +68,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			Int?.optic().tryUpdate(some, { $0 * 2 }),
+			Int?.optic().tryUpdating(some, { $0 * 2 }),
 			2
 		)
 		
@@ -78,7 +78,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			Int?.optic().tryUpdate(none, { $0 * 2 }),
+			Int?.optic().tryUpdating(none, { $0 * 2 }),
 			nil
 		)
 	}
@@ -93,7 +93,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			Result<Int, MyError>.optic().tryUpdate(success, { $0 * 2 }),
+			Result<Int, MyError>.optic().tryUpdating(success, { $0 * 2 }),
 			.success(2)
 		)
 		
@@ -103,7 +103,7 @@ class BasicOpticsTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			Result<Int, MyError>.optic().tryUpdate(fail, { $0 * 2 }),
+			Result<Int, MyError>.optic().tryUpdating(fail, { $0 * 2 }),
 			fail
 		)
 	}

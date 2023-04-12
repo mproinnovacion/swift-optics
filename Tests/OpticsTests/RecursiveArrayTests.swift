@@ -62,7 +62,7 @@ class RecursiveArrayTests: XCTestCase {
 
 		XCTAssertEqual(
 			GroupLeafsOptic().getAll(
-				GroupLeafsOptic().updateAll(group, { $0 + "!" })
+				GroupLeafsOptic().updatingAll(group, { $0 + "!" })
 			),
 			[ "leaf0!", "leaf1!", "leaf2!", "leaf3!" ]
 		)

@@ -41,21 +41,24 @@ where O.NewPart == O.Part {
 		}
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		optic.tryUpdate(whole) { oPart in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try optic.tryUpdating(whole) { oPart in
 			let original = from(oPart)
 			
-			return original.flatMap { original in
-				to(oPart, f(original))
+			return try original.flatMap { original in
+				to(oPart, try f(original))
 			} ?? oPart
 		}
 	}
 	
-	public func trySet(_ whole: Whole, to newValue: Part) -> NewWhole {
-		optic.tryUpdate(whole, { oPart in
+	public func trySetting(
+		_ whole: Whole,
+		to newValue: Part
+	) -> NewWhole {
+		optic.tryUpdating(whole, { oPart in
 			to(oPart, newValue) ?? oPart
 		})
 	}

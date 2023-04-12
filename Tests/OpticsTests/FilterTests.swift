@@ -26,7 +26,7 @@ class FilterTests: XCTestCase {
 		)
 
 		var local = company
-		local = odd.updateAll(local, { person in
+		local = odd.updatingAll(local, { person in
 			var result = person
 			result.name = result.name.uppercased()
 			return result

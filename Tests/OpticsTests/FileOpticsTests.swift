@@ -66,20 +66,20 @@ class FileOpticsTests: XCTestCase {
 		
 		try FileManager.default.copyItem(at: assetUrl, to: targetUrl)
 		
-		let datesOptic = Many {
+		let datesOptic = ManyThrowing {
 			URL.fileOptic()
 			Group.codableOptic()
 			GroupDatesOptic()
 		}
 		
-		let weekdayOptic = Many {
+		let weekdayOptic = ManyThrowing {
 			datesOptic
 			Date.weekdayOptic()
 		}
 		
 		XCTAssertEqual(
-			datesOptic.getAll(
-				weekdayOptic.settingAll(targetUrl, to: .tuesday)
+			try datesOptic.getAll(
+				try weekdayOptic.settingAll(targetUrl, to: .tuesday)
 			),
 			[
 				Date(timeIntervalSinceReferenceDate: 702856800),
@@ -91,6 +91,6 @@ class FileOpticsTests: XCTestCase {
 			]
 		)
 		
-		try? FileManager.default.removeItem(at: targetUrl)
+		try FileManager.default.removeItem(at: targetUrl)
 	}
 }

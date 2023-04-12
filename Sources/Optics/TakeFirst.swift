@@ -25,14 +25,14 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 		)
 	}
 	
-	public func update(
+	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole) { elements in
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole) { elements in
 			let toKeep = Array(elements.dropFirst(self.count))
 			var toUpdate = Array(elements.prefix(self.count))
-			toUpdate = f(toUpdate)
+			toUpdate = try f(toUpdate)
 			return toUpdate + Array(toKeep)
 		}
 	}

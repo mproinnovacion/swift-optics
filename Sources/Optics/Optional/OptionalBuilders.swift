@@ -47,18 +47,18 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 		optic?.tryGet(whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		optic?.tryUpdate(whole, f) ?? whole
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try optic?.tryUpdating(whole, f) ?? whole
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		optic?.trySet(whole, to: newValue) ?? whole
+		optic?.trySetting(whole, to: newValue) ?? whole
 	}
 }
 
@@ -78,18 +78,18 @@ public struct OptionalLiftLensOptic<O: LensOptic>: OptionalOptic {
 		lens.get(whole)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lens.update(whole, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lens.updating(whole, f)
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}
@@ -114,20 +114,20 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 		rhs.tryGet(lhs.get(whole))
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lhs.update(whole) { lhsPart in
-			rhs.tryUpdate(lhsPart, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lhs.updating(whole) { lhsPart in
+			try rhs.tryUpdating(lhsPart, f)
 		}
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdate(whole) { _ in
+		tryUpdating(whole) { _ in
 			newValue
 		}
 	}
@@ -152,21 +152,21 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 		lhs.tryGet(whole).flatMap(rhs.tryGet)
 	}
 	
-	public func tryUpdate(
+	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		lhs.tryUpdate(whole) { lhsPart in
-			rhs.tryUpdate(lhsPart, f)
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try lhs.tryUpdating(whole) { lhsPart in
+			try rhs.tryUpdating(lhsPart, f)
 		}
 	}
 	
-	public func trySet(
+	public func trySetting(
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		lhs.tryUpdate(whole) { part in
-			rhs.trySet(part, to: newValue)
+		lhs.tryUpdating(whole) { part in
+			rhs.trySetting(part, to: newValue)
 		}
 	}
 }
