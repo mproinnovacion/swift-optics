@@ -11,6 +11,7 @@ digraph protocols {
 	PrismOptic -> OptionalOptic [label="optional"];
 	LensOptic -> ArrayOptic [label="each"];
 	LensOptic -> ThrowingOptic [label="throwing"];
+	PrismOptic -> ThrowingOptic [label="throwing"];
 	OptionalOptic -> ThrowingOptic [label="throwing"];
 	ArrayOptic -> ThrowingArrayOptic [label="throwing"];
 
