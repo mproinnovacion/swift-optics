@@ -231,3 +231,9 @@ public struct OptionalLiftPrismOptic<P: PrismOptic>: OptionalOptic {
 		prism.embed(newValue)
 	}
 }
+
+extension PrismOptic {
+	public func optional() -> OptionalLiftPrismOptic<Self> {
+		.init(prism: self)
+	}
+}

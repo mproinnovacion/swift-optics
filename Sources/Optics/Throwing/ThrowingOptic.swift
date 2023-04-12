@@ -165,20 +165,20 @@ public struct ThrowingRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingOptic {
 	}
 }
 
+extension LensOptic {
+	public func throwing() -> ThrowingLiftLensOptic<Self> {
+		.init(optic: self)
+	}
+}
+
+extension PrismOptic {
+	public func throwing() -> ThrowingLiftPrismOptic<Self> {
+		.init(prism: self)
+	}
+}
+
 extension OptionalOptic {
-	public func throwing() -> ThrowingRawOptic<Whole, Part, NewWhole, NewPart> {
-		ThrowingRawOptic { whole in
-			guard let part = self.tryGet(whole) else {
-				throw(ThrowingError.noData)
-			}
-			
-			return part
-		} updating: { whole, update in
-			try tryUpdating(whole) { part in
-				try update(part)
-			}
-		} setting: { whole, newPart in
-			trySetting(whole, to: newPart)
-		}
+	public func throwing() -> ThrowingLiftOptionalOptic<Self> {
+		ThrowingLiftOptionalOptic(optic: self)
 	}
 }

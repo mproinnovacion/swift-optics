@@ -196,8 +196,7 @@ where O.NewPart == O.Part {
 	}
 }
 
-public struct ThrowingArrayLiftArrayOptic<O: ArrayOptic>: ThrowingArrayOptic
-where O.NewPart == O.Part {
+public struct ThrowingArrayLiftArrayOptic<O: ArrayOptic>: ThrowingArrayOptic {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = O.Part

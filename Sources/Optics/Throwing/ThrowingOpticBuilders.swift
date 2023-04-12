@@ -74,7 +74,7 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 	}
 }
 
-public struct ThrowingLiftLensOptic<O: LensOptic>: ThrowingOptic where O.Part == O.NewPart {
+public struct ThrowingLiftLensOptic<O: LensOptic>: ThrowingOptic {
 	let lens: O
 	
 	public typealias Whole = O.Whole
@@ -94,8 +94,8 @@ public struct ThrowingLiftLensOptic<O: LensOptic>: ThrowingOptic where O.Part ==
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		lens.updating(whole) { part in
-			(try? f(part)) ?? part
+		try lens.updating(whole) { part in
+			try f(part)
 		}
 	}
 	
@@ -152,8 +152,7 @@ public struct ThrowingLiftPrismOptic<P: PrismOptic>: ThrowingOptic {
 	}
 }
 
-public struct ThrowingLiftOptionalOptic<O: OptionalOptic>: ThrowingOptic
-where O.NewPart == O.Part {
+public struct ThrowingLiftOptionalOptic<O: OptionalOptic>: ThrowingOptic {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = O.Part
@@ -179,8 +178,8 @@ where O.NewPart == O.Part {
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		optic.tryUpdating(whole) { part in
-			(try? f(part)) ?? part
+		try optic.tryUpdating(whole) { part in
+			try f(part)
 		}
 	}
 	

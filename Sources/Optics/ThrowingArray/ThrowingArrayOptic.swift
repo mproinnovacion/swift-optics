@@ -146,3 +146,9 @@ public struct ThrowingArrayRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingArr
 		try _updatingAll(whole, f)
 	}
 }
+
+extension ArrayOptic {
+	public func throwing() -> ThrowingArrayLiftArrayOptic<Self> {
+		.init(optic: self)
+	}
+}
