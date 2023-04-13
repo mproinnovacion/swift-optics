@@ -12,7 +12,7 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L,
+		@LensOpticBuilder with build: () -> L,
 		while condition: @escaping (Element) -> Bool
 	) {
 		self.condition = condition

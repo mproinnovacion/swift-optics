@@ -13,7 +13,7 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 	@inlinable
 	public init(
 		count: Int = 1,
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.count = count
 		self.lens = build()

@@ -14,8 +14,8 @@ where L.Part == [SortPropertyOptic.Whole], SortPropertyOptic.Part: Comparable, L
 	@inlinable
 	public init(
 		reversed: Bool = false,
-		@LensBuilder _ build: () -> L,
-		@LensBuilder by: () -> SortPropertyOptic
+		@LensOpticBuilder _ build: () -> L,
+		@LensOpticBuilder by: () -> SortPropertyOptic
 	) {
 		self.reversed = reversed
 		self.lens = build()

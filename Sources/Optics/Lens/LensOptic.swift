@@ -39,7 +39,7 @@ public protocol LensOptic<Whole, Part, NewWhole, NewPart>: Getter, Setter {
 	
 	typealias Body = _Body
 
-	@LensBuilder
+	@LensOpticBuilder
 	var body: Body { get }
 }
 

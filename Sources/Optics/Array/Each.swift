@@ -12,7 +12,7 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.lens = build()
 	}

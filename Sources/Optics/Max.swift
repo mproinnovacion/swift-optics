@@ -12,8 +12,8 @@ where L.Part == [Element], Sorted.Whole == Element, Sorted.Part: Comparable, L.N
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L,
-		@LensBuilder by: () -> Sorted
+		@LensOpticBuilder with build: () -> L,
+		@LensOpticBuilder by: () -> Sorted
 	) {
 		self.lens = build()
 		self.by = by()

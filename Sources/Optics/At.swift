@@ -13,7 +13,7 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 	@inlinable
 	public init(
 		_ index: Array.Index,
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.index = index
 		self.lens = build()

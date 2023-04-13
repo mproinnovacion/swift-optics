@@ -10,7 +10,7 @@ public struct Last<L: LensOptic, Element>: OptionalOptic where L.Part == [Elemen
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.lens = build()
 	}

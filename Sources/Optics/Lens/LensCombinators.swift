@@ -10,7 +10,7 @@ public struct Lens<L: LensOptic>: LensOptic {
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.lens = build()
 	}

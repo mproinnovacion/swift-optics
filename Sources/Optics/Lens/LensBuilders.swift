@@ -1,7 +1,7 @@
 import Foundation
 
 @resultBuilder
-public enum LensBuilder {
+public enum LensOpticBuilder {
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> O {
 		optic
 	}

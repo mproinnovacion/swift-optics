@@ -7,13 +7,13 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	public typealias Part = [(Array.Index, Element)]
 	public typealias NewPart = [(Array.Index, NewElement)]
 	
-	public let lens: EnumeratedLens<L, Element, NewElement>
+	public let lens: EnumeratedLensOptic<L, Element, NewElement>
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
-		self.lens = EnumeratedLens(lens: build())
+		self.lens = EnumeratedLensOptic(lens: build())
 	}
 	
 	public func get(_ whole: Whole) -> Part {
@@ -28,7 +28,7 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	}
 }
 
-public struct EnumeratedLens<L: LensOptic, Element, NewElement>: LensOptic
+public struct EnumeratedLensOptic<L: LensOptic, Element, NewElement>: LensOptic
 where L.Part == [Element], L.NewPart == [NewElement] {
 	public typealias Whole = L.Whole
 	public typealias NewWhole = L.NewWhole

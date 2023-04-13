@@ -7,13 +7,13 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	public typealias Part = [(Array.Index, Element)]
 	public typealias NewPart = [(Array.Index, NewElement)]
 	
-	public let optic: EnumeratedOptional<O, Element, NewElement>
+	public let optic: EnumeratedOptionalOptic<O, Element, NewElement>
 	
 	@inlinable
 	public init(
 		@OptionalOpticBuilder with build: () -> O
 	) {
-		self.optic = EnumeratedOptional(optic: build())
+		self.optic = EnumeratedOptionalOptic(optic: build())
 	}
 	
 	public func tryGet(_ whole: Whole) -> Part? {
@@ -32,7 +32,7 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	}
 }
 
-public struct EnumeratedOptional<O: OptionalOptic, Element, NewElement>: OptionalOptic
+public struct EnumeratedOptionalOptic<O: OptionalOptic, Element, NewElement>: OptionalOptic
 where O.Part == [Element], O.NewPart == [NewElement] {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole

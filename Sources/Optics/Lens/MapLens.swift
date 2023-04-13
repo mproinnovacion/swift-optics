@@ -12,7 +12,7 @@ public struct MapLens<O: LensOptic, MappedPart, MappedNewPart>: LensOptic {
 	
 	@inlinable
 	public init(
-		@LensBuilder _ build: () -> O,
+		@LensOpticBuilder _ build: () -> O,
 		from: @escaping (O.Part) -> MappedPart,
 		to: @escaping (O.Part, MappedNewPart) -> O.NewPart
 	) {
@@ -23,7 +23,7 @@ public struct MapLens<O: LensOptic, MappedPart, MappedNewPart>: LensOptic {
 	
 	@inlinable
 	public init(
-		@LensBuilder _ build: () -> O,
+		@LensOpticBuilder _ build: () -> O,
 		from: @escaping (O.Part) -> MappedPart,
 		to: @escaping (MappedNewPart) -> O.NewPart
 	) {
