@@ -12,6 +12,10 @@ public enum ThrowingOpticBuilder {
 		.init(optic: optic)
 	}
 	
+	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> ThrowingLiftOptionalOptic<O> {
+		.init(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> ThrowingLiftPrismOptic<O> {
 		.init(prism: optic)
 	}
@@ -20,15 +24,15 @@ public enum ThrowingOpticBuilder {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O0: OptionalOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, ThrowingLiftLensOptic<O1>> {
+	public static func buildPartialBlock<O0: ThrowingOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, ThrowingLiftLensOptic<O1>> {
 		CombineThrowing(lhs: o0, rhs: ThrowingLiftLensOptic(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: OptionalOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, ThrowingLiftPrismOptic<O1>> {
+	public static func buildPartialBlock<O0: ThrowingOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, ThrowingLiftPrismOptic<O1>> {
 		CombineThrowing(lhs: o0, rhs: ThrowingLiftPrismOptic(prism: o1))
 	}
 	
-	public static func buildPartialBlock<O0: OptionalOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, O1> {
+	public static func buildPartialBlock<O0: ThrowingOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, O1> {
 		CombineThrowing(lhs: o0, rhs: o1)
 	}
 }

@@ -62,4 +62,10 @@ extension LensOptic {
 	) -> MapLens<Self, MappedPart, MappedNewPart> {
 		MapLens({ self }, from: from, to: to)
 	}
+	
+	public func map<MappedPart>(
+		_ conversion: Conversion<Part, MappedPart>
+	) -> MapLens<Self, MappedPart, MappedPart> where NewPart == Part {
+		MapLens({ self }, from: conversion.to, to: conversion.from)
+	}
 }
