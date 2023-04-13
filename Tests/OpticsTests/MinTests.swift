@@ -6,7 +6,6 @@ class MinTests: XCTestCase {
 	func testMin() {
 		let people = Lens {
 			\Company.employees
-//			\Company.freelance
 		}
 		
 		let youngest = Min {
@@ -39,6 +38,33 @@ class MinTests: XCTestCase {
 		XCTAssertEqual(
 			youngestName.tryGet(local),
 			"Jessica"
+		)
+	}
+	
+	func testEmpty() {
+		let people = Lens {
+			\Company.freelance
+		}
+
+		let youngest = Min {
+			people
+		} by: {
+			\Person.age
+		}
+		
+		var empty = company
+		empty.freelance = []
+		
+		XCTAssertEqual(
+			youngest.tryGet(empty),
+			nil
+		)
+		
+		XCTAssertEqual(
+			youngest.tryGet(
+				youngest.trySetting(empty, to: john)
+			),
+			nil
 		)
 	}
 }

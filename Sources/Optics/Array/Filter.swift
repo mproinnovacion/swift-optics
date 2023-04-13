@@ -54,6 +54,22 @@ extension LensOptic {
 	}
 }
 
+extension OptionalOptic {
+	public func filterIndexed<Element>(
+		_ filter: @escaping (Int, Element) -> Bool
+	) -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
+	where Part == [Element], NewPart == Part, NewWhole == Whole {
+		EnumeratedOptionally { self }
+			.each()
+			.filter(filter)
+			.map { pair in
+				pair.1
+			} to: { current, updated in
+				(current.0, updated)
+			}
+	}
+}
+
 extension ArrayOptic {
 	public func filter(
 		_ filter: @escaping (Part) -> Bool

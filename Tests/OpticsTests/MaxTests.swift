@@ -40,4 +40,31 @@ class MaxTests: XCTestCase {
 			"Jessica"
 		)
 	}
+	
+	func testEmpty() {
+		let people = Lens {
+			\Company.freelance
+		}
+
+		let oldest = Max {
+			people
+		} by: {
+			\Person.age
+		}
+		
+		var empty = company
+		empty.freelance = []
+		
+		XCTAssertEqual(
+			oldest.tryGet(empty),
+			nil
+		)
+		
+		XCTAssertEqual(
+			oldest.tryGet(
+				oldest.trySetting(empty, to: john)
+			),
+			nil
+		)
+	}
 }
