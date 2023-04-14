@@ -36,6 +36,10 @@ public enum ZipLensBuilder {
 	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> ZipCombination<O0, O1> {
 		ZipCombination(lhs: o0, rhs: o1)
 	}
+	
+	public static func buildExpression<O: LensOptic>(_ expression: O) -> O {
+		expression
+	}
 }
 
 public struct ZipCombination<LHS: LensOptic, RHS: LensOptic>: LensOptic

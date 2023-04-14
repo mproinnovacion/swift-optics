@@ -10,8 +10,12 @@ public enum LensOpticBuilder {
 		LensCombination(lhs: o0, rhs: o1)
 	}
 	
-	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> LensEachCombinator<O0, O1> where O0.Part == [O1.Whole] {
+	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> LensEachCombinator<O0, O1> {
 		LensEachCombinator(lhs: o0, rhs: o1)
+	}
+	
+	public static func buildExpression<O: LensOptic>(_ expression: O) -> O {
+		expression
 	}
 }
 
