@@ -11,7 +11,7 @@ public struct Concat<Optics: ArrayOptic>: ArrayOptic {
 	
 	@inlinable
 	public init(
-		@ConcatLensesBuilder with build: () -> Optics
+		@ConcatLensesBuilderOf<Optics> with build: () -> Optics
 	) {
 		self.lens = build()
 	}
@@ -53,8 +53,8 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 }
 
 @resultBuilder
-public enum ConcatLensesBuilder {
-	public static func buildOptional<O: ArrayOptic>(
+public enum ConcatLensesBuilder<Whole, Part, NewWhole, NewPart> {
+	public static func buildOptional<O: ArrayOptic<Whole, Part, NewWhole, NewPart>>(
 		_ optic: O?
 	) -> ArrayOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
 		ArrayOpticFromOptional(optic: optic)
@@ -68,7 +68,7 @@ public enum ConcatLensesBuilder {
 		ArrayOptionalLiftOptic(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: ArrayOptic>(first optic: O) -> O {
+	public static func buildPartialBlock<O: ArrayOptic<Whole, Part, NewWhole, NewPart>>(first optic: O) -> O {
 		optic
 	}
 	
@@ -79,14 +79,20 @@ public enum ConcatLensesBuilder {
 		)
 	}
 	
-	public static func buildPartialBlock<O0: ArrayOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, ArrayOptionalLiftOptic<O1>> {
+	public static func buildPartialBlock<O0: ArrayOptic<Whole, Part, NewWhole, NewPart>, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, ArrayOptionalLiftOptic<O1>> {
 		ConcatLenses(
 			lhs: o0,
 			rhs: ArrayOptionalLiftOptic(optic: o1)
 		)
 	}
 	
-	public static func buildPartialBlock<O0: ArrayOptic, O1: ArrayOptic>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, O1> {
+	public static func buildPartialBlock<O0: ArrayOptic<Whole, Part, NewWhole, NewPart>, O1: ArrayOptic<Whole, Part, NewWhole, NewPart>>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, O1> {
 		ConcatLenses(lhs: o0, rhs: o1)
 	}
+	
+	public static func buildExpression<O: ArrayOptic<Whole, Part, NewWhole, NewPart>>(_ expression: O) -> O {
+		expression
+	}
 }
+
+public typealias ConcatLensesBuilderOf<O: ArrayOptic> = ConcatLensesBuilder<O.Whole, O.Part, O.NewWhole, O.NewPart>
