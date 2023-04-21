@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Get<O: GetterOptic>: GetterOptic {
+public struct Getter<O: GetterOptic>: GetterOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
 	

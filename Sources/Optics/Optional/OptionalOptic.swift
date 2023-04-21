@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol OptionalOptic<Whole, Part, NewWhole, NewPart> {
+public protocol OptionalOptic<Whole, Part, NewWhole, NewPart>: OptionalGetterOptic, OptionalSetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part
@@ -62,63 +62,6 @@ extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Par
 }
 
 public typealias SimpleOptionalOptic<Whole, Part> = OptionalOptic<Whole, Part, Whole, Part>
-
-extension OptionalOptic {
-	@inlinable
-	public func tryUpdate(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
-	where Part == NewPart, Whole == NewWhole {
-		whole = try self.tryUpdating(whole, { part in
-			var copy = part
-			try f(&copy)
-			return copy
-		})
-	}
-	
-	@inlinable
-	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole
-	where Part == NewPart, Whole == NewWhole {
-		try self.tryUpdating(whole) { part in
-			var result = part
-			try f(&result)
-			return result
-		}
-	}
-	
-	@inlinable
-	public func tryUpdate(
-		_ whole: inout Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> Void
-	where Part == NewPart, Whole == NewWhole {
-		self.tryUpdate(&whole) { part in
-			part = f(part)
-		}
-	}
-	
-	@inlinable
-	public func trySet(
-		_ whole: inout Whole,
-		to newPart: NewPart
-	) where Part == NewPart, Whole == NewWhole {
-		whole = self.trySetting(whole, to: newPart)
-	}
-	
-	@inlinable
-	public func trySetting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) -> Whole where Part == NewPart, Whole == NewWhole {
-		var copy = whole
-		self.trySet(&copy, to: newValue)
-		return copy
-	}
-}
 
 public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	public let _tryGet: (Whole) -> Part?

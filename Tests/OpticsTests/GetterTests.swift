@@ -8,7 +8,7 @@ fileprivate func getCompany() -> Company {
 
 class GetterTests: XCTestCase {
 	func testGetter() {
-		let optic: some GetterOptic<Void, Int> = Get {
+		let optic: some GetterOptic<Void, Int> = Getter {
 			getCompany
 			
 			Lens {
