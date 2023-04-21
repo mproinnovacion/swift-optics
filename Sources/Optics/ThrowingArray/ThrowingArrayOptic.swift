@@ -42,7 +42,7 @@ extension ThrowingArrayOptic where Body: ThrowingArrayOptic, Body.Whole == Whole
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		try self.body.updatingAll(whole, f)
 	}

@@ -40,8 +40,5 @@ class EnumeratedTests: XCTestCase {
 			enumerated[2].1,
 			mike
 		)
-		
-		
-		
 	}
 }

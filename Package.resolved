@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "swift-algebra",
+      "kind" : "remoteSourceControl",
+      "location" : "https://bitbucket.org/damonfer/swift-algebra",
+      "state" : {
+        "revision" : "4f68ec4e8f37233aab12b66b43e3cd88e41ec141",
+        "version" : "0.1.0"
+      }
+    },
+    {
       "identity" : "swift-case-paths",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",

@@ -26,7 +26,6 @@ public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart> {
 		to: NewPart
 	) throws -> NewWhole
 	
-	
 	@ThrowingOpticBuilder
 	var body: Body { get }
 }

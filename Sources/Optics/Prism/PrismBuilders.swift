@@ -1,7 +1,7 @@
 import Foundation
 
 @resultBuilder
-public enum PrismBuilder {
+public enum PrismOpticBuilder {
 	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> O {
 		optic
 	}
@@ -28,3 +28,4 @@ where LHS.Part == RHS.Whole {
 		lhs.embed(rhs.embed(part))
 	}
 }
+

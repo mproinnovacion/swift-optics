@@ -12,7 +12,7 @@ public protocol PrismOptic<Whole, Part> {
 	
 	func embed(_ part: Part) -> Whole
 
-	@PrismBuilder
+	@PrismOpticBuilder
 	var body: Body { get }
 }
 

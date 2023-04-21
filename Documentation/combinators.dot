@@ -1,0 +1,86 @@
+digraph combinators {
+	node [shape=circle];
+
+	LensOptic [shape=box]
+	PrismOptic [shape=box]
+	OptionalOptic [shape=box]
+	ArrayOptic [shape=box]
+	ThrowingOptic [shape=box]
+	ThrowingArrayOptic [shape=box]
+	
+	Lens [shape=doublecircle]
+	Prism [shape=doublecircle]
+	Optionally [shape=doublecircle]
+	Many [shape=doublecircle]
+	Throwing [shape=doublecircle]
+	ManyThrowing [shape=doublecircle]
+
+
+	LensOptic -> Lens;
+	LensOptic -> Each;
+	LensOptic -> At;
+	LensOptic -> First;
+	LensOptic -> Last;
+	LensOptic -> Min;
+	LensOptic -> Max;
+	LensOptic -> DropFirst;
+	LensOptic -> DropWhile;
+	LensOptic -> Enumerated;
+	LensOptic -> Sorted;
+	
+	PrismOptic -> Prism;
+	
+	PrismOptic -> AnyOf;
+	
+	LensOptic -> Optionally;
+	PrismOptic -> Optionally;
+	OptionalOptic -> Optionally;
+	
+	OptionalOptic -> EachOptional;
+	Optionally -> EachOptional;
+	
+	Lens -> Optionally;
+	Prism -> Optionally;
+	At -> Optionally;
+	First -> Optionally;
+	Last -> Optionally;
+	Min -> Optionally;
+	Max -> Optionally;
+	DropFirst -> Optionally;
+	DropWhile -> Optionally;
+	Enumerated -> Optionally;
+	Sorted -> Optionally;
+	
+	LensOptic -> Many;
+	PrismOptic -> Many;
+	OptionalOptic -> Many;
+	ArrayOptic -> Many;
+
+	ArrayOptic -> Filter;
+	
+	Each -> Many;	
+	Optionally -> Many;
+	Filter -> Many;
+	EachOptional -> Many;
+	
+	Lens -> Throwing;
+	Prism -> Throwing;
+	LensOptic -> Throwing;
+	PrismOptic -> Throwing;
+	OptionalOptic -> Throwing;
+	ThrowingOptic -> Throwing;
+	
+	LensOptic -> ManyThrowing;
+	PrismOptic -> ManyThrowing;
+	OptionalOptic -> ManyThrowing;
+	ThrowingOptic -> ManyThrowing;
+	ArrayOptic -> ManyThrowing;
+	ThrowingArrayOptic -> ManyThrowing;
+
+	Each -> ManyThrowing;
+	Many -> ManyThrowing;
+	Throwing -> ManyThrowing;
+	Filter -> ManyThrowing;
+	
+	{ rank = min; LensOptic ; PrismOptic ; OptionalOptic ; ArrayOptic ; ThrowingOptic ; ThrowingArrayOptic }
+}

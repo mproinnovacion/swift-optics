@@ -8,7 +8,7 @@ public struct Prism<P: PrismOptic>: PrismOptic {
 	
 	@inlinable
 	public init(
-		@PrismBuilder with build: () -> P
+		@PrismOpticBuilder with build: () -> P
 	) {
 		self.optics = build()
 	}
