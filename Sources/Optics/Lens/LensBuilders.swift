@@ -6,6 +6,10 @@ public enum LensOpticBuilder {
 		optic
 	}
 	
+//	public static func buildPartialBlock<O0, Part>(first f: @escaping (O0) -> Part) ->  {
+//		optic
+//	}
+	
 	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> LensCombination<O0, O1> {
 		LensCombination(lhs: o0, rhs: o1)
 	}

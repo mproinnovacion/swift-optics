@@ -1,5 +1,7 @@
 import Foundation
 
+import Algebra
+
 /// Get all the elements as an array, update them one by one
 public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype Whole
