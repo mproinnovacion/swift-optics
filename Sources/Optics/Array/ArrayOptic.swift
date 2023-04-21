@@ -3,7 +3,7 @@ import Foundation
 import Algebra
 
 /// Get all the elements as an array, update them one by one
-public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
+public protocol ArrayOptic<Whole, Part, NewWhole, NewPart>: ArrayGetterOptic, ArraySetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part
@@ -11,13 +11,6 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype _Body
 	
 	typealias Body = _Body
-		
-	func getAll(_ whole: Whole) -> [Part]
-	
-	func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
 	
 	@ArrayOpticBuilder var body: Body { get }
 }
@@ -54,49 +47,6 @@ extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == P
 }
 
 public typealias SimpleArrayOptic<Whole, Part> = ArrayOptic<Whole, Part, Whole, Part>
-
-extension ArrayOptic {
-	@inlinable
-	public func updateAll(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
-	where NewWhole == Whole, NewPart == Part {
-		whole = try self.updatingAll(whole) { part in
-			var copy = part
-			try f(&copy)
-			return copy
-		}
-	}
-}
-
-extension ArrayOptic where NewPart == Part, NewWhole == Whole {
-	@inlinable
-	public func setAll(_ whole: inout Whole, to part: Part) -> Void {
-		self.updateAll(&whole) { value in
-			value = part
-		}
-	}
-	
-	@inlinable
-	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole {
-		try self.updatingAll(whole) { part in
-			var copy = part
-			try f(&copy)
-			return copy
-		}
-	}
-
-	@inlinable
-	public func settingAll(_ whole: Whole, to part: Part) -> Whole {
-		var copy = whole
-		self.setAll(&copy, to: part)
-		return copy
-	}
-}
 
 public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	public typealias Whole = Array<Element>
