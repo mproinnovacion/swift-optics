@@ -138,6 +138,29 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output), S.NewPart 
 	}
 }
 
+public struct MapSetter6<S: SetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: SetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.NewPart == S.Part {
+	public typealias Whole = S.Whole
+	public typealias NewWhole = S.NewWhole
+	public typealias Part = Output
+	public typealias NewPart = Output
+	
+	let optic: S
+	
+	public init(optic: S) {
+		self.optic = optic
+	}
+	
+	public func updating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+		self.optic.updating(whole) { part in
+			{ input0, input1, input2, input3, input4, input5 in
+				let output = part(input0, input1, input2, input3, input4, input5)
+				return (try? f(output)) ?? output
+			}
+		}
+	}
+}
+
 extension SetterOptic {
 	public func map<Output>() -> MapSetter0<Self, Output> {
 		.init(optic: self)
@@ -160,6 +183,10 @@ extension SetterOptic {
 	}
 	
 	public func map<Input0, Input1, Input2, Input3, Input4, Output>() -> MapSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
+		.init(optic: self)
+	}
+	
+	public func map<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
 		.init(optic: self)
 	}
 }
