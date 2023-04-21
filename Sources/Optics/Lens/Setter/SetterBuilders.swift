@@ -30,21 +30,3 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 		}
 	}
 }
-
-public struct SetterFunc1<O0, Part>: SetterOptic {
-	public typealias Whole = (O0) throws -> Part
-	public typealias NewWhole = Whole
-	public typealias NewPart = Part
-
-	public init() {}
-	
-	public func updating(
-		_ whole: @escaping (O0) throws -> Part,
-		_ f: @escaping (Part) throws -> Part
-	) rethrows -> NewWhole {
-		{ o0 in
-			try f(whole(o0))
-		}
-	}
-}
-

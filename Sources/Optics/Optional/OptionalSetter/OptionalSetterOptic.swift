@@ -14,6 +14,14 @@ public protocol OptionalSetterOptic<Whole, Part, NewWhole, NewPart> {
 	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
 }
 
+extension OptionalSetterOptic {
+	public func trySetting(_ whole: Whole, to newPart: NewPart) -> NewWhole {
+		self.tryUpdating(whole) { _ in
+			newPart
+		}
+	}
+}
+
 public typealias SimpleOptionalSetterOptic<Whole, Part> = OptionalSetterOptic<Whole, Part, Whole, Part>
 
 extension OptionalSetterOptic {
