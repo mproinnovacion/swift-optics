@@ -3,7 +3,7 @@ import Foundation
 import Algebra
 
 /// Get all the elements as an array, update them one by one
-public protocol ReduceOptic<Whole, Part> {
+public protocol FoldOptic<Whole, Part> {
 	associatedtype Whole
 	associatedtype Part
 	associatedtype _Body
@@ -16,10 +16,10 @@ public protocol ReduceOptic<Whole, Part> {
 		foldMap: (Part) -> Result
 	) -> Result
 	
-	@ReduceOpticBuilder var body: Body { get }
+	@FoldOpticBuilder var body: Body { get }
 }
 
-extension ReduceOptic {
+extension FoldOptic {
 	public func getAll(
 		_ whole: Whole
 	) -> [Part] {
@@ -27,7 +27,7 @@ extension ReduceOptic {
 	}
 }
 
-extension ReduceOptic where Body == Never {
+extension FoldOptic where Body == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
@@ -42,7 +42,7 @@ extension ReduceOptic where Body == Never {
 	}
 }
 
-extension ReduceOptic where Body: ReduceOptic, Body.Whole == Whole, Body.Part == Part {
+extension FoldOptic where Body: FoldOptic, Body.Whole == Whole, Body.Part == Part {
 	@inlinable
 	public func reduced<Result>(
 		_ whole: Whole,
@@ -53,7 +53,7 @@ extension ReduceOptic where Body: ReduceOptic, Body.Whole == Whole, Body.Part ==
 	}
 }
 
-public struct ReduceLiftLensOptic<O: LensOptic>: ReduceOptic {
+public struct FoldLiftLensOptic<O: LensOptic>: FoldOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
 	
@@ -72,7 +72,7 @@ public struct ReduceLiftLensOptic<O: LensOptic>: ReduceOptic {
 	}
 }
 
-public struct ReduceLiftOptionalOptic<O: OptionalOptic>: ReduceOptic {
+public struct FoldLiftOptionalOptic<O: OptionalOptic>: FoldOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
 	
@@ -91,7 +91,7 @@ public struct ReduceLiftOptionalOptic<O: OptionalOptic>: ReduceOptic {
 	}
 }
 
-public struct ReduceLiftPrismOptic<O: PrismOptic>: ReduceOptic {
+public struct FoldLiftPrismOptic<O: PrismOptic>: FoldOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
 	
@@ -110,7 +110,7 @@ public struct ReduceLiftPrismOptic<O: PrismOptic>: ReduceOptic {
 	}
 }
 
-public struct ReduceLiftArrayOptic<O: ArrayOptic>: ReduceOptic {
+public struct FoldLiftArrayOptic<O: ArrayOptic>: FoldOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
 	

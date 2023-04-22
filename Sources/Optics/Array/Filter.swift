@@ -63,6 +63,10 @@ extension LensOptic {
 	}
 }
 
+extension ThrowingOptic {
+	// TODO: filter & filterIndexed
+}
+
 extension OptionalOptic {
 	public func filter<Element>(
 		_ filter: @escaping (Element) -> Bool
@@ -94,4 +98,8 @@ extension ArrayOptic {
 	) -> Filter<Self> where NewPart == Part {
 		Filter(filter: filter, with: { self })
 	}
+}
+
+extension ThrowingArrayOptic {
+	// TODO: filter & filterIndexed
 }

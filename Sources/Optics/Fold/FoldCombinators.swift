@@ -2,8 +2,8 @@ import Foundation
 
 import Algebra
 
-/// Main ReduceOptic builder.
-public struct Reduce<Optic: ReduceOptic>: ReduceOptic {
+/// Main FoldOptic builder.
+public struct Fold<Optic: FoldOptic>: FoldOptic {
 	public typealias Whole = Optic.Whole
 	public typealias Part = Optic.Part
 	
@@ -11,7 +11,7 @@ public struct Reduce<Optic: ReduceOptic>: ReduceOptic {
 	
 	@inlinable
 	public init(
-		@ReduceOpticBuilder with build: () -> Optic
+		@FoldOpticBuilder with build: () -> Optic
 	) {
 		self.optic = build()
 	}
