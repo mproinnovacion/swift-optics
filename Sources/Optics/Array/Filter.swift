@@ -39,6 +39,15 @@ where O.NewPart == O.Part, O.NewWhole == O.Whole {
 }
 
 extension LensOptic {
+	public func filter<Element>(
+		_ filter: @escaping (Element) -> Bool
+	) -> Filter<Each<Self, Element, Element>> where Part == [Element], NewPart == Part, NewWhole == Whole {
+		Filter(
+			filter: filter,
+			with: { self.each() }
+		)
+	}
+	
 	public func filterIndexed<Element>(
 		_ filter: @escaping (Int, Element) -> Bool
 	) -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
@@ -55,6 +64,15 @@ extension LensOptic {
 }
 
 extension OptionalOptic {
+	public func filter<Element>(
+		_ filter: @escaping (Element) -> Bool
+	) -> Filter<EachOptional<Self, Element, Element>> where Part == [Element], NewPart == Part, NewWhole == Whole {
+		Filter(
+			filter: filter,
+			with: { self.each() }
+		)
+	}
+	
 	public func filterIndexed<Element>(
 		_ filter: @escaping (Int, Element) -> Bool
 	) -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
