@@ -2,6 +2,14 @@ import Foundation
 
 @resultBuilder
 public enum ArrayGetterOpticBuilder {
+	public static func buildPartialBlock<O: GetterOptic>(first optic: O) -> ArrayGetterLiftOptic<O> {
+		.init(optic: optic)
+	}
+	
+	public static func buildPartialBlock<O: OptionalGetterOptic>(first optic: O) -> ArrayGetterOptionalLiftOptic<O> {
+		.init(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: ArrayGetterOptic>(first optic: O) -> O {
 		optic
 	}
@@ -48,8 +56,38 @@ public enum ArrayGetterOpticBuilder {
 		.init(run: f)
 	}
 	
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: GetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, ArrayGetterLiftOptic<O1>> {
+		ArrayGetterCombination(lhs: o0, rhs: .init(optic: o1))
+	}
+	
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: OptionalGetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, ArrayGetterOptionalLiftOptic<O1>> {
+		ArrayGetterCombination(lhs: o0, rhs: .init(optic: o1))
+	}
+	
 	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: ArrayGetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, O1> {
 		ArrayGetterCombination(lhs: o0, rhs: o1)
+	}
+}
+
+public struct ArrayGetterLiftOptic<O: GetterOptic>: ArrayGetterOptic {
+	let optic: O
+	
+	public typealias Whole = O.Whole
+	public typealias Part = O.Part
+	
+	public func getAll(_ whole: Whole) -> [Part] {
+		[optic.get(whole)]
+	}
+}
+
+public struct ArrayGetterOptionalLiftOptic<O: OptionalGetterOptic>: ArrayGetterOptic {
+	let optic: O
+	
+	public typealias Whole = O.Whole
+	public typealias Part = O.Part
+	
+	public func getAll(_ whole: Whole) -> [Part] {
+		[optic.tryGet(whole)].compactMap { $0 }
 	}
 }
 

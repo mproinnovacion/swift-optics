@@ -31,6 +31,10 @@ public enum OptionalOpticBuilder {
 	public static func buildPartialBlock<O0: OptionalOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, O1> {
 		CombineOptionals(lhs: o0, rhs: o1)
 	}
+	
+//	public static func buildExpression<O: OptionalOptic>(_ optic: O) -> O {
+//		optic
+//	}
 }
 
 public struct OptionalOpticFromOptional<Whole, Part, NewPart, O: OptionalOptic>: OptionalOptic

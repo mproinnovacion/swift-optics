@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol SetterOptic<Whole, Part, NewWhole, NewPart> {
+public protocol SetterOptic<Whole, Part, NewWhole, NewPart> { //}: OptionalSetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part
@@ -10,6 +10,16 @@ public protocol SetterOptic<Whole, Part, NewWhole, NewPart> {
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) rethrows -> NewWhole
+}
+
+extension SetterOptic {
+	public func tryUpdating(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) rethrows -> NewWhole {
+		try self.updating(whole, f)
+	}
+	
+	public func trySetting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
+		self.updating(whole, { _ in newValue })
+	}
 }
 
 extension SetterOptic {

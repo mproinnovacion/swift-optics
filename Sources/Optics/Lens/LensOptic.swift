@@ -1,20 +1,20 @@
 import Foundation
 
 public protocol LensOptic<Whole, Part, NewWhole, NewPart>: GetterOptic, SetterOptic {
-	associatedtype _Body
+	associatedtype _LensBody
 	
-	typealias Body = _Body
+	typealias LensBody = _LensBody
 
 	@LensOpticBuilder
-	var body: Body { get }
+	var body: LensBody { get }
 }
 
-extension LensOptic where Body == Never {
+extension LensOptic where LensBody == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
 	@_transparent
-	public var body: Body {
+	public var body: LensBody {
 		fatalError(
   """
   '\(Self.self)' has no body. …
@@ -24,7 +24,7 @@ extension LensOptic where Body == Never {
 	}
 }
 
-extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+extension LensOptic where LensBody: LensOptic, LensBody.Whole == Whole, LensBody.Part == Part, LensBody.NewWhole == NewWhole, LensBody.NewPart == NewPart {
 	
 	@inlinable
 	public func get(_ whole: Whole) -> Part {

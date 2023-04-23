@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol OptionalSetterOptic<Whole, Part, NewWhole, NewPart> {
+public protocol OptionalSetterOptic<Whole, Part, NewWhole, NewPart> { //}: ArraySetterOptic {
 	associatedtype Whole
 	associatedtype Part
 	associatedtype NewWhole
@@ -12,6 +12,15 @@ public protocol OptionalSetterOptic<Whole, Part, NewWhole, NewPart> {
 	) rethrows -> NewWhole
 	
 	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
+}
+
+extension OptionalSetterOptic {
+	public func updatingAll(
+		_ whole: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) rethrows -> NewWhole {
+		try self.tryUpdating(whole, f)
+	}
 }
 
 extension OptionalSetterOptic {

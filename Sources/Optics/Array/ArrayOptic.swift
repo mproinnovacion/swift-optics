@@ -8,19 +8,19 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart>: ArrayGetterOptic, Ar
 	associatedtype NewWhole
 	associatedtype Part
 	associatedtype NewPart
-	associatedtype _Body
+	associatedtype _ArrayBody
 	
-	typealias Body = _Body
+	typealias ArrayBody = _ArrayBody
 	
-	@ArrayOpticBuilder var body: Body { get }
+	@ArrayOpticBuilder var body: ArrayBody { get }
 }
 
-extension ArrayOptic where Body == Never {
+extension ArrayOptic where ArrayBody == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
 	@_transparent
-	public var body: Body {
+	public var body: ArrayBody {
 		fatalError(
   """
   '\(Self.self)' has no body. …
@@ -30,7 +30,7 @@ extension ArrayOptic where Body == Never {
 	}
 }
 
-extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+extension ArrayOptic where ArrayBody: ArrayOptic, ArrayBody.Whole == Whole, ArrayBody.Part == Part, ArrayBody.NewWhole == NewWhole, ArrayBody.NewPart == NewPart {
 	
 	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {

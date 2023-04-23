@@ -32,7 +32,7 @@ extension URL {
 			String?.optic()
 		}
 	}
-	
+
 	public static func hostOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, String> {
@@ -42,7 +42,7 @@ extension URL {
 			String?.optic()
 		}
 	}
-	
+
 	public static func userOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, String> {
@@ -52,7 +52,7 @@ extension URL {
 			String?.optic()
 		}
 	}
-	
+
 	public static func passwordOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, String> {
@@ -62,7 +62,7 @@ extension URL {
 			String?.optic()
 		}
 	}
-	
+
 	public static func portOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, Int> {
@@ -72,13 +72,13 @@ extension URL {
 			Int?.optic()
 		}
 	}
-	
+
 	public static func pathOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, String> {
 		Optionally {
 			self.componentsOptic(resolvingAgainstBaseURL: resolvingAgainstBaseURL)
-			
+
 			Lens {
 				\URLComponents.path
 			}.map { (string: String) -> String in
@@ -88,7 +88,7 @@ extension URL {
 			}
 		}
 	}
-	
+
 	public static func queryOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, String> {
@@ -98,7 +98,7 @@ extension URL {
 			String?.optic()
 		}
 	}
-	
+
 	public static func fragmentOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, String> {
@@ -108,7 +108,7 @@ extension URL {
 			String?.optic()
 		}
 	}
-	
+
 	public static func queryItemsOptic(
 		resolvingAgainstBaseURL: Bool = true
 	) -> some SimpleOptionalOptic<URL, [URLQueryItem]> {
@@ -118,7 +118,7 @@ extension URL {
 			[URLQueryItem]?.optic()
 		}
 	}
-	
+
 	public static func absoluteStringOptic() -> some SimpleOptionalOptic<URL, String> {
 		Optionally {
 			\URL.self

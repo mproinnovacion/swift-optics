@@ -6,9 +6,9 @@ public protocol OptionalOptic<Whole, Part, NewWhole, NewPart>: OptionalGetterOpt
 	associatedtype Part
 	associatedtype NewPart
 	
-	associatedtype _Body
+	associatedtype _OptionalBody
 	
-	typealias Body = _Body
+	typealias OptionalBody = _OptionalBody
 		
 	func tryGet(_ whole: Whole) -> Part?
 	
@@ -20,15 +20,15 @@ public protocol OptionalOptic<Whole, Part, NewWhole, NewPart>: OptionalGetterOpt
 	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
 	
 	@OptionalOpticBuilder
-	var body: Body { get }
+	var body: OptionalBody { get }
 }
 
-extension OptionalOptic where Body == Never {
+extension OptionalOptic where OptionalBody == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
 	@_transparent
-	public var body: Body {
+	public var body: OptionalBody {
 		fatalError(
   """
   '\(Self.self)' has no body. …
@@ -38,7 +38,7 @@ extension OptionalOptic where Body == Never {
 	}
 }
 
-extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+extension OptionalOptic where OptionalBody: OptionalOptic, OptionalBody.Whole == Whole, OptionalBody.Part == Part, OptionalBody.NewWhole == NewWhole, OptionalBody.NewPart == NewPart {
 	@inlinable
 	public func tryGet(_ whole: Whole) -> Part? {
 		self.body.tryGet(whole)
