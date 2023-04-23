@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ArrayGetter<O: ArrayGetterOptic>: ArrayGetterOptic {
+public struct ManyGetter<O: ArrayGetterOptic>: ArrayGetterOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
 	

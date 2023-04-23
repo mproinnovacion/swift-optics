@@ -14,7 +14,7 @@ fileprivate struct Group {
 class FoldTests: XCTestCase {
 	func testFold() {
 		let optic = Fold(monoid: .all) {
-			ArrayGetter {
+			ManyGetter {
 				\Group.isBig
 			}
 			
@@ -24,15 +24,15 @@ class FoldTests: XCTestCase {
 				}.map { string in
 					string.count > 0
 				}
-
+				
 				Getter {
 					\Group.name
 				}.map { string in
 					string.contains("h")
 				}
 			}
-
-			ArrayGetter {
+			
+			ManyGetter {
 				Getter {
 					\Group.strings
 				}.map { strings in
@@ -54,31 +54,37 @@ class FoldTests: XCTestCase {
 	}
 	
 	func testBool() {
+		let groupNameIsEmpty = Getter {
+			\Group.name
+		}.map { string in
+			string.count > 0
+		}
+		
+		let groupNameContainsH = Getter {
+			\Group.name
+		}.map { string in
+			string.contains("h")
+		}
+		
+		let groupHasStrings = Getter {
+			\Group.strings
+		}.map { strings in
+			strings.count > 0
+		}
+		
 		let optic = And {
-			ArrayGetter {
+			ManyGetter {
 				\Group.isBig
 			}
 			
 			Or {
-				Getter {
-					\Group.name
-				}.map { string in
-					string.count > 0
-				}
-
-				Getter {
-					\Group.name
-				}.map { string in
-					string.contains("h")
-				}
+				groupNameIsEmpty
+				
+				groupNameContainsH
 			}
-
-			ArrayGetter {
-				Getter {
-					\Group.strings
-				}.map { strings in
-					strings.count > 0
-				}
+			
+			ManyGetter {
+				groupHasStrings
 			}
 		}
 		
@@ -93,32 +99,4 @@ class FoldTests: XCTestCase {
 			true
 		)
 	}
-	
-//	func testReduce() {
-//		let optic = Fold(monoid: Monoid<Bool>.any) {
-//
-//		}
-//
-//		Fold {
-//			\Group.strings
-//			[String].optic()
-//		}
-//
-//		let group = Group(
-//			strings: [
-//				"hello", "world", "bye"
-//			]
-//		)
-//
-//		XCTAssertEqual(
-//			optic.reduced(group, Int.sum) { $0.count },
-//			13
-//		)
-//
-//
-//		XCTAssertEqual(
-//			optic.reduced(group, String.monoid) { $0 },
-//			"helloworldbye"
-//		)
-//	}
 }
