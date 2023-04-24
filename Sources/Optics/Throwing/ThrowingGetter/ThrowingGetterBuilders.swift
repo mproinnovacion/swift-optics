@@ -53,6 +53,17 @@ public enum ThrowingGetterOpticBuilder {
 	}
 }
 
+public struct ThrowingArrayGetterLiftOptic<O: ThrowingGetterOptic>: ThrowingArrayGetterOptic {
+	let optic: O
+	
+	public typealias Whole = O.Whole
+	public typealias Part = O.Part
+	
+	public func getAll(_ whole: Whole) throws -> [Part] {
+		[try optic.get(whole)]
+	}
+}
+
 public struct ThrowingGetterCombination<LHS: ThrowingGetterOptic, RHS: ThrowingGetterOptic>: ThrowingGetterOptic
 where LHS.Part == RHS.Whole {
 	let lhs: LHS

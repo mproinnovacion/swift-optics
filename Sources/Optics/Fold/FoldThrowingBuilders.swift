@@ -3,40 +3,29 @@ import Foundation
 import Algebra
 
 @resultBuilder
-public enum FoldBuilder<Whole, Part> {
-	public static func buildPartialBlock<O: GetterOptic<Whole, Part>>(first optic: O) -> ArrayGetterLiftOptic<O> {
+public enum FoldThrowingBuilder<Whole, Part> {
+	public static func buildPartialBlock<O: ThrowingGetterOptic<Whole, Part>>(first optic: O) -> ThrowingArrayGetterLiftOptic<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: OptionalGetterOptic<Whole, Part>>(first optic: O) -> ArrayGetterOptionalLiftOptic<O> {
-		.init(optic: optic)
-	}
-	
-	public static func buildPartialBlock<O: ArrayGetterOptic<Whole, Part>>(first optic: O) -> O {
+	public static func buildPartialBlock<O: ThrowingArrayGetterOptic<Whole, Part>>(first optic: O) -> O {
 		optic
 	}
 
-	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: GetterOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayGetterOptics<O0, ArrayGetterLiftOptic<O1>> {
-		ConcatArrayGetterOptics(lhs: o0, rhs: .init(optic: o1))
+	public static func buildPartialBlock<O0: ThrowingArrayGetterOptic, O1: ThrowingGetterOptic>(accumulated o0: O0, next o1: O1) -> ConcatThrowingArrayGetterOptics<O0, ThrowingArrayGetterLiftOptic<O1>> {
+		ConcatThrowingArrayGetterOptics(lhs: o0, rhs: .init(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: ArrayGetterOptic<Whole, Part>, O1: OptionalGetterOptic<Whole, Part>>(
+	public static func buildPartialBlock<O0: ThrowingArrayGetterOptic<Whole, Part>, O1: ThrowingArrayGetterOptic<Whole, Part>>(
 		accumulated o0: O0,
 		next o1: O1
-	) -> ConcatArrayGetterOptics<O0, ArrayGetterOptionalLiftOptic<O1>> {
-		ConcatArrayGetterOptics(lhs: o0, rhs: .init(optic: o1))
-	}
-	
-	public static func buildPartialBlock<O0: ArrayGetterOptic<Whole, Part>, O1: ArrayGetterOptic<Whole, Part>>(
-		accumulated o0: O0,
-		next o1: O1
-	) -> ConcatArrayGetterOptics<O0, O1> {
-		ConcatArrayGetterOptics(lhs: o0, rhs: o1)
+	) -> ConcatThrowingArrayGetterOptics<O0, O1> {
+		ConcatThrowingArrayGetterOptics(lhs: o0, rhs: o1)
 	}
 }
 
 
-public struct ConcatArrayGetterOptics<LHS: ArrayGetterOptic, RHS: ArrayGetterOptic>: ArrayGetterOptic
+public struct ConcatThrowingArrayGetterOptics<LHS: ThrowingArrayGetterOptic, RHS: ThrowingArrayGetterOptic>: ThrowingArrayGetterOptic
 where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 	let lhs: LHS
 	let rhs: RHS
@@ -52,8 +41,10 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 	public typealias Whole = LHS.Whole
 	public typealias Part = RHS.Part
 	
-	public func getAll(_ whole: LHS.Whole) -> [RHS.Part] {
-		lhs.getAll(whole) + rhs.getAll(whole)
+	public func getAll(_ whole: LHS.Whole) throws -> [RHS.Part] {
+		let left = try lhs.getAll(whole)
+		let right = try rhs.getAll(whole)
+		return left + right
 	}
 }
 
@@ -65,11 +56,11 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 ////	) -> FoldOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
 ////		FoldOpticFromOptional(optic: optic)
 ////	}
-//	
+//
 //	public static func buildPartialBlock<O: GetterOptic<Whole, Part>>(first optic: O) -> [FoldLiftGetterOptic<O>] {
 //		[.init(optic: optic)]
 //	}
-//	
+//
 ////	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> [ArrayOptionalLiftOptic<OptionalLiftPrismOptic<O>>] {
 ////		.init(optic: .init(prism: optic))
 ////	}
@@ -95,7 +86,7 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 //	) -> [any FoldOptic] {
 //		o0 + [o1]
 //	}
-//	
+//
 ////	public static func buildPartialBlock<O0: FoldOptic, O1: FoldOptic>(accumulated o0: O0, next o1: O1) -> CombineFoldOptics<O0, O1> {
 ////		CombineFoldOptics(lhs: o0, rhs: o1)
 ////	}
@@ -144,15 +135,15 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 ////where LHS.Part == RHS.Whole {
 ////	public let lhs: LHS
 ////	public let rhs: RHS
-////	
+////
 ////	public typealias Whole = LHS.Whole
 ////	public typealias Part = RHS.Part
-////	
+////
 ////	public init(lhs: LHS, rhs: RHS) {
 ////		self.lhs = lhs
 ////		self.rhs = rhs
 ////	}
-////	
+////
 ////	public func reduced<Result>(
 ////		_ whole: LHS.Whole,
 ////		_ monoid: Algebra.Monoid<Result>,
