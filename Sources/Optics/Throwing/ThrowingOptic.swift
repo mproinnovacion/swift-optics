@@ -4,7 +4,7 @@ public enum ThrowingError: Error {
 	case noData
 }
 
-public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart> {
+public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart>: ThrowingGetterOptic, ThrowingSetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part

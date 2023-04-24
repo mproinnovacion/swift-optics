@@ -23,3 +23,17 @@ Prism {
 	/Failable<Person>.valid
 }
 ```
+
+## RawRepresentable
+
+A RawRepresentable can be seen as an inverse Prism, where the Whole is the RawValue, and the Part is the RawRepresentable. This is due to the fact that the RawValue is usually a bigger type, and so we can always embed a RawValue into a RawRepresentable, but we can't always extract a RawRepresentable from its RawValue:
+
+```
+enum MyEnum: Int {
+	case one = 1
+}
+
+MyEnum.prismOptic().embed(.one) // Returns 1
+MyEnum.prismOptic().extract(3) // Returns nil
+
+```
