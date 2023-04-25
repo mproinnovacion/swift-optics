@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ArraySetter<O: ArraySetterOptic>: ArraySetterOptic {
+public struct ManySetter<O: ArraySetterOptic>: ArraySetterOptic {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = O.Part
