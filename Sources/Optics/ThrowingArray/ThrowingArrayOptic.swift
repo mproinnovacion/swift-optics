@@ -87,7 +87,7 @@ public struct ThrowingArrayRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingArr
 }
 
 extension ArrayOptic {
-	public func throwing() -> ThrowingArrayLiftArrayOptic<Self> {
+	public func throwing() -> LiftArrayToThrowingArray<Self> {
 		.init(optic: self)
 	}
 }
