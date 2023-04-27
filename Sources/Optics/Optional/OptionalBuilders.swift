@@ -8,11 +8,11 @@ public enum OptionalOpticBuilder {
 		OptionalOpticFromOptional(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> OptionalLiftLensOptic<O> {
+	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> LiftLensToOptional<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> OptionalLiftPrismOptic<O> {
+	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftPrismToOptional<O> {
 		.init(prism: optic)
 	}
 	
@@ -20,21 +20,17 @@ public enum OptionalOpticBuilder {
 		optic
 	}
 	
-	public static func buildPartialBlock<O0: OptionalOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, OptionalLiftLensOptic<O1>> {
-		CombineOptionals(lhs: o0, rhs: OptionalLiftLensOptic(optic: o1))
+	public static func buildPartialBlock<O0: OptionalOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, LiftLensToOptional<O1>> {
+		CombineOptionals(lhs: o0, rhs: LiftLensToOptional(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: OptionalOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, OptionalLiftPrismOptic<O1>> {
-		CombineOptionals(lhs: o0, rhs: OptionalLiftPrismOptic(prism: o1))
+	public static func buildPartialBlock<O0: OptionalOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, LiftPrismToOptional<O1>> {
+		CombineOptionals(lhs: o0, rhs: LiftPrismToOptional(prism: o1))
 	}
 	
 	public static func buildPartialBlock<O0: OptionalOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, O1> {
 		CombineOptionals(lhs: o0, rhs: o1)
 	}
-	
-//	public static func buildExpression<O: OptionalOptic>(_ optic: O) -> O {
-//		optic
-//	}
 }
 
 public struct OptionalOpticFromOptional<Whole, Part, NewPart, O: OptionalOptic>: OptionalOptic
@@ -63,39 +59,6 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 		to newValue: NewPart
 	) -> NewWhole {
 		optic?.trySetting(whole, to: newValue) ?? whole
-	}
-}
-
-public struct OptionalLiftLensOptic<O: LensOptic>: OptionalOptic {
-	let lens: O
-	
-	public typealias Whole = O.Whole
-	public typealias NewWhole = O.NewWhole
-	public typealias Part = O.Part
-	public typealias NewPart = O.NewPart
-	
-	public init(optic: O) {
-		self.lens = optic
-	}
-	
-	public func tryGet(_ whole: Whole) -> Part? {
-		lens.get(whole)
-	}
-	
-	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole, f)
-	}
-	
-	public func trySetting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) -> NewWhole {
-		tryUpdating(whole) { _ in
-			newValue
-		}
 	}
 }
 

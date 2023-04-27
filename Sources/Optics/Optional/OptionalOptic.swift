@@ -135,48 +135,8 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 	}
 }
 
-public struct OptionalLiftPrismOptic<P: PrismOptic>: OptionalOptic {
-	public typealias Whole = P.Whole
-	public typealias NewWhole = Whole
-	public typealias Part = P.Part
-	public typealias NewPart = Part
-	
-	public let prism: P
-	
-	public init(prism: P) {
-		self.prism = prism
-	}
-	
-	@inlinable
-	public func tryGet(_ whole: Whole) -> Part? {
-		prism.extract(from: whole)
-	}
-	
-	@inlinable
-	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		guard var value = prism.extract(from: whole) else {
-			return whole
-		}
-		
-		value = try f(value)
-		
-		return prism.embed(value)
-	}
-	
-	@inlinable
-	public func trySetting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) -> NewWhole {
-		prism.embed(newValue)
-	}
-}
-
 extension PrismOptic {
-	public func optional() -> OptionalLiftPrismOptic<Self> {
+	public func optional() -> LiftPrismToOptional<Self> {
 		.init(prism: self)
 	}
 }

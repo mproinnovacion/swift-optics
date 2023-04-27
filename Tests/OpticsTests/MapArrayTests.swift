@@ -1,8 +1,8 @@
-import Foundation
-import XCTest
-
-import Optics
-
+//import Foundation
+//import XCTest
+//
+//import Optics
+//
 //class MapArrayTests: XCTestCase {
 //	func testMapArray() {
 //		let optic = MapArray {

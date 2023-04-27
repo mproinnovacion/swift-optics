@@ -165,19 +165,19 @@ public struct ThrowingRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingOptic {
 }
 
 extension LensOptic {
-	public func throwing() -> ThrowingLiftLensOptic<Self> {
+	public func throwing() -> LiftLensToThrowing<Self> {
 		.init(optic: self)
 	}
 }
 
 extension PrismOptic {
-	public func throwing() -> ThrowingLiftPrismOptic<Self> {
+	public func throwing() -> LiftPrismToThrowing<Self> {
 		.init(prism: self)
 	}
 }
 
 extension OptionalOptic {
-	public func throwing() -> ThrowingLiftOptionalOptic<Self> {
-		ThrowingLiftOptionalOptic(optic: self)
+	public func throwing() -> LiftOptionalToThrowing<Self> {
+		.init(optic: self)
 	}
 }
