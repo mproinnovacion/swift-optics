@@ -13,11 +13,11 @@ public protocol SetterOptic<Whole, Part, NewWhole, NewPart> { //}: OptionalSette
 }
 
 extension SetterOptic {
-	public func tryUpdating(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) rethrows -> NewWhole {
+	public func updating(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) rethrows -> NewWhole {
 		try self.updating(whole, f)
 	}
 	
-	public func trySetting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
+	public func setting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
 		self.updating(whole, { _ in newValue })
 	}
 }
