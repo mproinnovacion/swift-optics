@@ -16,3 +16,9 @@ public struct LiftGetterToAsync<O: GetterOptic>: AsyncGetterOptic {
 		optic.get(whole)
 	}
 }
+
+extension GetterOptic {
+	public func async() -> LiftGetterToAsync<Self> {
+		.init(optic: self)
+	}
+}

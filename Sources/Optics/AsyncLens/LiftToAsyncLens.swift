@@ -26,3 +26,9 @@ public struct LiftLensToAsync<O: LensOptic>: AsyncLensOptic {
 		return self.optic.setting(whole, to: newPart)
 	}
 }
+
+extension LensOptic {
+	public func async() -> LiftLensToAsync<Self> {
+		.init(optic: self)
+	}
+}
