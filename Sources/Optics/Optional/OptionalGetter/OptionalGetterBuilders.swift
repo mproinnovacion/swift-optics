@@ -13,43 +13,43 @@ public enum OptionalGetterOpticBuilder {
 	}
 	
 	public static func buildPartialBlock<R>(
-		first f: @escaping () -> R
+		first f: @escaping () -> R?
 	) -> OptionalGetterFunc0<R> {
 		.init(run: f)
 	}
 	
 	public static func buildPartialBlock<O0, R>(
-		first f: @escaping (O0) -> R
+		first f: @escaping (O0) -> R?
 	) -> OptionalGetterFunc1<O0, R> {
 		.init(run: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, R>(
-		first f: @escaping (O0, O1) -> R
+		first f: @escaping (O0, O1) -> R?
 	) -> OptionalGetterFunc2<O0, O1, R> {
 		.init(run: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, R>(
-		first f: @escaping (O0, O1, O2) -> R
+		first f: @escaping (O0, O1, O2) -> R?
 	) -> OptionalGetterFunc3<O0, O1, O2, R> {
 		.init(run: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
-		first f: @escaping (O0, O1, O2, O3) -> R
+		first f: @escaping (O0, O1, O2, O3) -> R?
 	) -> OptionalGetterFunc4<O0, O1, O2, O3, R> {
 		.init(run: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
-		first f: @escaping (O0, O1, O2, O3, O4) -> R
+		first f: @escaping (O0, O1, O2, O3, O4) -> R?
 	) -> OptionalGetterFunc5<O0, O1, O2, O3, O4, R> {
 		.init(run: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
-		first f: @escaping (O0, O1, O2, O3, O4, O5) -> R
+		first f: @escaping (O0, O1, O2, O3, O4, O5) -> R?
 	) -> OptionalGetterFunc6<O0, O1, O2, O3, O4, O5, R> {
 		.init(run: f)
 	}

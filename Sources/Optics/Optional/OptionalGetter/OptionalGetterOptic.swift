@@ -12,9 +12,3 @@ extension OptionalGetterOptic where Whole == Void {
 		self.tryGet(())
 	}
 }
-
-extension OptionalGetterOptic {
-	public func getAll(_ whole: Whole) -> [Part] {
-		[self.tryGet(whole)].compactMap { $0 }
-	}
-}
