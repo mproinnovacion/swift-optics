@@ -43,12 +43,9 @@ extension ArraySetterOptic {
 	@inlinable
 	public func settingAll(
 		_ whole: Whole,
-		to newValue: Part
-	) -> Whole
-	where NewWhole == Whole, NewPart == Part {
-		var copy = whole
-		self.setAll(&copy, to: newValue)
-		return copy
+		to newValue: NewPart
+	) -> NewWhole {
+		self.updatingAll(whole, { _ in newValue })
 	}
 	
 	@inlinable
@@ -77,5 +74,55 @@ public struct ArraySetterRawOptic<Whole, Part, NewWhole, NewPart>: ArraySetterOp
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		_updatingAll(whole, f)
+	}
+}
+
+public struct ArraySetterProvidedWholeOptic<O: ArraySetterOptic>: ArraySetterOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func updatingAll(
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updatingAll(self.whole, f)
+	}
+}
+
+extension ArraySetterOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ArraySetterProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ArraySetterOptic where Whole == Void {
+	public func updatingAll(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.updatingAll((), f)
+	}
+	
+	public func settingAll(
+		to newPart: NewPart
+	) -> NewWhole {
+		self.settingAll((), to: newPart)
 	}
 }

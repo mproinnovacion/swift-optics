@@ -133,3 +133,61 @@ where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewP
 		return optic.updatingAll(whole, f)
 	}
 }
+
+public struct ArrayProvidedWholeOptic<O: ArrayOptic>: ArrayOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func getAll(_ whole: Void) -> [O.Part] {
+		self.optic.getAll(self.whole)
+	}
+	
+	public func updatingAll(
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updatingAll(self.whole, f)
+	}
+}
+
+extension ArrayOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ArrayProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ArrayOptic where Whole == Void {
+	public func getAll() -> [Part] {
+		self.getAll(())
+	}
+	
+	public func updatingAll(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.updatingAll((), f)
+	}
+	
+	public func settingAll(
+		to newValue: NewPart
+	) -> NewWhole {
+		self.settingAll((), to: newValue)
+	}
+}
