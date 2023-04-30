@@ -66,3 +66,60 @@ extension WritableKeyPath: LensOptic {
 	}
 }
 
+public struct LensProvidedWholeOptic<O: LensOptic>: LensOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func get(_ whole: Void) -> O.Part {
+		self.optic.get(self.whole)
+	}
+	
+	public func updating(
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updating(self.whole, f)
+	}
+}
+
+extension LensOptic {
+	public func provide(
+		_ whole: Whole
+	) -> LensProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension LensOptic where Whole == Void {
+	public func get() -> Part {
+		self.get(())
+	}
+	
+	public func updating(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.updating((), f)
+	}
+	
+	public func setting(
+		to newValue: NewPart
+	) -> NewWhole {
+		self.setting((), to: newValue)
+	}
+}

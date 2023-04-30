@@ -80,3 +80,57 @@ extension OptionalSetterOptic {
 		return copy
 	}
 }
+
+public struct OptionalSetterProvidedWholeOptic<O: OptionalSetterOptic>: OptionalSetterOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func tryUpdating(
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(self.whole, f)
+	}
+	
+	public func trySetting(_ whole: Void, to newPart: O.NewPart) -> O.NewWhole {
+		optic.trySetting(self.whole, to: newPart)
+	}
+}
+
+extension OptionalSetterOptic {
+	public func provide(
+		_ whole: Whole
+	) -> OptionalSetterProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension OptionalSetterOptic where Whole == Void {
+	public func tryUpdating(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.tryUpdating((), f)
+	}
+	
+	public func trySetting(
+		to newPart: NewPart
+	) -> NewWhole {
+		self.trySetting((), to: newPart)
+	}
+}

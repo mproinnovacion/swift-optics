@@ -6,9 +6,15 @@ public enum SetterOpticBuilder {
 		optic
 	}
 	
-	public static func buildPartialBlock<R, NewPart>(
+	public static func buildPartialBlock<R>(
 		first f: @escaping () -> R
-	) -> SetterProvidedWholeOptic<SetterFunc0<R, NewPart>> {
+	) -> SetterProvidedWholeOptic<SetterFunc0<R, R>> {
+		.init(optic: .init(), whole: f)
+	}
+	
+	public static func buildPartialBlock<O0, R>(
+		first f: @escaping (O0) -> R
+	) -> SetterProvidedWholeOptic<SetterFunc1<O0, R, R>> {
 		.init(optic: .init(), whole: f)
 	}
 	

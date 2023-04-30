@@ -117,4 +117,24 @@ class SetterFuncTests: XCTestCase {
 		XCTAssertEqual(group.six("one", "one", "one", "one", "one", "one"), false)
 		XCTAssertEqual(group.six("one", "two", "one", "one", "one", "one"), true)
 	}
+	
+	func testFuncInVariable() {
+		func f(_ string: String) -> Int {
+			string.count
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc("hello")
+		
+		XCTAssertEqual(result, 10)
+	}
 }

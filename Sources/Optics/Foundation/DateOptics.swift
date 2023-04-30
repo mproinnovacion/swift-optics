@@ -30,10 +30,9 @@ extension Date {
 				from: date
 			)
 			
-			let updated = try? update(components)
+			let updated = update(components)
 			
-			return updated
-				.flatMap(calendar.date(from:)) ?? date
+			return calendar.date(from: updated) ?? date
 		} trySetting: { date, newComponents in
 			var components = calendar.dateComponents(
 				allComponents,
@@ -76,12 +75,12 @@ extension Date {
 		} tryUpdating: { date, update in
 			guard
 				let value = componentOptic(path, calendar: calendar, timeZone: timeZone)
-					.tryGet(date),
-				let updated = try? update(value)
+					.tryGet(date)
 			else {
 				return date
 			}
 			
+			let updated = update(value)
 			return calendar.date(bySetting: component, value: updated, of: date) ?? date
 		} trySetting: { date, value in
 			calendar.date(bySetting: component, value: value, of: date) ?? date

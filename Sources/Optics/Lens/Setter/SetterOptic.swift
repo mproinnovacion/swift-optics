@@ -50,17 +50,6 @@ extension SetterOptic {
 	}
 	
 	@inlinable
-	public func setting(
-		_ whole: Whole,
-		to newValue: Part
-	) -> Whole
-	where NewWhole == Whole, NewPart == Part {
-		var copy = whole
-		self.set(&copy, to: newValue)
-		return copy
-	}
-	
-	@inlinable
 	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (inout Part) -> Void
@@ -109,9 +98,15 @@ extension SetterOptic {
 }
 
 extension SetterOptic where Whole == Void {
-	func updating(
+	public func updating(
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		self.updating((), f)
+	}
+	
+	public func setting(
+		to newValue: NewPart
+	) -> NewWhole {
+		self.setting((), to: newValue)
 	}
 }

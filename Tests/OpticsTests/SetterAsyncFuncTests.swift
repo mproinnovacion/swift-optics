@@ -53,13 +53,15 @@ class SetterAsyncFuncTests: XCTestCase {
 //		var myFunc = asyncF
 //		
 //		let setter = Setter {
-//			Setter {
-//				\Self.myFunc
-//			}.mapAsync()
+//			myFunc
 //		}
 //		
 //		setter.update(&myFunc) { number in
 //			number * 2
 //		}
+//		
+//		let result = await myFunc(2)
+//		
+//		XCTAssertEqual(result, 4)
 //	}
 }
