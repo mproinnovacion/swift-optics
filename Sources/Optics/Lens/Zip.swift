@@ -21,9 +21,9 @@ public struct Zip<L: LensOptic>: LensOptic {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole, f)
 	}
 }
 
@@ -65,17 +65,17 @@ where LHS.Whole == RHS.Whole, LHS.NewWhole == RHS.NewWhole, LHS.NewWhole == LHS.
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		let lhsPart = lhs.get(whole)
 		let rhsPart = rhs.get(whole)
 		
-		let updated = try lhs.updating(whole) { lhsPart in
-			try f((lhsPart, rhsPart)).0
+		let updated = lhs.updating(whole) { lhsPart in
+			f((lhsPart, rhsPart)).0
 		}
 				
-		return try rhs.updating(updated) { rhsPart in
-			try f((lhsPart, rhsPart)).1
+		return rhs.updating(updated) { rhsPart in
+			f((lhsPart, rhsPart)).1
 		}
 	}
 }
@@ -101,22 +101,22 @@ where O0.Whole == O1.Whole, O0.NewWhole == O1.NewWhole, O0.NewWhole == O0.Whole,
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		let o0Part = o0.get(whole)
 		let o1Part = o1.get(whole)
 		let o2Part = o2.get(whole)
 		
-		var updated = try o0.updating(whole) { o0Part in
-			try f((o0Part, o1Part, o2Part)).0
+		var updated = o0.updating(whole) { o0Part in
+			f((o0Part, o1Part, o2Part)).0
 		}
 				
-		updated = try o1.updating(updated) { o1Part in
-			try f((o0Part, o1Part, o2Part)).1
+		updated = o1.updating(updated) { o1Part in
+			f((o0Part, o1Part, o2Part)).1
 		}
 		
-		updated = try o2.updating(updated) { o2Part in
-			try f((o0Part, o1Part, o2Part)).2
+		updated = o2.updating(updated) { o2Part in
+			f((o0Part, o1Part, o2Part)).2
 		}
 		
 		return updated

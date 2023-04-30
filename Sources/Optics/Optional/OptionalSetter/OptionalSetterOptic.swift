@@ -8,8 +8,8 @@ public protocol OptionalSetterOptic<Whole, Part, NewWhole, NewPart> {
 	
 	func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole
 	
 	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
 }
@@ -28,12 +28,12 @@ extension OptionalSetterOptic {
 	@inlinable
 	public func tryUpdate(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
+		_ f: @escaping (inout Part) -> Void
+	) -> Void
 	where Part == NewPart, Whole == NewWhole {
-		whole = try self.tryUpdating(whole, { part in
+		whole = self.tryUpdating(whole, { part in
 			var copy = part
-			try f(&copy)
+			f(&copy)
 			return copy
 		})
 	}
@@ -41,12 +41,12 @@ extension OptionalSetterOptic {
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole
+		_ f: @escaping (inout Part) -> Void
+	) -> Whole
 	where Part == NewPart, Whole == NewWhole {
-		try self.tryUpdating(whole) { part in
+		self.tryUpdating(whole) { part in
 			var result = part
-			try f(&result)
+			f(&result)
 			return result
 		}
 	}

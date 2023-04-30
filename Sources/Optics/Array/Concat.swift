@@ -22,9 +22,9 @@ public struct Concat<Optics: ArrayOptic>: ArrayOptic {
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updatingAll(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updatingAll(whole, f)
 	}
 }
 
@@ -44,11 +44,11 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		var result = whole
-		result = try lhs.updatingAll(result, f)
-		return try rhs.updatingAll(result, f)
+		result = lhs.updatingAll(result, f)
+		return rhs.updatingAll(result, f)
 	}
 }
 

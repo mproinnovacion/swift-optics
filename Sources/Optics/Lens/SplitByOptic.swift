@@ -22,11 +22,11 @@ public struct SplitByOptic: LensOptic {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		let components = whole.components(separatedBy: separator)
 		return String(
-			try f(components).joined(separator: separator)
+			f(components).joined(separator: separator)
 		)
 	}
 }

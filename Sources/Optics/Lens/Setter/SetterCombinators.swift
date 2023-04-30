@@ -17,8 +17,8 @@ public struct Setter<O: SetterOptic>: SetterOptic {
 	
 	public func updating(
 		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
-	) rethrows -> O.NewWhole {
-		try setter.updating(whole, f)
+		_ f: @escaping (O.Part) -> O.NewPart
+	) -> O.NewWhole {
+		setter.updating(whole, f)
 	}
 }

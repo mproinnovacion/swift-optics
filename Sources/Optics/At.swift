@@ -31,15 +31,15 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole) { elements in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole) { elements in
 			guard elements.count > self.index else {
 				return elements
 			}
 			
 			var result = elements
-			result[self.index] = try f(result[self.index])
+			result[self.index] = f(result[self.index])
 			return result
 		}
 	}

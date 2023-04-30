@@ -23,10 +23,10 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.tryUpdating(whole) { lhsPart in
-			try rhs.tryUpdating(lhsPart, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.tryUpdating(whole) { lhsPart in
+			rhs.tryUpdating(lhsPart, f)
 		}
 	}
 }

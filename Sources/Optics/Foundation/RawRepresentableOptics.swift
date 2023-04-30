@@ -5,8 +5,7 @@ extension RawRepresentable {
 		OptionalRawOptic { representable in
 			representable.rawValue
 		} tryUpdating: { representable, update in
-			(try? update(representable.rawValue))
-				.flatMap(Self.init(rawValue:)) ?? representable
+			Self(rawValue: update(representable.rawValue)) ?? representable
 		} trySetting: { representable, newValue in
 			Self(rawValue: newValue) ?? representable
 		}

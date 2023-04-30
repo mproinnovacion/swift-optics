@@ -20,9 +20,9 @@ public struct LiftLensToThrowing<O: LensOptic>: ThrowingOptic {
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try lens.updating(whole) { part in
-			try f(part)
-		}
+		let part = lens.get(whole)
+		let newPart = try f(part)
+		return lens.setting(whole, to: newPart)
 	}
 	
 	public func setting(
@@ -104,9 +104,13 @@ public struct LiftOptionalToThrowing<O: OptionalOptic>: ThrowingOptic {
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try optic.tryUpdating(whole) { part in
-			try f(part)
+		guard let part = optic.tryGet(whole) else {
+			throw(ThrowingError.noData)
 		}
+		
+		let newPart = try f(part)
+		
+		return optic.trySetting(whole, to: newPart)
 	}
 	
 	@inlinable

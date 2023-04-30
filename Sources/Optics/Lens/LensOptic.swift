@@ -33,9 +33,9 @@ extension LensOptic where LensBody: LensOptic, LensBody.Whole == Whole, LensBody
 	@inlinable
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.body.updating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.updating(whole, f)
 	}
 }
 
@@ -58,10 +58,10 @@ extension WritableKeyPath: LensOptic {
 	@inlinable
 	public func updating(
 		_ whole: Root,
-		_ f: @escaping (Value) throws -> Value
-	) rethrows -> Root {
+		_ f: @escaping (Value) -> Value
+	) -> Root {
 		var result = whole
-		result[keyPath: self] = try f(result[keyPath: self])
+		result[keyPath: self] = f(result[keyPath: self])
 		return result
 	}
 }

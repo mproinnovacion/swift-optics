@@ -44,4 +44,22 @@ class SetterAsyncFuncTests: XCTestCase {
 		XCTAssertEqual(oneFalse, false)
 		XCTAssertEqual(oneTrue, true)
 	}
+	
+//	func testFuncInVariable() async {
+//		func asyncF(_ string: String) async -> Int {
+//			string.count
+//		}
+//		
+//		var myFunc = asyncF
+//		
+//		let setter = Setter {
+//			Setter {
+//				\Self.myFunc
+//			}.mapAsync()
+//		}
+//		
+//		setter.update(&myFunc) { number in
+//			number * 2
+//		}
+//	}
 }

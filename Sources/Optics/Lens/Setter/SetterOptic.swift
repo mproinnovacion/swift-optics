@@ -8,16 +8,15 @@ public protocol SetterOptic<Whole, Part, NewWhole, NewPart> { //}: OptionalSette
 	
 	func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole
 }
 
 extension SetterOptic {
-	public func updating(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) rethrows -> NewWhole {
-		try self.updating(whole, f)
-	}
-	
-	public func setting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
+	public func setting(
+		_ whole: Whole,
+		to newValue: NewPart
+	) -> NewWhole {
 		self.updating(whole, { _ in newValue })
 	}
 }
@@ -26,12 +25,12 @@ extension SetterOptic {
 	@inlinable
 	public func update(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
+		_ f: @escaping (inout Part) -> Void
+	) -> Void
 	where NewWhole == Whole, NewPart == Part {
-		whole = try self.updating(whole) { part in
+		whole = self.updating(whole) { part in
 			var copy = part
-			try f(&copy)
+			f(&copy)
 			return copy
 		}
 	}
@@ -64,28 +63,55 @@ extension SetterOptic {
 	@inlinable
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole
+		_ f: @escaping (inout Part) -> Void
+	) -> Whole
 	where NewWhole == Whole, NewPart == Part {
 		var copy = whole
-		try self.update(&copy, f)
+		self.update(&copy, f)
 		return copy
 	}
 }
 
-public struct SetterRawOptic<Whole, Part, NewWhole, NewPart>: SetterOptic {
-	public let _updating: (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+public struct SetterProvidedWholeOptic<O: SetterOptic>: SetterOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
 	
 	public init(
-		updating: @escaping (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+		optic: O,
+		whole: O.Whole
 	) {
-		self._updating = updating
+		self.optic = optic
+		self.whole = whole
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		_updating(whole, f)
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updating(self.whole, f)
+	}
+}
+
+extension SetterOptic {
+	public func provide(
+		_ whole: Whole
+	) -> SetterProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension SetterOptic where Whole == Void {
+	func updating(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.updating((), f)
 	}
 }

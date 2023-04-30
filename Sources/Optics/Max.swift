@@ -27,9 +27,9 @@ where L.Part == [Element], Sorted.Whole == Element, Sorted.Part: Comparable, L.N
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole) { elements in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole) { elements in
 			guard elements.count > 0 else {
 				return elements
 			}
@@ -43,7 +43,7 @@ where L.Part == [Element], Sorted.Whole == Element, Sorted.Part: Comparable, L.N
 			}
 			
 			var result = elements
-			result[index] = try f(result[index])
+			result[index] = f(result[index])
 			return result
 		}
 	}

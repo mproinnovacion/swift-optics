@@ -17,9 +17,9 @@ public struct OptionalSetter<O: OptionalSetterOptic>: OptionalSetterOptic {
 	
 	public func tryUpdating(
 		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
-	) rethrows -> O.NewWhole {
-		try setter.tryUpdating(whole, f)
+		_ f: @escaping (O.Part) -> O.NewPart
+	) -> O.NewWhole {
+		setter.tryUpdating(whole, f)
 	}
 	
 	public func trySetting(_ whole: O.Whole, to newPart: O.NewPart) -> O.NewWhole {

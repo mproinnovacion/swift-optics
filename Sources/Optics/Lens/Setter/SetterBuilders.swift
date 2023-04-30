@@ -6,6 +6,12 @@ public enum SetterOpticBuilder {
 		optic
 	}
 	
+	public static func buildPartialBlock<R, NewPart>(
+		first f: @escaping () -> R
+	) -> SetterProvidedWholeOptic<SetterFunc0<R, NewPart>> {
+		.init(optic: .init(), whole: f)
+	}
+	
 	public static func buildPartialBlock<O0: SetterOptic, O1: SetterOptic>(accumulated o0: O0, next o1: O1) -> SetterCombination<O0, O1> {
 		SetterCombination(lhs: o0, rhs: o1)
 	}
@@ -23,10 +29,10 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.updating(whole) { lhsPart in
-			try rhs.updating(lhsPart, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.updating(whole) { lhsPart in
+			rhs.updating(lhsPart, f)
 		}
 	}
 }

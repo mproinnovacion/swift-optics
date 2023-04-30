@@ -138,13 +138,13 @@ where Whole == O.Whole, Part == O.Part {
 
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		guard let part = self.optic?.extract(from: whole) else {
 			return whole
 		}
 
-		let newPart = try f(part)
+		let newPart = f(part)
 
 		return self.optic?.embed(newPart) ?? whole
 	}

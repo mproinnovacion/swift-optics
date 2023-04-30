@@ -14,9 +14,9 @@ public struct LiftLensToArray<O: LensOptic>: ArrayOptic {
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole, f)
 	}
 }
 
@@ -34,8 +34,8 @@ public struct LiftOptionalToArray<O: OptionalOptic>: ArrayOptic {
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole, f)
 	}
 }

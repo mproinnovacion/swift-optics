@@ -1,11 +1,11 @@
 import Foundation
 
-public struct MapOptionalSetter0<S: OptionalSetterOptic, Output>: OptionalSetterOptic
-where S.Part == (() -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter0<S: OptionalSetterOptic, Output, NewOutput>: OptionalSetterOptic
+where S.Part == (() -> Output), S.NewPart == (() -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -13,22 +13,25 @@ where S.Part == (() -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{
 				let output = part()
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapOptionalSetter1<S: OptionalSetterOptic, Input, Output>: OptionalSetterOptic
-where S.Part == ((Input) -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter1<S: OptionalSetterOptic, Input, Output, NewOutput>: OptionalSetterOptic
+where S.Part == ((Input) -> Output), S.NewPart == ((Input) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -36,22 +39,26 @@ where S.Part == ((Input) -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{ input in
 				let output = part(input)
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapOptionalSetter2<S: OptionalSetterOptic, Input0, Input1, Output>: OptionalSetterOptic
-where S.Part == ((Input0, Input1) -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter2<S: OptionalSetterOptic, Input0, Input1, Output, NewOutput>: OptionalSetterOptic
+where S.Part == ((Input0, Input1) -> Output),
+		S.NewPart == ((Input0, Input1) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -59,22 +66,26 @@ where S.Part == ((Input0, Input1) -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{ input0, input1 in
 				let output = part(input0, input1)
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapOptionalSetter3<S: OptionalSetterOptic, Input0, Input1, Input2, Output>: OptionalSetterOptic
-where S.Part == ((Input0, Input1, Input2) -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter3<S: OptionalSetterOptic, Input0, Input1, Input2, Output, NewOutput>: OptionalSetterOptic
+where S.Part == ((Input0, Input1, Input2) -> Output),
+		S.NewPart == ((Input0, Input1, Input2) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -82,22 +93,26 @@ where S.Part == ((Input0, Input1, Input2) -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{ input0, input1, input2 in
 				let output = part(input0, input1, input2)
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapOptionalSetter4<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Output>: OptionalSetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3) -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter4<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Output, NewOutput>: OptionalSetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3) -> Output),
+		S.NewPart == ((Input0, Input1, Input2, Input3) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -105,22 +120,26 @@ where S.Part == ((Input0, Input1, Input2, Input3) -> Output), S.NewPart == S.Par
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{ input0, input1, input2, input3 in
 				let output = part(input0, input1, input2, input3)
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapOptionalSetter5<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Input4, Output>: OptionalSetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter5<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Input4, Output, NewOutput>: OptionalSetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output),
+		S.NewPart == ((Input0, Input1, Input2, Input3, Input4) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -128,22 +147,26 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output), S.NewPart 
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{ input0, input1, input2, input3, input4 in
 				let output = part(input0, input1, input2, input3, input4)
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapOptionalSetter6<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: OptionalSetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.NewPart == S.Part {
+public struct MapOptionalSetter6<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>: OptionalSetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output),
+		S.NewPart == ((Input0, Input1, Input2, Input3, Input4, Input5) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
-	public typealias NewPart = Output
+	public typealias NewPart = NewOutput
 	
 	let optic: S
 	
@@ -151,42 +174,45 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
+	public func tryUpdating(
+		_ whole: S.Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> S.NewWhole {
 		self.optic.tryUpdating(whole) { part in
 			{ input0, input1, input2, input3, input4, input5 in
 				let output = part(input0, input1, input2, input3, input4, input5)
-				return (try? f(output)) ?? output
+				return f(output)
 			}
 		}
 	}
 }
 
 extension OptionalSetterOptic {
-	public func map<Output>() -> MapOptionalSetter0<Self, Output> {
+	public func map<Output, NewOutput>() -> MapOptionalSetter0<Self, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input, Output>() -> MapOptionalSetter1<Self, Input, Output> {
+	public func map<Input, Output, NewOutput>() -> MapOptionalSetter1<Self, Input, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Output>() -> MapOptionalSetter2<Self, Input0, Input1, Output> {
+	public func map<Input0, Input1, Output, NewOutput>() -> MapOptionalSetter2<Self, Input0, Input1, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Output>() -> MapOptionalSetter3<Self, Input0, Input1, Input2, Output> {
+	public func map<Input0, Input1, Input2, Output, NewOutput>() -> MapOptionalSetter3<Self, Input0, Input1, Input2, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Output>() -> MapOptionalSetter4<Self, Input0, Input1, Input2, Input3, Output> {
+	public func map<Input0, Input1, Input2, Input3, Output, NewOutput>() -> MapOptionalSetter4<Self, Input0, Input1, Input2, Input3, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Input4, Output>() -> MapOptionalSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
+	public func map<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> MapOptionalSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapOptionalSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
+	public func map<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> MapOptionalSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput> {
 		.init(optic: self)
 	}
 }

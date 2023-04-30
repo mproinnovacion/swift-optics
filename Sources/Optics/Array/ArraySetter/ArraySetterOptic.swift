@@ -8,20 +8,20 @@ public protocol ArraySetterOptic<Whole, Part, NewWhole, NewPart> {
 	
 	func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole
 }
 
 extension ArraySetterOptic {
 	@inlinable
 	public func updateAll(
 		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
+		_ f: @escaping (inout Part) -> Void
+	) -> Void
 	where NewWhole == Whole, NewPart == Part {
-		whole = try self.updatingAll(whole) { part in
+		whole = self.updatingAll(whole) { part in
 			var copy = part
-			try f(&copy)
+			f(&copy)
 			return copy
 		}
 	}
@@ -54,28 +54,28 @@ extension ArraySetterOptic {
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole
+		_ f: @escaping (inout Part) -> Void
+	) -> Whole
 	where NewWhole == Whole, NewPart == Part {
 		var copy = whole
-		try self.updateAll(&copy, f)
+		self.updateAll(&copy, f)
 		return copy
 	}
 }
 
 public struct ArraySetterRawOptic<Whole, Part, NewWhole, NewPart>: ArraySetterOptic {
-	public let _updatingAll: (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+	public let _updatingAll: (Whole, @escaping (Part) -> NewPart) -> NewWhole
 	
 	public init(
-		updatingAll: @escaping (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+		updatingAll: @escaping (Whole, @escaping (Part) -> NewPart) -> NewWhole
 	) {
 		self._updatingAll = updatingAll
 	}
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		_updatingAll(whole, f)
 	}
 }

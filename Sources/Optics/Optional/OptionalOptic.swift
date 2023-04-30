@@ -9,15 +9,6 @@ public protocol OptionalOptic<Whole, Part, NewWhole, NewPart>: OptionalGetterOpt
 	associatedtype _OptionalBody
 	
 	typealias OptionalBody = _OptionalBody
-		
-	func tryGet(_ whole: Whole) -> Part?
-	
-	func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
-	
-	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
 	
 	@OptionalOpticBuilder
 	var body: OptionalBody { get }
@@ -47,9 +38,9 @@ extension OptionalOptic where OptionalBody: OptionalOptic, OptionalBody.Whole ==
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.body.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.tryUpdating(whole, f)
 	}
 	
 	@inlinable
@@ -65,12 +56,12 @@ public typealias SimpleOptionalOptic<Whole, Part> = OptionalOptic<Whole, Part, W
 
 public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	public let _tryGet: (Whole) -> Part?
-	public let _tryUpdating: (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+	public let _tryUpdating: (Whole, @escaping (Part) -> NewPart) -> NewWhole
 	public let _trySetting: (Whole, NewPart) -> NewWhole
 	
 	public init(
 		tryGet: @escaping (Whole) -> Part?,
-		tryUpdating: @escaping (Whole, @escaping (Part) throws -> NewPart) -> NewWhole,
+		tryUpdating: @escaping (Whole, @escaping (Part) -> NewPart) -> NewWhole,
 		trySetting: @escaping (Whole, NewPart) -> NewWhole
 	) {
 		self._tryGet = tryGet
@@ -86,8 +77,8 @@ public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		_tryUpdating(whole, f)
 	}
 	
@@ -114,11 +105,11 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		switch whole {
 			case let .some(value):
-				return .some(try f(value))
+				return .some(f(value))
 			case .none:
 				return .none
 		}

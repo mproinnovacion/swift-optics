@@ -60,10 +60,10 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.updatingAll(whole) { lhsPart in
-			try rhs.updating(lhsPart, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.updatingAll(whole) { lhsPart in
+			rhs.updating(lhsPart, f)
 		}
 	}
 }
@@ -92,10 +92,10 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		let updated = try lhs.updatingAll(whole, f)
-		return try rhs.updatingAll(updated, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		let updated = lhs.updatingAll(whole, f)
+		return rhs.updatingAll(updated, f)
 	}
 }
 
@@ -115,10 +115,10 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.updatingAll(whole) { lhsPart in
-			try rhs.tryUpdating(lhsPart, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.updatingAll(whole) { lhsPart in
+			rhs.tryUpdating(lhsPart, f)
 		}
 	}
 }
@@ -139,10 +139,10 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.updatingAll(whole) { lhsPart in
-			try rhs.updatingAll(lhsPart, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.updatingAll(whole) { lhsPart in
+			rhs.updatingAll(lhsPart, f)
 		}
 	}
 }

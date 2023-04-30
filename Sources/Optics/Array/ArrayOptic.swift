@@ -40,9 +40,9 @@ extension ArrayOptic where ArrayBody: ArrayOptic, ArrayBody.Whole == Whole, Arra
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.body.updatingAll(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.updatingAll(whole, f)
 	}
 }
 
@@ -62,9 +62,9 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try whole.map(f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		whole.map(f)
 	}
 }
 
@@ -82,9 +82,9 @@ public struct SetDefaultOptic<Element: Hashable, NewElement: Hashable>: ArrayOpt
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		Set(try whole.map(f))
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		Set(whole.map(f))
 	}
 }
 
@@ -102,9 +102,9 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try whole.mapValues(f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		whole.mapValues(f)
 	}
 }
 
@@ -124,12 +124,12 @@ where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewP
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		guard let optic = self.optic else {
 			return whole
 		}
 		
-		return try optic.updatingAll(whole, f)
+		return optic.updatingAll(whole, f)
 	}
 }
