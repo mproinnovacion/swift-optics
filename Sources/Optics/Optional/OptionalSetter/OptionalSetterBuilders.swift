@@ -9,173 +9,173 @@ public enum OptionalSetterOpticBuilder {
 	// MARK: Funcs
 	public static func buildPartialBlock<R>(
 		first f: @escaping () -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc0<R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc0<R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 
 	public static func buildPartialBlock<O0, R>(
 		first f: @escaping (O0) -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc1<O0, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc1<O0, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 
 	public static func buildPartialBlock<O0, O1, R>(
 		first f: @escaping (O0, O1) -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc2<O0, O1, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc2<O0, O1, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 
 	public static func buildPartialBlock<O0, O1, O2, R>(
 		first f: @escaping (O0, O1, O2) -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc3<O0, O1, O2, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc3<O0, O1, O2, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
 		first f: @escaping (O0, O1, O2, O3) -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc4<O0, O1, O2, O3, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc4<O0, O1, O2, O3, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
 		first f: @escaping (O0, O1, O2, O3, O4) -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc5<O0, O1, O2, O3, O4, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc5<O0, O1, O2, O3, O4, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
 		first f: @escaping (O0, O1, O2, O3, O4, O5) -> R
-	) -> OptionalSetterProvidedWholeOptic<OptionalSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<SetterFunc6<O0, O1, O2, O3, O4, O5, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	// MARK: Async
 	public static func buildPartialBlock<R>(
 		first f: @escaping () async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc0<R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc0<R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, R>(
 		first f: @escaping (O0) async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc1<O0, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc1<O0, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, R>(
 		first f: @escaping (O0, O1) async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc2<O0, O1, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc2<O0, O1, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, R>(
 		first f: @escaping (O0, O1, O2) async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc3<O0, O1, O2, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc3<O0, O1, O2, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
 		first f: @escaping (O0, O1, O2, O3) async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc4<O0, O1, O2, O3, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc4<O0, O1, O2, O3, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
 		first f: @escaping (O0, O1, O2, O3, O4) async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc5<O0, O1, O2, O3, O4, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc5<O0, O1, O2, O3, O4, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
 		first f: @escaping (O0, O1, O2, O3, O4, O5) async -> R
-	) -> OptionalSetterProvidedWholeOptic<AsyncOptionalSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<AsyncSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	// MARK: ThrowingFuncs
 	public static func buildPartialBlock<R>(
 		first f: @escaping () throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc0<R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc0<R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, R>(
 		first f: @escaping (O0) throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc1<O0, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc1<O0, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, R>(
 		first f: @escaping (O0, O1) throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc2<O0, O1, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc2<O0, O1, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, R>(
 		first f: @escaping (O0, O1, O2) throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc3<O0, O1, O2, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc3<O0, O1, O2, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
 		first f: @escaping (O0, O1, O2, O3) throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc4<O0, O1, O2, O3, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc4<O0, O1, O2, O3, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
 		first f: @escaping (O0, O1, O2, O3, O4) throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc5<O0, O1, O2, O3, O4, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc5<O0, O1, O2, O3, O4, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
 		first f: @escaping (O0, O1, O2, O3, O4, O5) throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingOptionalSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	// MARK: ThrowingAsyncFuncs
 	public static func buildPartialBlock<R>(
 		first f: @escaping () async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc0<R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc0<R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, R>(
 		first f: @escaping (O0) async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc1<O0, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc1<O0, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, R>(
 		first f: @escaping (O0, O1) async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc2<O0, O1, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc2<O0, O1, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, R>(
 		first f: @escaping (O0, O1, O2) async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc3<O0, O1, O2, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc3<O0, O1, O2, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
 		first f: @escaping (O0, O1, O2, O3) async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc4<O0, O1, O2, O3, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc4<O0, O1, O2, O3, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
 		first f: @escaping (O0, O1, O2, O3, O4) async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc5<O0, O1, O2, O3, O4, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc5<O0, O1, O2, O3, O4, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
 		first f: @escaping (O0, O1, O2, O3, O4, O5) async throws -> R
-	) -> OptionalSetterProvidedWholeOptic<ThrowingAsyncOptionalSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>> {
-		.init(optic: .init(), whole: f)
+	) -> OptionalSetterProvidedWholeOptic<LiftSetterToOptional<ThrowingAsyncSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>>> {
+		.init(optic: .init(optic: .init()), whole: f)
 	}
 	
 	public static func buildPartialBlock<O0: OptionalSetterOptic, O1: OptionalSetterOptic>(accumulated o0: O0, next o1: O1) -> OptionalSetterCombination<O0, O1> {

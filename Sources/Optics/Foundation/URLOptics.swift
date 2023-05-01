@@ -16,7 +16,7 @@ extension URL {
 				return url
 			}
 			
-			components = (try? update(components)) ?? components
+			components = update(components)
 			return components.url ?? url
 		} trySetting: { url, newComponents in
 			newComponents.url ?? url
