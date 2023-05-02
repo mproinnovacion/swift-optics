@@ -91,3 +91,61 @@ extension ArrayOptic where NewPart == Part {
 		.init(optic: self)
 	}
 }
+
+public struct ThrowingArrayProvidedWholeOptic<O: ThrowingArrayOptic>: ThrowingArrayOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+
+	public let optic: O
+	public let whole: O.Whole
+
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+
+	public func getAll(_ whole: Void) throws -> [O.Part] {
+		try self.optic.getAll(self.whole)
+	}
+	
+	public func updatingAll(
+		_ void: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try optic.updatingAll(self.whole, f)
+	}
+}
+
+extension ThrowingArrayOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ThrowingArrayProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ThrowingArrayOptic where Whole == Void {
+	public func getAll() throws -> [Part] {
+		try self.getAll(())
+	}
+	
+	public func updatingAll(
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try self.updatingAll((), f)
+	}
+
+	public func settingAll(
+		to newValue: NewPart
+	) throws -> NewWhole {
+		try self.settingAll((), to: newValue)
+	}
+}

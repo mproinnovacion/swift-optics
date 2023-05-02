@@ -181,3 +181,61 @@ extension OptionalOptic {
 		.init(optic: self)
 	}
 }
+
+public struct ThrowingProvidedWholeOptic<O: ThrowingOptic>: ThrowingOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+
+	public let optic: O
+	public let whole: O.Whole
+
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+
+	public func get(_ whole: Void) throws -> O.Part {
+		try self.optic.get(self.whole)
+	}
+	
+	public func updating(
+		_ void: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try optic.updating(self.whole, f)
+	}
+}
+
+extension ThrowingOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ThrowingProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ThrowingOptic where Whole == Void {
+	public func get() throws -> Part {
+		try self.get(())
+	}
+	
+	public func updating(
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try self.updating((), f)
+	}
+
+	public func setting(
+		to newValue: NewPart
+	) throws -> NewWhole {
+		try self.setting((), to: newValue)
+	}
+}
