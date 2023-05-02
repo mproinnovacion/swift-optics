@@ -22,8 +22,8 @@ public struct Many<Optics: ArrayOptic>: ArrayOptic {
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optics.updatingAll(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optics.updatingAll(whole, f)
 	}
 }

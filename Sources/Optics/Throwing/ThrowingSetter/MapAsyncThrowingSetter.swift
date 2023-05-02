@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MapAsyncOptionalSetter0<S: OptionalSetterOptic, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter0<S: ThrowingSetterOptic, Output>: ThrowingSetterOptic
 where S.Part == (() async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -13,8 +13,11 @@ where S.Part == (() async -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{
 				let output = await part()
 				return (try? f(output)) ?? output
@@ -23,7 +26,7 @@ where S.Part == (() async -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapAsyncOptionalSetter1<S: OptionalSetterOptic, Input, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter1<S: ThrowingSetterOptic, Input, Output>: ThrowingSetterOptic
 where S.Part == ((Input) async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -36,8 +39,11 @@ where S.Part == ((Input) async -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{ input in
 				let output = await part(input)
 				return (try? f(output)) ?? output
@@ -46,7 +52,7 @@ where S.Part == ((Input) async -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapAsyncOptionalSetter2<S: OptionalSetterOptic, Input0, Input1, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter2<S: ThrowingSetterOptic, Input0, Input1, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1) async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -59,8 +65,11 @@ where S.Part == ((Input0, Input1) async -> Output), S.NewPart == S.Part {
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{ input0, input1 in
 				let output = await part(input0, input1)
 				return (try? f(output)) ?? output
@@ -69,7 +78,7 @@ where S.Part == ((Input0, Input1) async -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapAsyncOptionalSetter3<S: OptionalSetterOptic, Input0, Input1, Input2, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter3<S: ThrowingSetterOptic, Input0, Input1, Input2, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2) async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -82,8 +91,11 @@ where S.Part == ((Input0, Input1, Input2) async -> Output), S.NewPart == S.Part 
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{ input0, input1, input2 in
 				let output = await part(input0, input1, input2)
 				return (try? f(output)) ?? output
@@ -92,7 +104,7 @@ where S.Part == ((Input0, Input1, Input2) async -> Output), S.NewPart == S.Part 
 	}
 }
 
-public struct MapAsyncOptionalSetter4<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter4<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2, Input3) async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -105,8 +117,11 @@ where S.Part == ((Input0, Input1, Input2, Input3) async -> Output), S.NewPart ==
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{ input0, input1, input2, input3 in
 				let output = await part(input0, input1, input2, input3)
 				return (try? f(output)) ?? output
@@ -115,7 +130,7 @@ where S.Part == ((Input0, Input1, Input2, Input3) async -> Output), S.NewPart ==
 	}
 }
 
-public struct MapAsyncOptionalSetter5<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Input4, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter5<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Input4, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2, Input3, Input4) async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -128,8 +143,11 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) async -> Output), S.Ne
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{ input0, input1, input2, input3, input4 in
 				let output = await part(input0, input1, input2, input3, input4)
 				return (try? f(output)) ?? output
@@ -138,7 +156,7 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) async -> Output), S.Ne
 	}
 }
 
-public struct MapAsyncOptionalSetter6<S: OptionalSetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: OptionalSetterOptic
+public struct MapAsyncThrowingSetter6<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -151,8 +169,11 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Outpu
 		self.optic = optic
 	}
 	
-	public func tryUpdating(_ whole: S.Whole, _ f: @escaping (Output) throws -> Output) rethrows -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+	public func updating(
+		_ whole: S.Whole,
+		_ f: @escaping (Output) throws -> Output
+	) throws -> S.NewWhole {
+		try self.optic.updating(whole) { part in
 			{ input0, input1, input2, input3, input4, input5 in
 				let output = await part(input0, input1, input2, input3, input4, input5)
 				return (try? f(output)) ?? output
@@ -161,32 +182,32 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Outpu
 	}
 }
 
-extension OptionalSetterOptic {
-	public func mapAsync<Output>() -> MapAsyncOptionalSetter0<Self, Output> {
+extension ThrowingSetterOptic {
+	public func mapAsync<Output>() -> MapAsyncThrowingSetter0<Self, Output> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input, Output>() -> MapAsyncOptionalSetter1<Self, Input, Output> {
+	public func mapAsync<Input, Output>() -> MapAsyncThrowingSetter1<Self, Input, Output> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Output>() -> MapAsyncOptionalSetter2<Self, Input0, Input1, Output> {
+	public func mapAsync<Input0, Input1, Output>() -> MapAsyncThrowingSetter2<Self, Input0, Input1, Output> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Output>() -> MapAsyncOptionalSetter3<Self, Input0, Input1, Input2, Output> {
+	public func mapAsync<Input0, Input1, Input2, Output>() -> MapAsyncThrowingSetter3<Self, Input0, Input1, Input2, Output> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Input3, Output>() -> MapAsyncOptionalSetter4<Self, Input0, Input1, Input2, Input3, Output> {
+	public func mapAsync<Input0, Input1, Input2, Input3, Output>() -> MapAsyncThrowingSetter4<Self, Input0, Input1, Input2, Input3, Output> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Output>() -> MapAsyncOptionalSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
+	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Output>() -> MapAsyncThrowingSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapAsyncOptionalSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
+	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapAsyncThrowingSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
 		.init(optic: self)
 	}
 }

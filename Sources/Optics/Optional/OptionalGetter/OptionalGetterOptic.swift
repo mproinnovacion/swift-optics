@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol OptionalGetterOptic<Whole, Part> {
+public protocol OptionalGetterOptic<Whole, Part> { // }: ArrayGetterOptic {
 	associatedtype Whole
 	associatedtype Part
 	

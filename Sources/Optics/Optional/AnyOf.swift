@@ -21,9 +21,9 @@ public struct AnyOf<P: OptionalOptic>: OptionalOptic {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.optics.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.optics.tryUpdating(whole, f)
 	}
 	
 	public func trySetting(
@@ -96,15 +96,15 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		var result = whole
 		
-		try lhs.tryUpdate(&result) { part in
-			part = try f(part)
+		lhs.tryUpdate(&result) { part in
+			part = f(part)
 		}
-		try rhs.tryUpdate(&result) { part in
-			part = try f(part)
+		rhs.tryUpdate(&result) { part in
+			part = f(part)
 		}
 		
 		return result
@@ -137,16 +137,16 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewWhole == LHS.Whole, L
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		var result = whole
 		
-		result = try lhs.tryUpdating(result) { part in
-			try f(part)
+		result = lhs.tryUpdating(result) { part in
+			f(part)
 		}
 		
-		result = try rhs.tryUpdating(result) { part in
-			try f(part)
+		result = rhs.tryUpdating(result) { part in
+			f(part)
 		}
 		
 		return result
@@ -179,14 +179,14 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == LHS.Part, LHS
 	
 	public func tryUpdating(
 		_ whole: LHS.Whole,
-		_ f: @escaping (RHS.Part) throws -> RHS.Part
-	) rethrows -> NewWhole {
+		_ f: @escaping (RHS.Part) -> RHS.Part
+	) -> NewWhole {
 		var result = whole
-		try lhs.tryUpdate(&result) { part in
-			part = try f(part)
+		lhs.tryUpdate(&result) { part in
+			part = f(part)
 		}
-		try rhs.tryUpdate(&result) { part in
-			part = try f(part)
+		rhs.tryUpdate(&result) { part in
+			part = f(part)
 		}
 		return result
 	}

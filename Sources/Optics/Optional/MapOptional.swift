@@ -40,10 +40,10 @@ public struct MapOptional<O: OptionalOptic, MappedPart>: OptionalOptic {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole) { oPart in
-			to(oPart, try f(from(oPart)))
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole) { oPart in
+			to(oPart, f(from(oPart)))
 		}
 	}
 	

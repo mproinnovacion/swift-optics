@@ -122,33 +122,33 @@ public struct PrismOptionalOptic<Wrapped>: PrismOptic {
 public struct OptionalOpticFromPrismOptional<Whole, Part, O: PrismOptic>: OptionalOptic
 where Whole == O.Whole, Part == O.Part {
 	let optic: O?
-	
+
 	public typealias NewWhole = Whole
 	public typealias NewPart = Part
-	
+
 	public init(optic: O?) {
 		self.optic = optic
 	}
-	
+
 	public func tryGet(
 		_ whole: Whole
 	) -> Part? {
 		self.optic?.extract(from: whole)
 	}
-	
+
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		guard let part = self.optic?.extract(from: whole) else {
 			return whole
 		}
-		
-		let newPart = try f(part)
-		
+
+		let newPart = f(part)
+
 		return self.optic?.embed(newPart) ?? whole
 	}
-	
+
 	public func trySetting(
 		_ whole: Whole,
 		to newPart: NewPart

@@ -8,19 +8,19 @@ public protocol ArrayOptic<Whole, Part, NewWhole, NewPart>: ArrayGetterOptic, Ar
 	associatedtype NewWhole
 	associatedtype Part
 	associatedtype NewPart
-	associatedtype _Body
+	associatedtype _ArrayBody
 	
-	typealias Body = _Body
+	typealias ArrayBody = _ArrayBody
 	
-	@ArrayOpticBuilder var body: Body { get }
+	@ArrayOpticBuilder var body: ArrayBody { get }
 }
 
-extension ArrayOptic where Body == Never {
+extension ArrayOptic where ArrayBody == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
 	@_transparent
-	public var body: Body {
+	public var body: ArrayBody {
 		fatalError(
   """
   '\(Self.self)' has no body. …
@@ -30,7 +30,7 @@ extension ArrayOptic where Body == Never {
 	}
 }
 
-extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+extension ArrayOptic where ArrayBody: ArrayOptic, ArrayBody.Whole == Whole, ArrayBody.Part == Part, ArrayBody.NewWhole == NewWhole, ArrayBody.NewPart == NewPart {
 	
 	@inlinable
 	public func getAll(_ whole: Whole) -> [Part] {
@@ -40,9 +40,9 @@ extension ArrayOptic where Body: ArrayOptic, Body.Whole == Whole, Body.Part == P
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.body.updatingAll(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.updatingAll(whole, f)
 	}
 }
 
@@ -62,9 +62,9 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try whole.map(f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		whole.map(f)
 	}
 }
 
@@ -82,9 +82,9 @@ public struct SetDefaultOptic<Element: Hashable, NewElement: Hashable>: ArrayOpt
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		Set(try whole.map(f))
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		Set(whole.map(f))
 	}
 }
 
@@ -102,9 +102,9 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try whole.mapValues(f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		whole.mapValues(f)
 	}
 }
 
@@ -124,52 +124,70 @@ where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewP
 	
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		guard let optic = self.optic else {
 			return whole
 		}
 		
-		return try optic.updatingAll(whole, f)
+		return optic.updatingAll(whole, f)
 	}
 }
 
-public struct ArrayLensLiftOptic<O: LensOptic>: ArrayOptic {
-	let lens: O
-	
-	public typealias Whole = O.Whole
-	public typealias NewWhole = O.NewWhole
+public struct ArrayProvidedWholeOptic<O: ArrayOptic>: ArrayOptic {
+	public typealias Whole = Void
 	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
 	public typealias NewPart = O.NewPart
 	
-	public func getAll(_ whole: Whole) -> [Part] {
-		[lens.get(whole)]
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func getAll(_ whole: Void) -> [O.Part] {
+		self.optic.getAll(self.whole)
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole, f)
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updatingAll(self.whole, f)
 	}
 }
 
-public struct ArrayOptionalLiftOptic<O: OptionalOptic>: ArrayOptic {
-	let optic: O
-	
-	public typealias Whole = O.Whole
-	public typealias NewWhole = O.NewWhole
-	public typealias Part = O.Part
-	public typealias NewPart = O.NewPart
-	
-	public func getAll(_ whole: Whole) -> [Part] {
-		[optic.tryGet(whole)].compactMap { $0 }
+extension ArrayOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ArrayProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ArrayOptic where Whole == Void {
+	public func getAll() -> [Part] {
+		self.getAll(())
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.updatingAll((), f)
+	}
+	
+	public func settingAll(
+		to newValue: NewPart
+	) -> NewWhole {
+		self.settingAll((), to: newValue)
 	}
 }

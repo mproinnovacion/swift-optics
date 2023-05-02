@@ -43,13 +43,13 @@ where O.NewPart == O.Part {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole) { oPart in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole) { oPart in
 			let original = from(oPart)
 			
-			return try original.flatMap { original in
-				to(oPart, try f(original))
+			return original.flatMap { original in
+				to(oPart, f(original))
 			} ?? oPart
 		}
 	}

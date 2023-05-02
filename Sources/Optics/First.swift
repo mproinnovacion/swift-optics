@@ -21,15 +21,15 @@ public struct First<L: LensOptic, Element>: OptionalOptic where L.Part == [Eleme
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole) { elements in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole) { elements in
 			guard elements.count > 0 else {
 				return elements
 			}
 			
 			var result = elements
-			result[0] = try f(result[0])
+			result[0] = f(result[0])
 			return result
 		}
 	}

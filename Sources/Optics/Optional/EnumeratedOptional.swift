@@ -22,9 +22,9 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole, f)
 	}
 	
 	public func trySetting(_ whole: Whole, to newPart: NewPart) -> NewWhole {
@@ -51,10 +51,10 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole) { array in
-			try f(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole) { array in
+			f(
 				array.enumerated().map { ($0.offset, $0.element) }
 			).map { $0.1 }
 		}

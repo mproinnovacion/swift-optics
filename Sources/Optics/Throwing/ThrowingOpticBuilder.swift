@@ -8,28 +8,28 @@ public enum ThrowingOpticBuilder {
 		ThrowingOpticFromOptional(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> ThrowingLiftLensOptic<O> {
+	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> LiftLensToThrowing<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> ThrowingLiftOptionalOptic<O> {
+	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> LiftOptionalToThrowing<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> ThrowingLiftPrismOptic<O> {
+	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftPrismToThrowing<O> {
 		.init(prism: optic)
 	}
 	
-	public static func buildPartialBlock<O: ThrowingOptic>(first optic: O) -> ThrowingLiftOptionalOptic<O> {
+	public static func buildPartialBlock<O: ThrowingOptic>(first optic: O) -> LiftOptionalToThrowing<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O0: ThrowingOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, ThrowingLiftLensOptic<O1>> {
-		CombineThrowing(lhs: o0, rhs: ThrowingLiftLensOptic(optic: o1))
+	public static func buildPartialBlock<O0: ThrowingOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, LiftLensToThrowing<O1>> {
+		CombineThrowing(lhs: o0, rhs: LiftLensToThrowing(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: ThrowingOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, ThrowingLiftPrismOptic<O1>> {
-		CombineThrowing(lhs: o0, rhs: ThrowingLiftPrismOptic(prism: o1))
+	public static func buildPartialBlock<O0: ThrowingOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, LiftPrismToThrowing<O1>> {
+		CombineThrowing(lhs: o0, rhs: LiftPrismToThrowing(prism: o1))
 	}
 	
 	public static func buildPartialBlock<O0: ThrowingOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowing<O0, O1> {
@@ -75,124 +75,6 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 		}
 		
 		return try optic.setting(whole, to: newValue)
-	}
-}
-
-public struct ThrowingLiftLensOptic<O: LensOptic>: ThrowingOptic {
-	let lens: O
-	
-	public typealias Whole = O.Whole
-	public typealias NewWhole = O.NewWhole
-	public typealias Part = O.Part
-	public typealias NewPart = O.NewPart
-	
-	public init(optic: O) {
-		self.lens = optic
-	}
-	
-	public func get(_ whole: Whole) throws -> Part {
-		lens.get(whole)
-	}
-	
-	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) throws -> NewWhole {
-		try lens.updating(whole) { part in
-			try f(part)
-		}
-	}
-	
-	public func setting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) throws -> NewWhole {
-		try updating(whole) { _ in
-			newValue
-		}
-	}
-}
-
-public struct ThrowingLiftPrismOptic<P: PrismOptic>: ThrowingOptic {
-	public typealias Whole = P.Whole
-	public typealias NewWhole = Whole
-	public typealias Part = P.Part
-	public typealias NewPart = Part
-	
-	public let prism: P
-	
-	public init(prism: P) {
-		self.prism = prism
-	}
-	
-	@inlinable
-	public func get(_ whole: Whole) throws -> Part {
-		guard let part = prism.extract(from: whole) else {
-			throw(ThrowingError.noData)
-		}
-		
-		return part
-	}
-	
-	@inlinable
-	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart) throws -> NewWhole {
-		guard var value = prism.extract(from: whole) else {
-			throw(ThrowingError.noData)
-		}
-		
-		value = try f(value)
-		
-		return prism.embed(value)
-	}
-	
-	@inlinable
-	public func setting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) throws -> NewWhole {
-		prism.embed(newValue)
-	}
-}
-
-public struct ThrowingLiftOptionalOptic<O: OptionalOptic>: ThrowingOptic {
-	public typealias Whole = O.Whole
-	public typealias NewWhole = O.NewWhole
-	public typealias Part = O.Part
-	public typealias NewPart = O.NewPart
-	
-	public let optic: O
-	
-	public init(optic: O) {
-		self.optic = optic
-	}
-	
-	@inlinable
-	public func get(_ whole: Whole) throws -> Part {
-		guard let part = optic.tryGet(whole) else {
-			throw(ThrowingError.noData)
-		}
-		
-		return part
-	}
-	
-	@inlinable
-	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) throws -> NewWhole {
-		try optic.tryUpdating(whole) { part in
-			try f(part)
-		}
-	}
-	
-	@inlinable
-	public func setting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) throws -> NewWhole {
-		optic.trySetting(whole, to: newValue)
 	}
 }
 
