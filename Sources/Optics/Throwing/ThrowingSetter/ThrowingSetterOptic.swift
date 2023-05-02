@@ -92,3 +92,53 @@ extension ThrowingSetterOptic {
 		return copy
 	}
 }
+
+public struct ThrowingSetterProvidedWholeOptic<O: ThrowingSetterOptic>: ThrowingSetterOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+
+	public let optic: O
+	public let whole: O.Whole
+
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+
+	public func updating(
+		_ void: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try optic.updating(self.whole, f)
+	}
+}
+
+extension ThrowingSetterOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ThrowingSetterProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ThrowingSetterOptic where Whole == Void {
+	public func updating(
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try self.updating((), f)
+	}
+
+	public func setting(
+		to newValue: NewPart
+	) throws -> NewWhole {
+		try self.setting((), to: newValue)
+	}
+}
