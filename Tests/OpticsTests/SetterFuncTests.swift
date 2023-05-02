@@ -118,7 +118,27 @@ class SetterFuncTests: XCTestCase {
 		XCTAssertEqual(group.six("one", "two", "one", "one", "one", "one"), true)
 	}
 	
-	func testFuncInVariable() {
+	func testFunc0InVariable() {
+		func f() -> Int {
+			5
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc()
+		
+		XCTAssertEqual(result, 10)
+	}
+	
+	func testFunc1InVariable() {
 		func f(_ string: String) -> Int {
 			string.count
 		}
@@ -134,6 +154,106 @@ class SetterFuncTests: XCTestCase {
 		}
 		
 		let result = myFunc("hello")
+		
+		XCTAssertEqual(result, 10)
+	}
+	
+	func testFunc2InVariable() {
+		func f(_ string: String, _ string2: String) -> Int {
+			string.count
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc("hello", "world")
+		
+		XCTAssertEqual(result, 10)
+	}
+	
+	func testFunc3InVariable() {
+		func f(_ string: String, _ string2: String, _ string3: String) -> Int {
+			string.count
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc("hello", "2", "3")
+		
+		XCTAssertEqual(result, 10)
+	}
+	
+	func testFunc4InVariable() {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String) -> Int {
+			string.count
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc("hello", "2", "3", "4")
+		
+		XCTAssertEqual(result, 10)
+	}
+	
+	func testFunc5InVariable() {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String) -> Int {
+			string.count
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc("hello", "2", "3", "4", "5")
+		
+		XCTAssertEqual(result, 10)
+	}
+	
+	func testFunc6InVariable() {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String, _ string6: String) -> Int {
+			string.count
+		}
+		
+		var myFunc = f
+		
+		let setter = Setter {
+			myFunc
+		}
+		
+		myFunc = setter.updating { number in
+			number * 2
+		}
+		
+		let result = myFunc("hello", "2", "3", "4", "5", "6")
 		
 		XCTAssertEqual(result, 10)
 	}
