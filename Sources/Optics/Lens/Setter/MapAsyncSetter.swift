@@ -212,18 +212,20 @@ public struct AsyncFunc1<Input, Output> {
 public typealias AsyncFunc0Alias<Output> = () async -> Output
 
 extension SetterOptic {
-//	public func mapAsync<Output, NewOutput>() -> some SetterOptic
-//	where Part == (() async -> Output), NewPart == (() async -> NewOutput) {
-//		SetterCombination(
-//			lhs: MapSetter(
-//				optic: self) { f in
-//				 AsyncFunc0(run: f)
-//			 } to: { _, wrapped in
-//				 wrapped.run
-//			 },
-//			rhs: AsyncSetterFunc0<Output, NewOutput>()
-//		)
-//	}
+	public func mapAsync<Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc0<Output, NewOutput>.Whole, AsyncSetterFunc0<Output, NewOutput>.NewWhole>, AsyncSetterFunc0<Output, NewOutput>>
+	where Part == (() async -> Output), NewPart == (() async -> NewOutput) {
+		let result = SetterCombination(
+			lhs: MapSetter(
+				optic: self) { f in
+				 AsyncFunc0(run: f)
+			 } to: { _, wrapped in
+				 wrapped.run
+			 },
+			rhs: AsyncSetterFunc0<Output, NewOutput>()
+		)
+		
+		return result
+	}
 //	
 //	public func mapAsync<Input, Output, NewOutput>() -> some SetterOptic
 //	where Part == ((Input) async -> Output), NewPart == ((Input) async -> NewOutput) {

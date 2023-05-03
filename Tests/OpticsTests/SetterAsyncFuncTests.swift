@@ -11,24 +11,24 @@ fileprivate struct Group {
 
 @MainActor
 class SetterAsyncFuncTests: XCTestCase {
-//	func testFunc0() async {
-//		let zeroOptic = Setter {
-//				\Group.zero
-//			}.mapAsync()
-//
-//		var group = Group(name: "") {
-//			true
-//		} one: { p in
-//			p == "john"
-//		}
-//
-//		zeroOptic.update(&group) { bool in
-//			bool.toggle()
-//		}
-//
-//		let zero = await group.zero()
-//		XCTAssertEqual(zero, false)
-//	}
+	func testFunc0() async {
+		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+			\Group.zero
+		}.mapAsync()
+
+		var group = Group(name: "") {
+			true
+		} one: { p in
+			p == "john"
+		}
+
+		group = zeroOptic.updating(group) { bool in
+			bool == false
+		}
+
+		let zero = await group.zero()
+		XCTAssertEqual(zero, false)
+	}
 	
 //	func testFunc() async {
 //		let zeroOptic =
