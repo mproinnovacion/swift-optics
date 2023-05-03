@@ -3,30 +3,68 @@ import XCTest
 
 import Optics
 
-fileprivate struct Group {
-	var name: String
-	var zero: () async -> Bool
-	var one: (String) async -> Bool
-}
-
 @MainActor
 class SetterAsyncFuncTests: XCTestCase {
 	func testFunc0() async {
+		struct Group {
+			var f: () async -> Bool
+		}
+
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
-			\Group.zero
+			\Group.f
 		}.mapAsync()
 
-		var group = Group(name: "") {
+		var group = Group {
 			true
-		} one: { p in
-			p == "john"
 		}
 
 		group = zeroOptic.updating(group) { bool in
 			bool == false
 		}
 
-		let zero = await group.zero()
+		let zero = await group.f()
+		XCTAssertEqual(zero, false)
+	}
+	
+	func testFunc1() async {
+		struct Group {
+			var f: (String) async -> Bool
+		}
+
+		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+			\Group.f
+		}.mapAsync()
+
+		var group = Group { _ in
+			true
+		}
+
+		group = zeroOptic.updating(group) { bool in
+			bool == false
+		}
+
+		let zero = await group.f("0")
+		XCTAssertEqual(zero, false)
+	}
+	
+	func testFunc2() async {
+		struct Group {
+			var f: (String, String) async -> Bool
+		}
+
+		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+			\Group.f
+		}.mapAsync()
+
+		var group = Group { _, _ in
+			true
+		}
+
+		group = zeroOptic.updating(group) { bool in
+			bool == false
+		}
+
+		let zero = await group.f("0", "1")
 		XCTAssertEqual(zero, false)
 	}
 	
