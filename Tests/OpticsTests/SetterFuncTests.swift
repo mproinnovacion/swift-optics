@@ -19,37 +19,37 @@ class SetterFuncTests: XCTestCase {
 		let zeroOptic =
 			Lens {
 				\Group.zero
-			}.map()
+			}.mapFunc()
 		
 		let oneOptic =
 			Lens {
 				\Group.one
-			}.map()
+			}.mapFunc()
 		
 		let twoOptic =
 			Lens {
 				\Group.two
-			}.map()
+			}.mapFunc()
 		
 		let threeOptic =
 			Lens {
 				\Group.three
-			}.map()
+			}.mapFunc()
 		
 		let fourOptic =
 			Lens {
 				\Group.four
-			}.map()
+			}.mapFunc()
 		
 		let fiveOptic =
 			Lens {
 				\Group.five
-			}.map()
+			}.mapFunc()
 		
 		let sixOptic =
 			Lens {
 				\Group.six
-			}.map()
+			}.mapFunc()
 		
 		var group = Group(name: "") {
 			true

@@ -53,13 +53,13 @@ public enum ArraySetterOpticBuilder {
 	public static func buildPartialBlock<R>(
 		first f: @escaping () async -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<AsyncSetterFunc0<R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, R>(
 		first f: @escaping (O0) async -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<AsyncSetterFunc1<O0, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, R>(

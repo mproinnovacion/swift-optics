@@ -12,7 +12,7 @@ public struct Fold<O: ArrayGetterOptic>: GetterOptic {
 	@inlinable
 	public init(
 		monoid: Monoid<Part>,
-		@FoldBuilder<Whole, Part> with build: () -> O
+		@FoldBuilder with build: () -> O
 	) {
 		self.optic = build()
 		self.monoid = monoid
@@ -20,7 +20,7 @@ public struct Fold<O: ArrayGetterOptic>: GetterOptic {
 	
 	@inlinable
 	public init(
-		@FoldBuilder<Whole, Part> with build: () -> O
+		@FoldBuilder with build: () -> O
 	) where Part: Monoidal {
 		self.optic = build()
 		self.monoid = Part.monoid

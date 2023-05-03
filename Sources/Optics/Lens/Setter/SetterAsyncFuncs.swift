@@ -1,39 +1,42 @@
 import Foundation
 
-public struct AsyncSetterFunc0<R, NewPart>: SetterOptic {
-	public typealias Whole = () async -> R
-	public typealias Part = R
-	public typealias NewWhole = () async -> NewPart
+public struct AsyncSetterFunc0<Output, NewOutput>: SetterOptic {
+	public typealias Whole = AsyncFunc0<Output>
+	public typealias Part = Output
+	public typealias NewWhole = AsyncFunc0<NewOutput>
+	public typealias NewPart = NewOutput
 	
 	public init() {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		{
+		.init(run: {
 			await f(whole())
-		}
+		})
 	}
 }
 
-public struct AsyncSetterFunc1<Input, R, NewPart>: SetterOptic {
-	public typealias Whole = (Input) async -> R
-	public typealias Part = R
-	public typealias NewWhole = (Input) async -> NewPart
+public struct AsyncSetterFunc1<Input, Output, NewOutput>: SetterOptic {
+	public typealias Whole = AsyncFunc1<Input, Output>
+	public typealias Part = Output
+	public typealias NewWhole = AsyncFunc1<Input, NewOutput>
+	public typealias NewPart = NewOutput
 	
 	public init() {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		_ whole: Whole,
+		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		{ input in
+		.init(run: { input in
 			await f(whole(input))
-		}
+		})
 	}
+
 }
 
 public struct AsyncSetterFunc2<Input0, Input1, R, NewPart>: SetterOptic {

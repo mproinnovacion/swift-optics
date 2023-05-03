@@ -10,7 +10,7 @@ public struct And<O: ArrayGetterOptic>: GetterOptic where O.Part == Bool {
 	
 	@inlinable
 	public init(
-		@FoldBuilder<Whole, Part> with build: () -> O
+		@FoldBuilder with build: () -> O
 	) {
 		self.optic = build()
 	}
@@ -30,7 +30,7 @@ public struct Or<O: ArrayGetterOptic>: GetterOptic where O.Part == Bool {
 	
 	@inlinable
 	public init(
-		@FoldBuilder<Whole, Part> with build: () -> O
+		@FoldBuilder with build: () -> O
 	) {
 		self.optic = build()
 	}

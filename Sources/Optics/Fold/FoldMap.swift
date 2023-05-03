@@ -14,7 +14,7 @@ public struct FoldMap<O: ArrayGetterOptic, Result>: GetterOptic {
 	public init(
 		monoid: Monoid<Part>,
 		map: @escaping (O.Part) -> Result,
-		@FoldBuilder<Whole, O.Part> with build: () -> O
+		@FoldBuilder with build: () -> O
 	) {
 		self.optic = build()
 		self.monoid = monoid
@@ -24,7 +24,7 @@ public struct FoldMap<O: ArrayGetterOptic, Result>: GetterOptic {
 	@inlinable
 	public init(
 		map: @escaping (O.Part) -> Result,
-		@FoldBuilder<Whole, O.Part> with build: () -> O
+		@FoldBuilder with build: () -> O
 	) where Result: Monoidal {
 		self.optic = build()
 		self.monoid = Result.monoid
