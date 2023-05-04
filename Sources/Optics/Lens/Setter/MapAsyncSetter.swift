@@ -239,12 +239,11 @@ extension SetterOptic {
 	public func mapAsync<Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc0<Output, NewOutput>.Whole, AsyncSetterFunc0<Output, NewOutput>.NewWhole>, AsyncSetterFunc0<Output, NewOutput>>
 	where Part == (() async -> Output), NewPart == (() async -> NewOutput) {
 		let result = SetterCombination(
-			lhs: MapSetter(
-				optic: self) { f in
-				 AsyncFunc0(run: f)
-			 } to: { _, wrapped in
-				 wrapped.run
-			 },
+			lhs: MapSetter(optic: self) { f in
+				AsyncFunc0(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
 			rhs: AsyncSetterFunc0<Output, NewOutput>()
 		)
 		
@@ -254,22 +253,25 @@ extension SetterOptic {
 	public func mapAsync<Input, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc1<Input, Output, NewOutput>.Whole, AsyncSetterFunc1<Input, Output, NewOutput>.NewWhole>, AsyncSetterFunc1<Input, Output, NewOutput>>
 	where Part == ((Input) async -> Output), NewPart == ((Input) async -> NewOutput) {
 		let result = SetterCombination(
-			lhs: MapSetter(
-				optic: self) { f in
-				 AsyncFunc1(run: f)
-			 } to: { _, wrapped in
-				 wrapped.run
-			 },
+			lhs: MapSetter(optic: self) { f in
+				AsyncFunc1(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
 			rhs: AsyncSetterFunc1<Input, Output, NewOutput>()
 		)
 		
 		return result
 	}
 	
-	public func mapAsync<Input0, Input1, Output, NewOutput>() -> SetterCombination<Self, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>>
+	public func mapAsync<Input0, Input1, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>.Whole, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>.NewWhole>, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>>
 	where Part == ((Input0, Input1) async -> Output), NewPart == ((Input0, Input1) async -> NewOutput) {
 		let result = SetterCombination(
-			lhs: self,
+			lhs: MapSetter(optic: self) { (f: Part) in
+				AsyncFunc2(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
 			rhs: AsyncSetterFunc2<Input0, Input1, Output, NewOutput>()
 		)
 		

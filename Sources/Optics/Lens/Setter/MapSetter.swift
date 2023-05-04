@@ -6,7 +6,6 @@ public struct MapSetter<O: SetterOptic, MappedPart, MappedNewPart>: SetterOptic 
 	public typealias Part = MappedPart
 	public typealias NewPart = MappedNewPart
 	
-
 	public let optic: O
 	@usableFromInline let from: (O.Part) -> MappedPart
 	@usableFromInline let to: (O.Part, MappedNewPart) -> O.NewPart

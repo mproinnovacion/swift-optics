@@ -40,20 +40,20 @@ public struct AsyncSetterFunc1<Input, Output, NewOutput>: SetterOptic {
 }
 
 public struct AsyncSetterFunc2<Input0, Input1, R, NewPart>: SetterOptic {
-	public typealias Whole = (Input0, Input1) async -> R
+	public typealias Whole = AsyncFunc2<Input0, Input1, R>
 	public typealias Part = R
-	public typealias NewWhole = (Input0, Input1) async -> NewPart
+	public typealias NewWhole = AsyncFunc2<Input0, Input1, NewPart>
 	
 	public init() {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
+		_ whole: Whole,
 		_ f: @escaping (R) -> NewPart
 	) -> NewWhole {
-		{ input0, input1 in
+		.init(run: { input0, input1 in
 			await f(whole(input0, input1))
-		}
+		})
 	}
 }
 
