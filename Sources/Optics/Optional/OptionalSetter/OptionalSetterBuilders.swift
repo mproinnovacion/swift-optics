@@ -2,6 +2,10 @@ import Foundation
 
 @resultBuilder
 public enum OptionalSetterOpticBuilder {
+	public static func buildPartialBlock<O: SetterOptic>(first optic: O) -> LiftSetterToOptional<O> {
+		LiftSetterToOptional(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: OptionalSetterOptic>(first optic: O) -> O {
 		optic
 	}
