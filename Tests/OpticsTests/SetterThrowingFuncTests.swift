@@ -3,16 +3,15 @@ import XCTest
 
 import Optics
 
-@MainActor
-class SetterAsyncFuncTests: XCTestCase {
-	func testFunc0() async {
+class SetterThrowingFuncTests: XCTestCase {
+	func testFunc0() throws {
 		struct Group {
-			var f: () async -> Bool
+			var f: () throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group {
 			true
@@ -22,18 +21,18 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f()
+		let zero = try group.f()
 		XCTAssertEqual(zero, false)
 	}
 	
-	func testFunc1() async {
+	func testFunc1() throws {
 		struct Group {
-			var f: (String) async -> Bool
+			var f: (String) throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group { _ in
 			true
@@ -43,18 +42,18 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f("0")
+		let zero = try group.f("0")
 		XCTAssertEqual(zero, false)
 	}
-	
-	func testFunc2() async {
+
+	func testFunc2() throws {
 		struct Group {
-			var f: (String, String) async -> Bool
+			var f: (String, String) throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group { _, _ in
 			true
@@ -64,18 +63,18 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f("0", "1")
+		let zero = try group.f("0", "1")
 		XCTAssertEqual(zero, false)
 	}
-	
-	func testFunc3() async {
+
+	func testFunc3() throws {
 		struct Group {
-			var f: (String, String, String) async -> Bool
+			var f: (String, String, String) throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group { _, _, _ in
 			true
@@ -85,18 +84,18 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f("0", "1", "2")
+		let zero = try group.f("0", "1", "2")
 		XCTAssertEqual(zero, false)
 	}
-	
-	func testFunc4() async {
+
+	func testFunc4() throws {
 		struct Group {
-			var f: (String, String, String, String) async -> Bool
+			var f: (String, String, String, String) throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group { _, _, _, _ in
 			true
@@ -106,18 +105,18 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f("0", "1", "2", "3")
+		let zero = try group.f("0", "1", "2", "3")
 		XCTAssertEqual(zero, false)
 	}
-	
-	func testFunc5() async {
+
+	func testFunc5() throws {
 		struct Group {
-			var f: (String, String, String, String, String) async -> Bool
+			var f: (String, String, String, String, String) throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group { _, _, _, _, _ in
 			true
@@ -127,18 +126,18 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f("0", "1", "2", "3", "4")
+		let zero = try group.f("0", "1", "2", "3", "4")
 		XCTAssertEqual(zero, false)
 	}
 	
-	func testFunc6() async {
+	func testFunc6() throws {
 		struct Group {
-			var f: (String, String, String, String, String, String) async -> Bool
+			var f: (String, String, String, String, String, String) throws -> Bool
 		}
 
 		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
 			\Group.f
-		}.mapAsync()
+		}.mapThrows()
 
 		var group = Group { _, _, _, _, _, _ in
 			true
@@ -148,12 +147,12 @@ class SetterAsyncFuncTests: XCTestCase {
 			bool == false
 		}
 
-		let zero = await group.f("0", "1", "2", "3", "4", "5")
+		let zero = try group.f("0", "1", "2", "3", "4", "5")
 		XCTAssertEqual(zero, false)
 	}
 
-	func testFunc0InVariable() async {
-		func f() async -> Int {
+	func testFunc0InVariable() throws {
+		func f() throws -> Int {
 			5
 		}
 
@@ -165,15 +164,15 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc()
+		let result = try myFunc()
 
 		XCTAssertEqual(result, 10)
 	}
 
-	func testFunc1InVariable() async {
-		func f(_ string: String) async -> Int {
+	func testFunc1InVariable() throws {
+		func f(_ string: String) throws -> Int {
 			string.count
 		}
 
@@ -185,15 +184,15 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc("hello")
+		let result = try myFunc("hello")
 
 		XCTAssertEqual(result, 10)
 	}
 
-	func testFunc2InVariable() async {
-		func f(_ string: String, _ string2: String) async -> Int {
+	func testFunc2InVariable() throws {
+		func f(_ string: String, _ string2: String) throws -> Int {
 			string.count
 		}
 
@@ -205,15 +204,15 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc("hello", "world")
+		let result = try myFunc("hello", "world")
 
 		XCTAssertEqual(result, 10)
 	}
 
-	func testFunc3InVariable() async {
-		func f(_ string: String, _ string2: String, _ string3: String) async -> Int {
+	func testFunc3InVariable() throws {
+		func f(_ string: String, _ string2: String, _ string3: String) throws -> Int {
 			string.count
 		}
 
@@ -225,15 +224,15 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc("hello", "2", "3")
+		let result = try myFunc("hello", "2", "3")
 
 		XCTAssertEqual(result, 10)
 	}
 
-	func testFunc4InVariable() async {
-		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String) async -> Int {
+	func testFunc4InVariable() throws {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String) throws -> Int {
 			string.count
 		}
 
@@ -245,15 +244,15 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc("hello", "2", "3", "4")
+		let result = try myFunc("hello", "2", "3", "4")
 
 		XCTAssertEqual(result, 10)
 	}
 
-	func testFunc5InVariable() async {
-		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String) async -> Int {
+	func testFunc5InVariable() throws {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String) throws -> Int {
 			string.count
 		}
 
@@ -265,15 +264,15 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc("hello", "2", "3", "4", "5")
+		let result = try myFunc("hello", "2", "3", "4", "5")
 
 		XCTAssertEqual(result, 10)
 	}
 
-	func testFunc6InVariable() async {
-		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String, _ string6: String) async -> Int {
+	func testFunc6InVariable() throws {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String, _ string6: String) throws -> Int {
 			string.count
 		}
 
@@ -285,9 +284,9 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		myFunc = setter.updating { number in
 			number * 2
-		}.run
+		}
 
-		let result = await myFunc("hello", "2", "3", "4", "5", "6")
+		let result = try myFunc("hello", "2", "3", "4", "5", "6")
 
 		XCTAssertEqual(result, 10)
 	}
