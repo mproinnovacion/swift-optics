@@ -33,7 +33,10 @@ public struct AsyncFunc2<Input0, Input1, Output> {
 		self.run = run
 	}
 	
-	func callAsFunction(_ input0: Input0, _ input1: Input1) async -> Output {
+	func callAsFunction(
+		_ input0: Input0,
+		_ input1: Input1
+	) async -> Output {
 		await self.run(input0, input1)
 	}
 }
@@ -45,8 +48,66 @@ public struct AsyncFunc3<Input0, Input1, Input2, Output> {
 		self.run = run
 	}
 	
-	func callAsFunction(_ input0: Input0, _ input1: Input1, _ input2: Input2) async -> Output {
+	func callAsFunction(
+		_ input0: Input0,
+		_ input1: Input1,
+		_ input2: Input2
+	) async -> Output {
 		await self.run(input0, input1, input2)
+	}
+}
+
+public struct AsyncFunc4<Input0, Input1, Input2, Input3, Output> {
+	public let run: (Input0, Input1, Input2, Input3) async -> Output
+	
+	public init(run: @escaping (Input0, Input1, Input2, Input3) async -> Output) {
+		self.run = run
+	}
+	
+	func callAsFunction(
+		_ input0: Input0,
+		_ input1: Input1,
+		_ input2: Input2,
+		_ input3: Input3
+	) async -> Output {
+		await self.run(input0, input1, input2, input3)
+	}
+}
+
+public struct AsyncFunc5<Input0, Input1, Input2, Input3, Input4, Output> {
+	public let run: (Input0, Input1, Input2, Input3, Input4) async -> Output
+	
+	public init(run: @escaping (Input0, Input1, Input2, Input3, Input4) async -> Output) {
+		self.run = run
+	}
+	
+	func callAsFunction(
+		_ input0: Input0,
+		_ input1: Input1,
+		_ input2: Input2,
+		_ input3: Input3,
+		_ input4: Input4
+	) async -> Output {
+		await self.run(input0, input1, input2, input3, input4)
+	}
+}
+
+public struct AsyncFunc6<Input0, Input1, Input2, Input3, Input4, Input5, Output> {
+	public let run: (Input0, Input1, Input2, Input3, Input4, Input5) async -> Output
+	
+	public init(run: @escaping (Input0, Input1, Input2, Input3, Input4, Input5) async -> Output) {
+		self.run = run
+	}
+	
+	func callAsFunction(
+		_ input0: Input0,
+		_ input1: Input1,
+		_ input2: Input2,
+		_ input3: Input3,
+		_ input4: Input4,
+		_ input5: Input5
+	) async -> Output {
+		await self.run(input0, input1, input2, input3, input4, input5)
 	}
 }
 
@@ -278,66 +339,59 @@ extension SetterOptic {
 		return result
 	}
 	
+	public func mapAsync<Input0, Input1, Input2, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc3<Input0, Input1, Input2, Output, NewOutput>.Whole, AsyncSetterFunc3<Input0, Input1, Input2, Output, NewOutput>.NewWhole>, AsyncSetterFunc3<Input0, Input1, Input2, Output, NewOutput>>
+	where Part == ((Input0, Input1, Input2) async -> Output), NewPart == ((Input0, Input1, Input2) async -> NewOutput) {
+		let result = SetterCombination(
+			lhs: MapSetter(optic: self) { (f: Part) in
+				AsyncFunc3(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
+			rhs: AsyncSetterFunc3<Input0, Input1, Input2, Output, NewOutput>()
+		)
+		
+		return result
+	}
 	
-//	public func mapAsync<Input0, Input1, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>.Whole, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>.NewWhole>, AsyncSetterFunc2<Input0, Input1, Output, NewOutput>>
-//	where Part == ((Input0, Input1) async -> Output), NewPart == ((Input0, Input1) async -> NewOutput) {
-//		let result = SetterCombination(
-//			lhs: MapSetter(
-//				optic: self) { f in
-//				 AsyncFunc2(run: f)
-//			 } to: { _, wrapped in
-//				 wrapped.run
-//			 },
-//			rhs: AsyncSetterFunc2<Input0, Input1, Output, NewOutput>()
-//		)
-//
-//		return result
-//	}
+	public func mapAsync<Input0, Input1, Input2, Input3, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc4<Input0, Input1, Input2, Input3, Output, NewOutput>.Whole, AsyncSetterFunc4<Input0, Input1, Input2, Input3, Output, NewOutput>.NewWhole>, AsyncSetterFunc4<Input0, Input1, Input2, Input3, Output, NewOutput>>
+	where Part == ((Input0, Input1, Input2, Input3) async -> Output), NewPart == ((Input0, Input1, Input2, Input3) async -> NewOutput) {
+		let result = SetterCombination(
+			lhs: MapSetter(optic: self) { (f: Part) in
+				AsyncFunc4(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
+			rhs: AsyncSetterFunc4<Input0, Input1, Input2, Input3, Output, NewOutput>()
+		)
+		
+		return result
+	}
 	
+	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc5<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>.Whole, AsyncSetterFunc5<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>.NewWhole>, AsyncSetterFunc5<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>>
+	where Part == ((Input0, Input1, Input2, Input3, Input4) async -> Output), NewPart == ((Input0, Input1, Input2, Input3, Input4) async -> NewOutput) {
+		let result = SetterCombination(
+			lhs: MapSetter(optic: self) { (f: Part) in
+				AsyncFunc5(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
+			rhs: AsyncSetterFunc5<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>()
+		)
+		
+		return result
+	}
 	
-//	
-//	public func mapAsync<Input, Output, NewOutput>() -> some SetterOptic
-//	where Part == ((Input) async -> Output), NewPart == ((Input) async -> NewOutput) {
-//		SetterCombination(
-//			lhs: MapSetter(
-//				optic: self) { f in
-//				 AsyncFunc1(run: f)
-//			 } to: { _, wrapped in
-//				 wrapped.run
-//			 },
-//			rhs: AsyncSetterFunc1<Input, Output, NewOutput>()
-//		)
-//	}
-	
-//	public func mapAsync<Input0, Output, NewOutput>() -> SetterCombination<Self, AsyncSetterFunc1<Input0, Output, NewOutput>>
-//	where Part == ((Input0) async -> Output), NewPart == ((Input0) async -> NewOutput) {
-//		SetterCombination(
-//			lhs: self,
-//			rhs: AsyncSetterFunc1()
-//		)
-//	}
-//
-//	public func mapAsync<Input, Output, NewOutput>() -> MapAsyncSetter1<Self, Input, Output, NewOutput> {
-//		.init(optic: self)
-//	}
-//
-//	public func mapAsync<Input0, Input1, Output, NewOutput>() -> MapAsyncSetter2<Self, Input0, Input1, Output, NewOutput> {
-//		.init(optic: self)
-//	}
-//
-//	public func mapAsync<Input0, Input1, Input2, Output, NewOutput>() -> MapAsyncSetter3<Self, Input0, Input1, Input2, Output, NewOutput> {
-//		.init(optic: self)
-//	}
-//
-//	public func mapAsync<Input0, Input1, Input2, Input3, Output, NewOutput>() -> MapAsyncSetter4<Self, Input0, Input1, Input2, Input3, Output, NewOutput> {
-//		.init(optic: self)
-//	}
-//
-//	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> MapAsyncSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output, NewOutput> {
-//		.init(optic: self)
-//	}
-//
-//	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> MapAsyncSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput> {
-//		.init(optic: self)
-//	}
+	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> SetterCombination<MapSetter<Self, AsyncSetterFunc6<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>.Whole, AsyncSetterFunc6<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>.NewWhole>, AsyncSetterFunc6<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>>
+	where Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Output), NewPart == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> NewOutput) {
+		let result = SetterCombination(
+			lhs: MapSetter(optic: self) { (f: Part) in
+				AsyncFunc6(run: f)
+			} to: { _, wrapped in
+				wrapped.run
+			},
+			rhs: AsyncSetterFunc6<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>()
+		)
+		
+		return result
+	}
 }

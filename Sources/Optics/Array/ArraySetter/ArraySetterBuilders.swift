@@ -71,25 +71,25 @@ public enum ArraySetterOpticBuilder {
 	public static func buildPartialBlock<O0, O1, O2, R>(
 		first f: @escaping (O0, O1, O2) async -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<AsyncSetterFunc3<O0, O1, O2, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
 		first f: @escaping (O0, O1, O2, O3) async -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<AsyncSetterFunc4<O0, O1, O2, O3, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
 		first f: @escaping (O0, O1, O2, O3, O4) async -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<AsyncSetterFunc5<O0, O1, O2, O3, O4, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
 		first f: @escaping (O0, O1, O2, O3, O4, O5) async -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<AsyncSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	// MARK: ThrowingFuncs

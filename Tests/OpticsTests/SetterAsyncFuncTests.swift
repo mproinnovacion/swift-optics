@@ -68,39 +68,68 @@ class SetterAsyncFuncTests: XCTestCase {
 		XCTAssertEqual(zero, false)
 	}
 	
-//	func testFunc() async {
-//		let zeroOptic =
-//			Lens {
-//				\Group.zero
-//			}.mapAsync()
-//
-//		let oneOptic =
-//			Lens {
-//				\Group.one
-//			}.mapAsync()
-//
-//		var group = Group(name: "") {
-//			true
-//		} one: { p in
-//			p == "john"
-//		}
-//
-//		zeroOptic.update(&group) { bool in
-//			bool.toggle()
-//		}
-//
-//		oneOptic.update(&group) { bool in
-//			bool.toggle()
-//		}
-//
-//		let zero = await group.zero()
-//		XCTAssertEqual(zero, false)
-//
-//		let oneFalse = await group.one("john")
-//		let oneTrue = await group.one("joe")
-//		XCTAssertEqual(oneFalse, false)
-//		XCTAssertEqual(oneTrue, true)
-//	}
+	func testFunc3() async {
+		struct Group {
+			var f: (String, String, String) async -> Bool
+		}
+
+		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+			\Group.f
+		}.mapAsync()
+
+		var group = Group { _, _, _ in
+			true
+		}
+
+		group = zeroOptic.updating(group) { bool in
+			bool == false
+		}
+
+		let zero = await group.f("0", "1", "2")
+		XCTAssertEqual(zero, false)
+	}
+	
+	func testFunc4() async {
+		struct Group {
+			var f: (String, String, String, String) async -> Bool
+		}
+
+		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+			\Group.f
+		}.mapAsync()
+
+		var group = Group { _, _, _, _ in
+			true
+		}
+
+		group = zeroOptic.updating(group) { bool in
+			bool == false
+		}
+
+		let zero = await group.f("0", "1", "2", "3")
+		XCTAssertEqual(zero, false)
+	}
+	
+	func testFunc5() async {
+		struct Group {
+			var f: (String, String, String, String, String) async -> Bool
+		}
+
+		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+			\Group.f
+		}.mapAsync()
+
+		var group = Group { _, _, _, _, _ in
+			true
+		}
+
+		group = zeroOptic.updating(group) { bool in
+			bool == false
+		}
+
+		let zero = await group.f("0", "1", "2", "3", "4")
+		XCTAssertEqual(zero, false)
+	}
 
 	func testFunc0InVariable() async {
 		func f() async -> Int {
@@ -121,124 +150,124 @@ class SetterAsyncFuncTests: XCTestCase {
 
 		XCTAssertEqual(result, 10)
 	}
-//
-//	func testFunc1InVariable() async {
-//		func f(_ string: String) async -> Int {
-//			string.count
-//		}
-//
-//		var myFunc = f
-//
-//		let setter = Setter {
-//			myFunc
-//		}
-//
-//		myFunc = setter.updating { number in
-//			number * 2
-//		}
-//
-//		let result = await myFunc("hello")
-//
-//		XCTAssertEqual(result, 10)
-//	}
-//
-//	func testFunc2InVariable() async {
-//		func f(_ string: String, _ string2: String) async -> Int {
-//			string.count
-//		}
-//
-//		var myFunc = f
-//
-//		let setter = Setter {
-//			myFunc
-//		}
-//
-//		myFunc = setter.updating { number in
-//			number * 2
-//		}
-//
-//		let result = await myFunc("hello", "world")
-//
-//		XCTAssertEqual(result, 10)
-//	}
-//
-//	func testFunc3InVariable() async {
-//		func f(_ string: String, _ string2: String, _ string3: String) async -> Int {
-//			string.count
-//		}
-//
-//		var myFunc = f
-//
-//		let setter = Setter {
-//			myFunc
-//		}
-//
-//		myFunc = setter.updating { number in
-//			number * 2
-//		}
-//
-//		let result = await myFunc("hello", "2", "3")
-//
-//		XCTAssertEqual(result, 10)
-//	}
-//
-//	func testFunc4InVariable() async {
-//		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String) async -> Int {
-//			string.count
-//		}
-//
-//		var myFunc = f
-//
-//		let setter = Setter {
-//			myFunc
-//		}
-//
-//		myFunc = setter.updating { number in
-//			number * 2
-//		}
-//
-//		let result = await myFunc("hello", "2", "3", "4")
-//
-//		XCTAssertEqual(result, 10)
-//	}
-//
-//	func testFunc5InVariable() async {
-//		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String) async -> Int {
-//			string.count
-//		}
-//
-//		var myFunc = f
-//
-//		let setter = Setter {
-//			myFunc
-//		}
-//
-//		myFunc = setter.updating { number in
-//			number * 2
-//		}
-//
-//		let result = await myFunc("hello", "2", "3", "4", "5")
-//
-//		XCTAssertEqual(result, 10)
-//	}
-//
-//	func testFunc6InVariable() async {
-//		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String, _ string6: String) async -> Int {
-//			string.count
-//		}
-//
-//		var myFunc = f
-//
-//		let setter = Setter {
-//			myFunc
-//		}
-//
-//		myFunc = setter.updating { number in
-//			number * 2
-//		}
-//
-//		let result = await myFunc("hello", "2", "3", "4", "5", "6")
-//
-//		XCTAssertEqual(result, 10)
-//	}
+
+	func testFunc1InVariable() async {
+		func f(_ string: String) async -> Int {
+			string.count
+		}
+
+		var myFunc = f
+
+		let setter = Setter {
+			myFunc
+		}
+
+		myFunc = setter.updating { number in
+			number * 2
+		}.run
+
+		let result = await myFunc("hello")
+
+		XCTAssertEqual(result, 10)
+	}
+
+	func testFunc2InVariable() async {
+		func f(_ string: String, _ string2: String) async -> Int {
+			string.count
+		}
+
+		var myFunc = f
+
+		let setter = Setter {
+			myFunc
+		}
+
+		myFunc = setter.updating { number in
+			number * 2
+		}.run
+
+		let result = await myFunc("hello", "world")
+
+		XCTAssertEqual(result, 10)
+	}
+
+	func testFunc3InVariable() async {
+		func f(_ string: String, _ string2: String, _ string3: String) async -> Int {
+			string.count
+		}
+
+		var myFunc = f
+
+		let setter = Setter {
+			myFunc
+		}
+
+		myFunc = setter.updating { number in
+			number * 2
+		}.run
+
+		let result = await myFunc("hello", "2", "3")
+
+		XCTAssertEqual(result, 10)
+	}
+
+	func testFunc4InVariable() async {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String) async -> Int {
+			string.count
+		}
+
+		var myFunc = f
+
+		let setter = Setter {
+			myFunc
+		}
+
+		myFunc = setter.updating { number in
+			number * 2
+		}.run
+
+		let result = await myFunc("hello", "2", "3", "4")
+
+		XCTAssertEqual(result, 10)
+	}
+
+	func testFunc5InVariable() async {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String) async -> Int {
+			string.count
+		}
+
+		var myFunc = f
+
+		let setter = Setter {
+			myFunc
+		}
+
+		myFunc = setter.updating { number in
+			number * 2
+		}.run
+
+		let result = await myFunc("hello", "2", "3", "4", "5")
+
+		XCTAssertEqual(result, 10)
+	}
+
+	func testFunc6InVariable() async {
+		func f(_ string: String, _ string2: String, _ string3: String, _ string4: String, _ string5: String, _ string6: String) async -> Int {
+			string.count
+		}
+
+		var myFunc = f
+
+		let setter = Setter {
+			myFunc
+		}
+
+		myFunc = setter.updating { number in
+			number * 2
+		}.run
+
+		let result = await myFunc("hello", "2", "3", "4", "5", "6")
+
+		XCTAssertEqual(result, 10)
+	}
 }
