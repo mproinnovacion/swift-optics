@@ -3,13 +3,13 @@ import XCTest
 
 import Optics
 
-class SetterThrowingAsyncFuncTests: XCTestCase {
+class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 	func testFunc0() async throws {
 		struct Group {
 			var f: () async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -17,7 +17,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -30,7 +30,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			var f: (String) async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -38,7 +38,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -51,7 +51,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			var f: (String, String) async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -59,7 +59,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -72,7 +72,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			var f: (String, String, String) async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -80,7 +80,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -93,7 +93,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			var f: (String, String, String, String) async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -101,7 +101,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -114,7 +114,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			var f: (String, String, String, String, String) async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -122,7 +122,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -135,7 +135,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			var f: (String, String, String, String, String, String) async throws -> Bool
 		}
 
-		let zeroOptic: some SimpleSetterOptic<Group, Bool> = Lens {
+		let zeroOptic: some SimpleOptionalSetterOptic<Group, Bool> = OptionalSetter {
 			\Group.f
 		}.mapAsyncThrows()
 
@@ -143,7 +143,7 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.updating(group) { bool in
+		group = zeroOptic.tryUpdating(group) { bool in
 			bool == false
 		}
 
@@ -158,11 +158,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 
@@ -178,11 +178,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 
@@ -198,11 +198,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 
@@ -218,11 +218,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 
@@ -238,11 +238,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 
@@ -258,11 +258,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 
@@ -278,11 +278,11 @@ class SetterThrowingAsyncFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}.run
 

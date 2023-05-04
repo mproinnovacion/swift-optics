@@ -139,43 +139,43 @@ public enum ArraySetterOpticBuilder {
 	public static func buildPartialBlock<R>(
 		first f: @escaping () async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc0<R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, R>(
 		first f: @escaping (O0) async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc1<O0, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, R>(
 		first f: @escaping (O0, O1) async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc2<O0, O1, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, R>(
 		first f: @escaping (O0, O1, O2) async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc3<O0, O1, O2, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, R>(
 		first f: @escaping (O0, O1, O2, O3) async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc4<O0, O1, O2, O3, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
 		first f: @escaping (O0, O1, O2, O3, O4) async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc5<O0, O1, O2, O3, O4, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
 		first f: @escaping (O0, O1, O2, O3, O4, O5) async throws -> R
 	) -> ArraySetterProvidedWholeOptic<LiftSetterToArray<ThrowingAsyncSetterFunc6<O0, O1, O2, O3, O4, O5, R, R>>> {
-		.init(optic: .init(optic: .init()), whole: f)
+		.init(optic: .init(optic: .init()), whole: .init(run: f))
 	}
 	
 	public static func buildPartialBlock<O0: ArraySetterOptic, O1: ArraySetterOptic>(accumulated o0: O0, next o1: O1) -> ArraySetterCombination<O0, O1> {
