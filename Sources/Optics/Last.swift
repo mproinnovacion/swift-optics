@@ -10,7 +10,7 @@ public struct Last<L: LensOptic, Element>: OptionalOptic where L.Part == [Elemen
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.lens = build()
 	}
@@ -21,15 +21,15 @@ public struct Last<L: LensOptic, Element>: OptionalOptic where L.Part == [Elemen
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole) { elements in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole) { elements in
 			guard let last = elements.last else {
 				return elements
 			}
 			
 			var result = elements
-			result[result.endIndex.advanced(by: -1)] = try f(last)
+			result[result.endIndex.advanced(by: -1)] = f(last)
 			return result
 		}
 	}

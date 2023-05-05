@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol ThrowingArrayOptic<Whole, Part, NewWhole, NewPart> {
+public protocol ThrowingArrayOptic<Whole, Part, NewWhole, NewPart>: ThrowingArrayGetterOptic, ThrowingArraySetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part
@@ -42,7 +42,7 @@ extension ThrowingArrayOptic where Body: ThrowingArrayOptic, Body.Whole == Whole
 	@inlinable
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		try self.body.updatingAll(whole, f)
 	}
@@ -59,67 +59,6 @@ extension ThrowingArrayOptic where Body: ThrowingArrayOptic, Body.Whole == Whole
 }
 
 public typealias SimpleThrowingArrayOptic<Whole, Part> = ThrowingArrayOptic<Whole, Part, Whole, Part>
-
-extension ThrowingArrayOptic where NewWhole == Whole {
-	@inlinable
-	public func setAll(
-		_ whole: inout Whole,
-		to newPart: NewPart
-	) throws {
-		whole = try self.updatingAll(whole) { _ in
-			newPart
-		}
-	}
-}
-
-extension ThrowingArrayOptic {
-	@inlinable
-	public func updateAll(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) throws -> Void
-	where Part == NewPart, Whole == NewWhole {
-		whole = try self.updatingAll(whole, { part in
-			var copy = part
-			try f(&copy)
-			return copy
-		})
-	}
-	
-	@inlinable
-	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) throws -> Whole
-	where Part == NewPart, Whole == NewWhole {
-		try self.updatingAll(whole) { part in
-			var result = part
-			try f(&result)
-			return result
-		}
-	}
-	
-	@inlinable
-	public func updateAll(
-		_ whole: inout Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) throws -> Void
-	where Part == NewPart, Whole == NewWhole {
-		try self.updateAll(&whole) { part in
-			part = try f(part)
-		}
-	}
-	
-	@inlinable
-	public func settingAll(
-		_ whole: Whole,
-		to newValue: NewPart
-	) throws -> Whole where Part == NewPart, Whole == NewWhole {
-		var copy = whole
-		try self.setAll(&copy, to: newValue)
-		return copy
-	}
-}
 
 public struct ThrowingArrayRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingArrayOptic {
 	public let _getAll: (Whole) throws -> [Part]
@@ -147,8 +86,66 @@ public struct ThrowingArrayRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingArr
 	}
 }
 
-extension ArrayOptic {
-	public func throwing() -> ThrowingArrayLiftArrayOptic<Self> {
+extension ArrayOptic where NewPart == Part {
+	public func throwing() -> LiftArrayToThrowingArray<Self> {
 		.init(optic: self)
+	}
+}
+
+public struct ThrowingArrayProvidedWholeOptic<O: ThrowingArrayOptic>: ThrowingArrayOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+
+	public let optic: O
+	public let whole: O.Whole
+
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+
+	public func getAll(_ whole: Void) throws -> [O.Part] {
+		try self.optic.getAll(self.whole)
+	}
+	
+	public func updatingAll(
+		_ void: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try optic.updatingAll(self.whole, f)
+	}
+}
+
+extension ThrowingArrayOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ThrowingArrayProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ThrowingArrayOptic where Whole == Void {
+	public func getAll() throws -> [Part] {
+		try self.getAll(())
+	}
+	
+	public func updatingAll(
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try self.updatingAll((), f)
+	}
+
+	public func settingAll(
+		to newValue: NewPart
+	) throws -> NewWhole {
+		try self.settingAll((), to: newValue)
 	}
 }

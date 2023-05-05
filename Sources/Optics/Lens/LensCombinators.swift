@@ -10,7 +10,7 @@ public struct Lens<L: LensOptic>: LensOptic {
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.lens = build()
 	}
@@ -21,8 +21,8 @@ public struct Lens<L: LensOptic>: LensOptic {
 	
 	public func updating(
 		_ whole: L.Whole,
-		_ f: @escaping (L.Part) throws -> L.NewPart
-	) rethrows -> L.NewWhole {
-		try lens.updating(whole, f)
+		_ f: @escaping (L.Part) -> L.NewPart
+	) -> L.NewWhole {
+		lens.updating(whole, f)
 	}
 }

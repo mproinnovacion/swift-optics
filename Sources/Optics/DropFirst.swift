@@ -13,7 +13,7 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 	@inlinable
 	public init(
 		count: Int = 1,
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
 		self.count = count
 		self.lens = build()
@@ -27,12 +27,12 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole) { elements in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole) { elements in
 			var toUpdate = Array(elements.dropFirst(self.count))
 			let notUpdated = elements.prefix(self.count)
-			toUpdate = try f(toUpdate)
+			toUpdate = f(toUpdate)
 			return Array(notUpdated) + toUpdate
 		}
 	}

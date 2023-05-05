@@ -26,19 +26,28 @@ where O.NewPart == O.Part, O.NewWhole == O.Whole {
 
 	public func updatingAll(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.updatingAll(whole) { part in
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updatingAll(whole) { part in
 			guard self.filter(part) else {
 				return part
 			}
 
-			return try f(part)
+			return f(part)
 		}
 	}
 }
 
 extension LensOptic {
+	public func filter<Element>(
+		_ filter: @escaping (Element) -> Bool
+	) -> Filter<Each<Self, Element, Element>> where Part == [Element], NewPart == Part, NewWhole == Whole {
+		Filter(
+			filter: filter,
+			with: { self.each() }
+		)
+	}
+	
 	public func filterIndexed<Element>(
 		_ filter: @escaping (Int, Element) -> Bool
 	) -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
@@ -54,7 +63,20 @@ extension LensOptic {
 	}
 }
 
+extension ThrowingOptic {
+	// TODO: filter & filterIndexed
+}
+
 extension OptionalOptic {
+	public func filter<Element>(
+		_ filter: @escaping (Element) -> Bool
+	) -> Filter<EachOptional<Self, Element, Element>> where Part == [Element], NewPart == Part, NewWhole == Whole {
+		Filter(
+			filter: filter,
+			with: { self.each() }
+		)
+	}
+	
 	public func filterIndexed<Element>(
 		_ filter: @escaping (Int, Element) -> Bool
 	) -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
@@ -76,4 +98,8 @@ extension ArrayOptic {
 	) -> Filter<Self> where NewPart == Part {
 		Filter(filter: filter, with: { self })
 	}
+}
+
+extension ThrowingArrayOptic {
+	// TODO: filter & filterIndexed
 }

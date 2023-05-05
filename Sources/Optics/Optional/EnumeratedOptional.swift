@@ -7,13 +7,13 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	public typealias Part = [(Array.Index, Element)]
 	public typealias NewPart = [(Array.Index, NewElement)]
 	
-	public let optic: EnumeratedOptional<O, Element, NewElement>
+	public let optic: EnumeratedOptionalOptic<O, Element, NewElement>
 	
 	@inlinable
 	public init(
 		@OptionalOpticBuilder with build: () -> O
 	) {
-		self.optic = EnumeratedOptional(optic: build())
+		self.optic = EnumeratedOptionalOptic(optic: build())
 	}
 	
 	public func tryGet(_ whole: Whole) -> Part? {
@@ -22,9 +22,9 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole, f)
 	}
 	
 	public func trySetting(_ whole: Whole, to newPart: NewPart) -> NewWhole {
@@ -32,7 +32,7 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	}
 }
 
-public struct EnumeratedOptional<O: OptionalOptic, Element, NewElement>: OptionalOptic
+public struct EnumeratedOptionalOptic<O: OptionalOptic, Element, NewElement>: OptionalOptic
 where O.Part == [Element], O.NewPart == [NewElement] {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
@@ -51,10 +51,10 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optic.tryUpdating(whole) { array in
-			try f(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(whole) { array in
+			f(
 				array.enumerated().map { ($0.offset, $0.element) }
 			).map { $0.1 }
 		}

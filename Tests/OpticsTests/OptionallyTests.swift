@@ -39,6 +39,20 @@ class OptionallyTests: XCTestCase {
 			advisorName.tryGet(local),
 			"John"
 		)
+		
+		advisorName.tryUpdate(&local) { $0 + "!" }
+
+		XCTAssertEqual(
+			advisorName.tryGet(local),
+			"John!"
+		)
+		
+		XCTAssertEqual(
+			advisorName.tryGet(
+				advisorName.tryUpdating(local) { $0 = $0.uppercased() }
+			),
+			"JOHN!"
+		)
 	}
 	
 	func testMap() {

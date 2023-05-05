@@ -1,0 +1,29 @@
+import Foundation
+
+public struct MapSetter<O: SetterOptic, MappedPart, MappedNewPart>: SetterOptic {
+	public typealias Whole = O.Whole
+	public typealias NewWhole = O.NewWhole
+	public typealias Part = MappedPart
+	public typealias NewPart = MappedNewPart
+	
+	public let optic: O
+	@usableFromInline let from: (O.Part) -> MappedPart
+	@usableFromInline let to: (O.Part, MappedNewPart) -> O.NewPart
+
+	public init(
+		optic: O,
+		from: @escaping (O.Part) -> MappedPart,
+		to: @escaping (O.Part, MappedNewPart) -> O.NewPart
+
+	) {
+		self.optic = optic
+		self.from = from
+		self.to = to
+	}
+	
+	public func updating(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
+		self.optic.updating(whole) { part in
+			to(part, f(from(part)))
+		}
+	}
+}

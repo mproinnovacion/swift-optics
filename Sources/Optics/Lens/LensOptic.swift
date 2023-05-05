@@ -1,54 +1,20 @@
 import Foundation
 
-public protocol Getter {
-	associatedtype Whole
-	associatedtype Part
+public protocol LensOptic<Whole, Part, NewWhole, NewPart>: GetterOptic, SetterOptic {
+	associatedtype _LensBody
 	
-	func `get`(_ whole: Whole) -> Part
+	typealias LensBody = _LensBody
+
+	@LensOpticBuilder
+	var body: LensBody { get }
 }
 
-public protocol Setter {
-	associatedtype Whole
-	associatedtype NewWhole
-	associatedtype Part
-	associatedtype NewPart
-	
-	func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
-}
-
-extension Setter {
-	@inlinable
-	public func update(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
-	where NewWhole == Whole, NewPart == Part {
-		whole = try self.updating(whole) { part in
-			var copy = part
-			try f(&copy)
-			return copy
-		}
-	}
-}
-
-public protocol LensOptic<Whole, Part, NewWhole, NewPart>: Getter, Setter {
-	associatedtype _Body
-	
-	typealias Body = _Body
-
-	@LensBuilder
-	var body: Body { get }
-}
-
-extension LensOptic where Body == Never {
+extension LensOptic where LensBody == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
 	@_transparent
-	public var body: Body {
+	public var body: LensBody {
 		fatalError(
   """
   '\(Self.self)' has no body. …
@@ -58,7 +24,7 @@ extension LensOptic where Body == Never {
 	}
 }
 
-extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+extension LensOptic where LensBody: LensOptic, LensBody.Whole == Whole, LensBody.Part == Part, LensBody.NewWhole == NewWhole, LensBody.NewPart == NewPart {
 	
 	@inlinable
 	public func get(_ whole: Whole) -> Part {
@@ -67,47 +33,13 @@ extension LensOptic where Body: LensOptic, Body.Whole == Whole, Body.Part == Par
 	@inlinable
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.body.updating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.updating(whole, f)
 	}
 }
 
 public typealias SimpleLensOptic<Whole, Part> = LensOptic<Whole, Part, Whole, Part>
-
-extension LensOptic {
-	@inlinable
-	public func `set`(
-		_ whole: inout Whole,
-		to newValue: NewPart
-	) where NewWhole == Whole, NewPart == Part {
-		update(&whole) { part in
-			part = newValue
-		}
-	}
-	
-	@inlinable
-	public func setting(
-		_ whole: Whole,
-		to newValue: Part
-	) -> Whole
-	where NewWhole == Whole, NewPart == Part {
-		var copy = whole
-		self.set(&copy, to: newValue)
-		return copy
-	}
-	
-	@inlinable
-	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole
-	where NewWhole == Whole, NewPart == Part {
-		var copy = whole
-		try self.update(&copy, f)
-		return copy
-	}
-}
 
 extension LensOptic {
 	@inlinable
@@ -119,13 +51,6 @@ extension LensOptic {
 	}
 }
 
-extension KeyPath: Getter {
-	@inlinable
-	public func get(_ whole: Root) -> Value {
-		whole[keyPath: self]
-	}
-}
-
 extension WritableKeyPath: LensOptic {
 	public typealias NewWhole = Root
 	public typealias NewPart = Value
@@ -133,11 +58,68 @@ extension WritableKeyPath: LensOptic {
 	@inlinable
 	public func updating(
 		_ whole: Root,
-		_ f: @escaping (Value) throws -> Value
-	) rethrows -> Root {
+		_ f: @escaping (Value) -> Value
+	) -> Root {
 		var result = whole
-		result[keyPath: self] = try f(result[keyPath: self])
+		result[keyPath: self] = f(result[keyPath: self])
 		return result
 	}
 }
 
+public struct LensProvidedWholeOptic<O: LensOptic>: LensOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func get(_ whole: Void) -> O.Part {
+		self.optic.get(self.whole)
+	}
+	
+	public func updating(
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.updating(self.whole, f)
+	}
+}
+
+extension LensOptic {
+	public func provide(
+		_ whole: Whole
+	) -> LensProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension LensOptic where Whole == Void {
+	public func get() -> Part {
+		self.get(())
+	}
+	
+	public func updating(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.updating((), f)
+	}
+	
+	public func setting(
+		to newValue: NewPart
+	) -> NewWhole {
+		self.setting((), to: newValue)
+	}
+}

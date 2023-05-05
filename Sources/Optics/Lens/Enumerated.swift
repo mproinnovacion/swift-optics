@@ -7,13 +7,13 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	public typealias Part = [(Array.Index, Element)]
 	public typealias NewPart = [(Array.Index, NewElement)]
 	
-	public let lens: EnumeratedLens<L, Element, NewElement>
+	public let lens: EnumeratedLensOptic<L, Element, NewElement>
 	
 	@inlinable
 	public init(
-		@LensBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L
 	) {
-		self.lens = EnumeratedLens(lens: build())
+		self.lens = EnumeratedLensOptic(lens: build())
 	}
 	
 	public func get(_ whole: Whole) -> Part {
@@ -22,13 +22,13 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lens.updating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lens.updating(whole, f)
 	}
 }
 
-public struct EnumeratedLens<L: LensOptic, Element, NewElement>: LensOptic
+public struct EnumeratedLensOptic<L: LensOptic, Element, NewElement>: LensOptic
 where L.Part == [Element], L.NewPart == [NewElement] {
 	public typealias Whole = L.Whole
 	public typealias NewWhole = L.NewWhole
@@ -47,10 +47,10 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	
 	public func updating(
 		_ whole: L.Whole,
-		_ f: @escaping ([(Array.Index, Element)]) throws -> [(Array.Index, NewElement)]
-	) rethrows -> L.NewWhole {
-		try lens.updating(whole) { array in
-			try f(
+		_ f: @escaping ([(Array.Index, Element)]) -> [(Array.Index, NewElement)]
+	) -> L.NewWhole {
+		lens.updating(whole) { array in
+			f(
 				array.enumerated().map { ($0.offset, $0.element) }
 			).map {$0.1 }
 		}

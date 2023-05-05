@@ -1,34 +1,25 @@
 import Foundation
 
-public protocol OptionalOptic<Whole, Part, NewWhole, NewPart> {
+public protocol OptionalOptic<Whole, Part, NewWhole, NewPart>: OptionalGetterOptic, OptionalSetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part
 	associatedtype NewPart
 	
-	associatedtype _Body
+	associatedtype _OptionalBody
 	
-	typealias Body = _Body
-		
-	func tryGet(_ whole: Whole) -> Part?
-	
-	func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole
-	
-	func trySetting(_ whole: Whole, to: NewPart) -> NewWhole
+	typealias OptionalBody = _OptionalBody
 	
 	@OptionalOpticBuilder
-	var body: Body { get }
+	var body: OptionalBody { get }
 }
 
-extension OptionalOptic where Body == Never {
+extension OptionalOptic where OptionalBody == Never {
 	/// A non-existent body.
 	///
 	/// > Warning: Do not invoke this property directly. It will trigger a fatal error at runtime.
 	@_transparent
-	public var body: Body {
+	public var body: OptionalBody {
 		fatalError(
   """
   '\(Self.self)' has no body. …
@@ -38,7 +29,7 @@ extension OptionalOptic where Body == Never {
 	}
 }
 
-extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Part == Part, Body.NewWhole == NewWhole, Body.NewPart == NewPart {
+extension OptionalOptic where OptionalBody: OptionalOptic, OptionalBody.Whole == Whole, OptionalBody.Part == Part, OptionalBody.NewWhole == NewWhole, OptionalBody.NewPart == NewPart {
 	@inlinable
 	public func tryGet(_ whole: Whole) -> Part? {
 		self.body.tryGet(whole)
@@ -47,9 +38,9 @@ extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Par
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try self.body.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.body.tryUpdating(whole, f)
 	}
 	
 	@inlinable
@@ -63,71 +54,14 @@ extension OptionalOptic where Body: OptionalOptic, Body.Whole == Whole, Body.Par
 
 public typealias SimpleOptionalOptic<Whole, Part> = OptionalOptic<Whole, Part, Whole, Part>
 
-extension OptionalOptic {
-	@inlinable
-	public func tryUpdate(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Void
-	where Part == NewPart, Whole == NewWhole {
-		whole = try self.tryUpdating(whole, { part in
-			var copy = part
-			try f(&copy)
-			return copy
-		})
-	}
-	
-	@inlinable
-	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
-	) rethrows -> Whole
-	where Part == NewPart, Whole == NewWhole {
-		try self.tryUpdating(whole) { part in
-			var result = part
-			try f(&result)
-			return result
-		}
-	}
-	
-	@inlinable
-	public func tryUpdate(
-		_ whole: inout Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> Void
-	where Part == NewPart, Whole == NewWhole {
-		self.tryUpdate(&whole) { part in
-			part = f(part)
-		}
-	}
-	
-	@inlinable
-	public func trySet(
-		_ whole: inout Whole,
-		to newPart: NewPart
-	) where Part == NewPart, Whole == NewWhole {
-		whole = self.trySetting(whole, to: newPart)
-	}
-	
-	@inlinable
-	public func trySetting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) -> Whole where Part == NewPart, Whole == NewWhole {
-		var copy = whole
-		self.trySet(&copy, to: newValue)
-		return copy
-	}
-}
-
 public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	public let _tryGet: (Whole) -> Part?
-	public let _tryUpdating: (Whole, @escaping (Part) throws -> NewPart) -> NewWhole
+	public let _tryUpdating: (Whole, @escaping (Part) -> NewPart) -> NewWhole
 	public let _trySetting: (Whole, NewPart) -> NewWhole
 	
 	public init(
 		tryGet: @escaping (Whole) -> Part?,
-		tryUpdating: @escaping (Whole, @escaping (Part) throws -> NewPart) -> NewWhole,
+		tryUpdating: @escaping (Whole, @escaping (Part) -> NewPart) -> NewWhole,
 		trySetting: @escaping (Whole, NewPart) -> NewWhole
 	) {
 		self._tryGet = tryGet
@@ -143,8 +77,8 @@ public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		_tryUpdating(whole, f)
 	}
 	
@@ -171,11 +105,11 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 	@inlinable
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
 		switch whole {
 			case let .some(value):
-				return .some(try f(value))
+				return .some(f(value))
 			case .none:
 				return .none
 		}
@@ -192,48 +126,70 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 	}
 }
 
-public struct OptionalLiftPrismOptic<P: PrismOptic>: OptionalOptic {
-	public typealias Whole = P.Whole
-	public typealias NewWhole = Whole
-	public typealias Part = P.Part
-	public typealias NewPart = Part
-	
-	public let prism: P
-	
-	public init(prism: P) {
-		self.prism = prism
-	}
-	
-	@inlinable
-	public func tryGet(_ whole: Whole) -> Part? {
-		prism.extract(from: whole)
-	}
-	
-	@inlinable
-	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		guard var value = prism.extract(from: whole) else {
-			return whole
-		}
-		
-		value = try f(value)
-		
-		return prism.embed(value)
-	}
-	
-	@inlinable
-	public func trySetting(
-		_ whole: Whole,
-		to newValue: NewPart
-	) -> NewWhole {
-		prism.embed(newValue)
+extension PrismOptic {
+	public func optional() -> LiftPrismToOptional<Self> {
+		.init(prism: self)
 	}
 }
 
-extension PrismOptic {
-	public func optional() -> OptionalLiftPrismOptic<Self> {
-		.init(prism: self)
+public struct OptionalProvidedWholeOptic<O: OptionalOptic>: OptionalOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+	
+	public let optic: O
+	public let whole: O.Whole
+	
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+	
+	public func tryGet(_ whole: Void) -> O.Part? {
+		optic.tryGet(self.whole)
+	}
+	
+	public func tryUpdating(
+		_ void: Whole,
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optic.tryUpdating(self.whole, f)
+	}
+	
+	public func trySetting(_ whole: Void, to newPart: O.NewPart) -> O.NewWhole {
+		optic.trySetting(self.whole, to: newPart)
+	}
+}
+
+extension OptionalOptic {
+	public func provide(
+		_ whole: Whole
+	) -> OptionalProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension OptionalOptic where Whole == Void {
+	public func tryGet() -> Part? {
+		self.tryGet(())
+	}
+	
+	public func tryUpdating(
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		self.tryUpdating((), f)
+	}
+	
+	public func trySetting(
+		to newPart: NewPart
+	) -> NewWhole {
+		self.trySetting((), to: newPart)
 	}
 }

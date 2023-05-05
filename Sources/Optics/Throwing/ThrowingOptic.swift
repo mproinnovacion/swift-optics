@@ -4,7 +4,7 @@ public enum ThrowingError: Error {
 	case noData
 }
 
-public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart> {
+public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart>: ThrowingGetterOptic, ThrowingSetterOptic {
 	associatedtype Whole
 	associatedtype NewWhole
 	associatedtype Part
@@ -25,7 +25,6 @@ public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart> {
 		_ whole: Whole,
 		to: NewPart
 	) throws -> NewWhole
-	
 	
 	@ThrowingOpticBuilder
 	var body: Body { get }
@@ -166,19 +165,77 @@ public struct ThrowingRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingOptic {
 }
 
 extension LensOptic {
-	public func throwing() -> ThrowingLiftLensOptic<Self> {
+	public func throwing() -> LiftLensToThrowing<Self> {
 		.init(optic: self)
 	}
 }
 
 extension PrismOptic {
-	public func throwing() -> ThrowingLiftPrismOptic<Self> {
+	public func throwing() -> LiftPrismToThrowing<Self> {
 		.init(prism: self)
 	}
 }
 
 extension OptionalOptic {
-	public func throwing() -> ThrowingLiftOptionalOptic<Self> {
-		ThrowingLiftOptionalOptic(optic: self)
+	public func throwing() -> LiftOptionalToThrowing<Self> {
+		.init(optic: self)
+	}
+}
+
+public struct ThrowingProvidedWholeOptic<O: ThrowingOptic>: ThrowingOptic {
+	public typealias Whole = Void
+	public typealias Part = O.Part
+	public typealias NewWhole = O.NewWhole
+	public typealias NewPart = O.NewPart
+
+	public let optic: O
+	public let whole: O.Whole
+
+	public init(
+		optic: O,
+		whole: O.Whole
+	) {
+		self.optic = optic
+		self.whole = whole
+	}
+
+	public func get(_ whole: Void) throws -> O.Part {
+		try self.optic.get(self.whole)
+	}
+	
+	public func updating(
+		_ void: Whole,
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try optic.updating(self.whole, f)
+	}
+}
+
+extension ThrowingOptic {
+	public func provide(
+		_ whole: Whole
+	) -> ThrowingProvidedWholeOptic<Self> {
+		.init(
+			optic: self,
+			whole: whole
+		)
+	}
+}
+
+extension ThrowingOptic where Whole == Void {
+	public func get() throws -> Part {
+		try self.get(())
+	}
+	
+	public func updating(
+		_ f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try self.updating((), f)
+	}
+
+	public func setting(
+		to newValue: NewPart
+	) throws -> NewWhole {
+		try self.setting((), to: newValue)
 	}
 }

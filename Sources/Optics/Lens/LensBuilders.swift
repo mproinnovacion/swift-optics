@@ -1,17 +1,25 @@
 import Foundation
 
 @resultBuilder
-public enum LensBuilder {
+public enum LensOpticBuilder {
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> O {
 		optic
 	}
+	
+//	public static func buildPartialBlock<O0, Part>(first f: @escaping (O0) -> Part) ->  {
+//		optic
+//	}
 	
 	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> LensCombination<O0, O1> {
 		LensCombination(lhs: o0, rhs: o1)
 	}
 	
-	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> LensEachCombinator<O0, O1> where O0.Part == [O1.Whole] {
+	public static func buildPartialBlock<O0: LensOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> LensEachCombinator<O0, O1> {
 		LensEachCombinator(lhs: o0, rhs: o1)
+	}
+	
+	public static func buildExpression<O: LensOptic>(_ expression: O) -> O {
+		expression
 	}
 }
 
@@ -39,10 +47,10 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.updating(whole) { lhsPart in
-			try rhs.updating(lhsPart, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.updating(whole) { lhsPart in
+			rhs.updating(lhsPart, f)
 		}
 	}
 }
@@ -63,10 +71,10 @@ where LHS.Part == [RHS.Whole], LHS.NewPart == [RHS.NewWhole] {
 	
 	public func updating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try lhs.updating(whole) { rhsWholes in
-			let rhsParts: [RHS.NewPart] = try f(rhsWholes.map(rhs.get))
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		lhs.updating(whole) { rhsWholes in
+			let rhsParts: [RHS.NewPart] = f(rhsWholes.map(rhs.get))
 			
 			return zip(rhsWholes, rhsParts).map { whole, newPart in
 				rhs.updating(whole, { _ in newPart })

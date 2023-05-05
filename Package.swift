@@ -16,13 +16,15 @@ let package = Package(
 		)
 	],
 	dependencies: [
-		.package(url: "https://github.com/pointfreeco/swift-case-paths", from: "0.14.0")
+		.package(url: "https://github.com/pointfreeco/swift-case-paths", from: "0.14.0"),
+		.package(url: "https://bitbucket.org/damonfer/swift-algebra", from: "0.1.0")
 	],
 	targets: [
 		.target(
 			name: "Optics",
 			dependencies: [
-				.product(name: "CasePaths", package: "swift-case-paths")
+				.product(name: "CasePaths", package: "swift-case-paths"),
+				.product(name: "Algebra", package: "swift-algebra")
 			]
 		),
 		.testTarget(

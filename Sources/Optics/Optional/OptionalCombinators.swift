@@ -21,9 +21,9 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 	
 	public func tryUpdating(
 		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) rethrows -> NewWhole {
-		try optics.tryUpdating(whole, f)
+		_ f: @escaping (Part) -> NewPart
+	) -> NewWhole {
+		optics.tryUpdating(whole, f)
 	}
 	
 	public func trySetting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
