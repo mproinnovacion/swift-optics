@@ -10,11 +10,6 @@ public protocol ThrowingSetterOptic<Whole, Part, NewWhole, NewPart> {
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole
-	
-	func setting(
-		_ whole: Whole,
-		to newPart: NewPart
-	) throws -> NewWhole
 }
 
 extension ThrowingSetterOptic {
