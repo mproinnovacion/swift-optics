@@ -2,6 +2,14 @@ import Foundation
 
 @resultBuilder
 public enum ArraySetterOpticBuilder {
+	public static func buildPartialBlock<O: SetterOptic>(first optic: O) -> LiftSetterToArray<O> {
+		LiftSetterToArray(optic: optic)
+	}
+	
+	public static func buildPartialBlock<O: OptionalSetterOptic>(first optic: O) -> LiftOptionalSetterToArray<O> {
+		LiftOptionalSetterToArray(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: ArraySetterOptic>(first optic: O) -> O {
 		optic
 	}

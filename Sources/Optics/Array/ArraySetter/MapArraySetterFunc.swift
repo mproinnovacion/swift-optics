@@ -183,31 +183,31 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.
 }
 
 extension ArraySetterOptic {
-	public func map<Output, NewOutput>() -> MapArraySetter0<Self, Output, NewOutput> {
+	public func mapFunc<Output, NewOutput>() -> MapArraySetter0<Self, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input, Output, NewOutput>() -> MapArraySetter1<Self, Input, Output, NewOutput> {
+	public func mapFunc<Input, Output, NewOutput>() -> MapArraySetter1<Self, Input, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Output, NewOutput>() -> MapArraySetter2<Self, Input0, Input1, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Output, NewOutput>() -> MapArraySetter2<Self, Input0, Input1, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Output, NewOutput>() -> MapArraySetter3<Self, Input0, Input1, Input2, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Output, NewOutput>() -> MapArraySetter3<Self, Input0, Input1, Input2, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Output, NewOutput>() -> MapArraySetter4<Self, Input0, Input1, Input2, Input3, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Output, NewOutput>() -> MapArraySetter4<Self, Input0, Input1, Input2, Input3, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> MapArraySetter5<Self, Input0, Input1, Input2, Input3, Input4, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> MapArraySetter5<Self, Input0, Input1, Input2, Input3, Input4, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> MapArraySetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> MapArraySetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput> {
 		.init(optic: self)
 	}
 }
