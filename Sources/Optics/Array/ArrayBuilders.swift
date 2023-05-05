@@ -68,37 +68,6 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	}
 }
 
-public struct ConcatArrayOptics<LHS: ArrayOptic, RHS: ArrayOptic>: ArrayOptic
-where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, LHS.NewWhole == RHS.NewWhole, LHS.NewWhole == LHS.Whole {
-	let lhs: LHS
-	let rhs: RHS
-
-	public init(
-		lhs: LHS,
-		rhs: RHS
-	) {
-		self.lhs = lhs
-		self.rhs = rhs
-	}
-
-	public typealias Whole = LHS.Whole
-	public typealias Part = RHS.Part
-	public typealias NewPart = RHS.NewPart
-	public typealias NewWhole = RHS.NewWhole
-
-	public func getAll(_ whole: LHS.Whole) -> [RHS.Part] {
-		lhs.getAll(whole) + rhs.getAll(whole)
-	}
-
-	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
-	) -> NewWhole {
-		let updated = lhs.updatingAll(whole, f)
-		return rhs.updatingAll(updated, f)
-	}
-}
-
 public struct CombineArrayOptional<LHS: ArrayOptic, RHS: OptionalOptic>: ArrayOptic
 where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	let lhs: LHS
