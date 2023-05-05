@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "DD8C256F-ACC3-484A-AF17-96EE18CC0562",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "OpticsTests",
+        "name" : "OpticsTests"
+      }
+    }
+  ],
+  "version" : 1
+}
