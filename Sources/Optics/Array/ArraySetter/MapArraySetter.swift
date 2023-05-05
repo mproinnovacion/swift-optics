@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MapOptionalSetter<O: OptionalSetterOptic, MappedPart, MappedNewPart>: OptionalSetterOptic {
+public struct MapArraySetter<O: ArraySetterOptic, MappedPart, MappedNewPart>: ArraySetterOptic {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = MappedPart
@@ -21,12 +21,12 @@ public struct MapOptionalSetter<O: OptionalSetterOptic, MappedPart, MappedNewPar
 		self.to = to
 	}
 	
-	public func tryUpdating(
+	public func updatingAll(
 		_ whole: O.Whole,
 		_ f: @escaping (MappedPart) -> MappedNewPart
 	) -> O.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.updatingAll(whole) { part in
 			to(part, f(from(part)))
 		}
-	}
+	}	
 }

@@ -3,16 +3,16 @@ import Foundation
 import Algebra
 
 @resultBuilder
-public enum FoldBuilder<Whole, Part> {
-	public static func buildPartialBlock<O: GetterOptic<Whole, Part>>(first optic: O) -> ArrayGetterLiftOptic<O> {
+public enum FoldBuilder {
+	public static func buildPartialBlock<O: GetterOptic>(first optic: O) -> ArrayGetterLiftOptic<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: OptionalGetterOptic<Whole, Part>>(first optic: O) -> ArrayGetterOptionalLiftOptic<O> {
+	public static func buildPartialBlock<O: OptionalGetterOptic>(first optic: O) -> ArrayGetterOptionalLiftOptic<O> {
 		.init(optic: optic)
 	}
 	
-	public static func buildPartialBlock<O: ArrayGetterOptic<Whole, Part>>(first optic: O) -> O {
+	public static func buildPartialBlock<O: ArrayGetterOptic>(first optic: O) -> O {
 		optic
 	}
 
@@ -20,14 +20,14 @@ public enum FoldBuilder<Whole, Part> {
 		ConcatArrayGetterOptics(lhs: o0, rhs: .init(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: ArrayGetterOptic<Whole, Part>, O1: OptionalGetterOptic<Whole, Part>>(
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: OptionalGetterOptic>(
 		accumulated o0: O0,
 		next o1: O1
 	) -> ConcatArrayGetterOptics<O0, ArrayGetterOptionalLiftOptic<O1>> {
 		ConcatArrayGetterOptics(lhs: o0, rhs: .init(optic: o1))
 	}
 	
-	public static func buildPartialBlock<O0: ArrayGetterOptic<Whole, Part>, O1: ArrayGetterOptic<Whole, Part>>(
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: ArrayGetterOptic>(
 		accumulated o0: O0,
 		next o1: O1
 	) -> ConcatArrayGetterOptics<O0, O1> {

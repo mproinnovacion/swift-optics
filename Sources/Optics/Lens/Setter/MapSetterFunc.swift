@@ -1,7 +1,7 @@
 import Foundation
 
-public struct MapAsyncSetter0<S: SetterOptic, Output, NewOutput>: SetterOptic
-where S.Part == (() async -> Output), S.NewPart == (() async -> NewOutput) {
+public struct MapSetterFunc0<S: SetterOptic, Output, NewOutput>: SetterOptic
+where S.Part == (() -> Output), S.NewPart == (() -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
@@ -19,20 +19,20 @@ where S.Part == (() async -> Output), S.NewPart == (() async -> NewOutput) {
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{
-				let output = await part()
+				let output = part()
 				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapAsyncSetter1<S: SetterOptic, Input, Output, NewOutput>: SetterOptic
-where S.Part == ((Input) async -> Output), S.NewPart == ((Input) async -> NewOutput) {
+public struct MapSetterFunc1<S: SetterOptic, Input, Output, NewOutput>: SetterOptic
+where S.Part == ((Input) -> Output), S.NewPart == ((Input) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
 	public typealias NewPart = NewOutput
-
+	
 	let optic: S
 	
 	public init(optic: S) {
@@ -45,20 +45,20 @@ where S.Part == ((Input) async -> Output), S.NewPart == ((Input) async -> NewOut
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{ input in
-				let output = await part(input)
+				let output = part(input)
 				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapAsyncSetter2<S: SetterOptic, Input0, Input1, Output, NewOutput>: SetterOptic
-where S.Part == ((Input0, Input1) async -> Output), S.NewPart == ((Input0, Input1) async -> NewOutput) {
+public struct MapSetterFunc2<S: SetterOptic, Input0, Input1, Output, NewOutput>: SetterOptic
+where S.Part == ((Input0, Input1) -> Output), S.NewPart == ((Input0, Input1) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
 	public typealias NewPart = NewOutput
-
+	
 	let optic: S
 	
 	public init(optic: S) {
@@ -71,20 +71,20 @@ where S.Part == ((Input0, Input1) async -> Output), S.NewPart == ((Input0, Input
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{ input0, input1 in
-				let output = await part(input0, input1)
+				let output = part(input0, input1)
 				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapAsyncSetter3<S: SetterOptic, Input0, Input1, Input2, Output, NewOutput>: SetterOptic
-where S.Part == ((Input0, Input1, Input2) async -> Output), S.NewPart == ((Input0, Input1, Input2) async -> NewOutput) {
+public struct MapSetterFunc3<S: SetterOptic, Input0, Input1, Input2, Output, NewOutput>: SetterOptic
+where S.Part == ((Input0, Input1, Input2) -> Output), S.NewPart == ((Input0, Input1, Input2) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
 	public typealias NewPart = NewOutput
-
+	
 	let optic: S
 	
 	public init(optic: S) {
@@ -97,20 +97,20 @@ where S.Part == ((Input0, Input1, Input2) async -> Output), S.NewPart == ((Input
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{ input0, input1, input2 in
-				let output = await part(input0, input1, input2)
+				let output = part(input0, input1, input2)
 				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapAsyncSetter4<S: SetterOptic, Input0, Input1, Input2, Input3, Output, NewOutput>: SetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3) async -> Output), S.NewPart == ((Input0, Input1, Input2, Input3) async -> NewOutput) {
+public struct MapSetterFunc4<S: SetterOptic, Input0, Input1, Input2, Input3, Output, NewOutput>: SetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3) -> Output), S.NewPart == ((Input0, Input1, Input2, Input3) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
 	public typealias NewPart = NewOutput
-
+	
 	let optic: S
 	
 	public init(optic: S) {
@@ -123,15 +123,16 @@ where S.Part == ((Input0, Input1, Input2, Input3) async -> Output), S.NewPart ==
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{ input0, input1, input2, input3 in
-				let output = await part(input0, input1, input2, input3)
+				let output = part(input0, input1, input2, input3)
 				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapAsyncSetter5<S: SetterOptic, Input0, Input1, Input2, Input3, Input4, Output, NewOutput>: SetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3, Input4) async -> Output), S.NewPart == ((Input0, Input1, Input2, Input3, Input4) async -> NewOutput) {
+public struct MapSetterFunc5<S: SetterOptic, Input0, Input1, Input2, Input3, Input4, Output, NewOutput>: SetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output),
+		S.NewPart == ((Input0, Input1, Input2, Input3, Input4) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
@@ -149,15 +150,16 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) async -> Output), S.Ne
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{ input0, input1, input2, input3, input4 in
-				let output = await part(input0, input1, input2, input3, input4)
+				let output = part(input0, input1, input2, input3, input4)
 				return f(output)
 			}
 		}
 	}
 }
 
-public struct MapAsyncSetter6<S: SetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>: SetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Output), S.NewPart == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> NewOutput) {
+public struct MapSetterFunc6<S: SetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>: SetterOptic
+where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output),
+		S.NewPart == ((Input0, Input1, Input2, Input3, Input4, Input5) -> NewOutput) {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
 	public typealias Part = Output
@@ -175,7 +177,7 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Outpu
 	) -> NewWhole {
 		self.optic.updating(whole) { part in
 			{ input0, input1, input2, input3, input4, input5 in
-				let output = await part(input0, input1, input2, input3, input4, input5)
+				let output = part(input0, input1, input2, input3, input4, input5)
 				return f(output)
 			}
 		}
@@ -183,31 +185,31 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) async -> Outpu
 }
 
 extension SetterOptic {
-	public func mapAsync<Output, NewOutput>() -> MapAsyncSetter0<Self, Output, NewOutput> {
+	public func mapFunc<Output, NewOutput>() -> MapSetterFunc0<Self, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input, Output, NewOutput>() -> MapAsyncSetter1<Self, Input, Output, NewOutput> {
+	public func mapFunc<Input, Output, NewOutput>() -> MapSetterFunc1<Self, Input, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Output, NewOutput>() -> MapAsyncSetter2<Self, Input0, Input1, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Output, NewOutput>() -> MapSetterFunc2<Self, Input0, Input1, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Output, NewOutput>() -> MapAsyncSetter3<Self, Input0, Input1, Input2, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Output, NewOutput>() -> MapSetterFunc3<Self, Input0, Input1, Input2, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Input3, Output, NewOutput>() -> MapAsyncSetter4<Self, Input0, Input1, Input2, Input3, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Output, NewOutput>() -> MapSetterFunc4<Self, Input0, Input1, Input2, Input3, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> MapAsyncSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Input4, Output, NewOutput>() -> MapSetterFunc5<Self, Input0, Input1, Input2, Input3, Input4, Output, NewOutput> {
 		.init(optic: self)
 	}
 	
-	public func mapAsync<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> MapAsyncSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput>() -> MapSetterFunc6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output, NewOutput> {
 		.init(optic: self)
 	}
 }
