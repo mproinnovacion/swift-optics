@@ -1,7 +1,7 @@
 import Foundation
 
 /// Concats ArrayOptic optics where the wholes and the parts match.
-public struct ConcatManySetters<Optics: ArraySetterOptic>: ArraySetterOptic {
+public struct ConcatSetters<Optics: ArraySetterOptic>: ArraySetterOptic {
 	public typealias Whole = Optics.Whole
 	public typealias NewWhole = Optics.NewWhole
 	public typealias Part = Optics.Part
@@ -11,7 +11,7 @@ public struct ConcatManySetters<Optics: ArraySetterOptic>: ArraySetterOptic {
 	
 	@inlinable
 	public init(
-		@ConcatManySettersBuilder with build: () -> Optics
+		@ConcatSettersBuilder with build: () -> Optics
 	) {
 		self.optic = build()
 	}
@@ -25,7 +25,7 @@ public struct ConcatManySetters<Optics: ArraySetterOptic>: ArraySetterOptic {
 }
 
 @resultBuilder
-public enum ConcatManySettersBuilder {
+public enum ConcatSettersBuilder {
 	public static func buildPartialBlock<O: SetterOptic>(first optic: O) -> LiftSetterToArray<O> {
 		LiftSetterToArray(optic: optic)
 	}
