@@ -158,11 +158,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
@@ -178,11 +178,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
@@ -198,11 +198,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
@@ -218,11 +218,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
@@ -238,11 +238,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
@@ -258,11 +258,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
@@ -278,11 +278,11 @@ class OptionalSetterThrowingFuncTests: XCTestCase {
 
 		var myFunc = f
 
-		let setter = Setter {
+		let setter = OptionalSetter {
 			myFunc
 		}
 
-		myFunc = setter.updating { number in
+		myFunc = setter.tryUpdating { number in
 			number * 2
 		}
 
