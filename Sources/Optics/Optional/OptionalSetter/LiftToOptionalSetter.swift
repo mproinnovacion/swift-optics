@@ -23,3 +23,5 @@ public struct LiftSetterToOptional<O: SetterOptic>: OptionalSetterOptic {
 		self.optic.setting(whole, to: newPart)
 	}
 }
+
+public typealias LiftPrismToOptionalSetter = LiftPrismToOptional

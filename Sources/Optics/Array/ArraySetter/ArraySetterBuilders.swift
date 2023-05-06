@@ -6,6 +6,10 @@ public enum ArraySetterOpticBuilder {
 		LiftSetterToArray(optic: optic)
 	}
 	
+	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftPrismToArray<O> {
+		LiftPrismToArray(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: OptionalSetterOptic>(first optic: O) -> LiftOptionalSetterToArray<O> {
 		LiftOptionalSetterToArray(optic: optic)
 	}
@@ -16,6 +20,10 @@ public enum ArraySetterOpticBuilder {
 	
 	public static func buildPartialBlock<O0: ArraySetterOptic, O1: SetterOptic>(accumulated o0: O0, next o1: O1) -> ArraySetterCombination<O0, LiftSetterToArray<O1>> {
 		ArraySetterCombination(lhs: o0, rhs: LiftSetterToArray(optic: o1))
+	}
+	
+	public static func buildPartialBlock<O0: ArraySetterOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> ArraySetterCombination<O0, LiftPrismToArray<O1>> {
+		ArraySetterCombination(lhs: o0, rhs: LiftPrismToArray(optic: o1))
 	}
 	
 	public static func buildPartialBlock<O0: ArraySetterOptic, O1: OptionalSetterOptic>(accumulated o0: O0, next o1: O1) -> ArraySetterCombination<O0, LiftOptionalSetterToArray<O1>> {

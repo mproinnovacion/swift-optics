@@ -6,12 +6,20 @@ public enum OptionalSetterOpticBuilder {
 		LiftSetterToOptional(optic: optic)
 	}
 	
+	public static func buildPartialBlock<O: SetterOptic>(first optic: O) -> LiftPrismToOptionalSetter<O> {
+		LiftPrismToOptionalSetter(optic: optic)
+	}
+	
 	public static func buildPartialBlock<O: OptionalSetterOptic>(first optic: O) -> O {
 		optic
 	}
 	
 	public static func buildPartialBlock<O0: OptionalSetterOptic, O1: SetterOptic>(accumulated o0: O0, next o1: O1) -> OptionalSetterCombination<O0, LiftSetterToOptional<O1>> {
 		OptionalSetterCombination(lhs: o0, rhs: LiftSetterToOptional(optic: o1))
+	}
+	
+	public static func buildPartialBlock<O0: OptionalSetterOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> OptionalSetterCombination<O0, LiftPrismToOptionalSetter<O1>> {
+		OptionalSetterCombination(lhs: o0, rhs: LiftPrismToOptionalSetter(optic: o1))
 	}
 	
 	public static func buildPartialBlock<O0: OptionalSetterOptic, O1: OptionalSetterOptic>(accumulated o0: O0, next o1: O1) -> OptionalSetterCombination<O0, O1> {

@@ -13,7 +13,7 @@ public enum OptionalOpticBuilder {
 	}
 	
 	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftPrismToOptional<O> {
-		.init(prism: optic)
+		.init(optic: optic)
 	}
 	
 	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> O {
@@ -25,7 +25,7 @@ public enum OptionalOpticBuilder {
 	}
 	
 	public static func buildPartialBlock<O0: OptionalOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, LiftPrismToOptional<O1>> {
-		CombineOptionals(lhs: o0, rhs: LiftPrismToOptional(prism: o1))
+		CombineOptionals(lhs: o0, rhs: LiftPrismToOptional(optic: o1))
 	}
 	
 	public static func buildPartialBlock<O0: OptionalOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> CombineOptionals<O0, O1> {
