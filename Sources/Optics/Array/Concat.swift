@@ -61,7 +61,11 @@ public enum ConcatArrayOpticsBuilder {
 	}
 	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> LiftLensToArray<O> {
-		LiftLensToArray(lens: optic)
+		LiftLensToArray(optic: optic)
+	}
+	
+	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftPrismToArray<O> {
+		LiftPrismToArray(optic: optic)
 	}
 	
 	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> LiftOptionalToArray<O> {
@@ -75,7 +79,14 @@ public enum ConcatArrayOpticsBuilder {
 	public static func buildPartialBlock<O0: ArrayOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, LiftLensToArray<O1>> {
 		ConcatArrayOptics(
 			lhs: o0,
-			rhs: LiftLensToArray(lens: o1)
+			rhs: LiftLensToArray(optic: o1)
+		)
+	}
+	
+	public static func buildPartialBlock<O0: ArrayOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, LiftPrismToArray<O1>> {
+		ConcatArrayOptics(
+			lhs: o0,
+			rhs: LiftPrismToArray(optic: o1)
 		)
 	}
 	
@@ -94,5 +105,3 @@ public enum ConcatArrayOpticsBuilder {
 		expression
 	}
 }
-
-//public typealias ConcatArrayOpticsBuilderOf<O: ArrayOptic> = ConcatArrayOpticsBuilder<O.Whole, O.Part, O.NewWhole, O.NewPart>

@@ -14,6 +14,76 @@ public enum ArrayGetterOpticBuilder {
 		optic
 	}
 	
+	
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: GetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, ArrayGetterLiftOptic<O1>> {
+		ArrayGetterCombination(lhs: o0, rhs: .init(optic: o1))
+	}
+	
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: OptionalGetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, ArrayGetterOptionalLiftOptic<O1>> {
+		ArrayGetterCombination(lhs: o0, rhs: .init(optic: o1))
+	}
+	
+	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: ArrayGetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, O1> {
+		ArrayGetterCombination(lhs: o0, rhs: o1)
+	}
+	
+	// MARK: Functions
+	public static func buildPartialBlock<R>(
+		first f: @escaping () -> R
+	) -> ArrayGetterFunc0<R> {
+		.init {
+			[f()]
+		}
+	}
+	
+	public static func buildPartialBlock<O0, R>(
+		first f: @escaping (O0) -> R
+	) -> ArrayGetterFunc1<O0, R> {
+		.init { input in
+			[f(input)]
+		}
+	}
+	
+	public static func buildPartialBlock<O0, O1, R>(
+		first f: @escaping (O0, O1) -> R
+	) -> ArrayGetterFunc2<O0, O1, R> {
+		.init { input0, input1 in
+			[f(input0, input1)]
+		}
+	}
+	
+	public static func buildPartialBlock<O0, O1, O2, R>(
+		first f: @escaping (O0, O1, O2) -> R
+	) -> ArrayGetterFunc3<O0, O1, O2, R> {
+		.init { input0, input1, input2 in
+			[f(input0, input1, input2)]
+		}
+	}
+	
+	public static func buildPartialBlock<O0, O1, O2, O3, R>(
+		first f: @escaping (O0, O1, O2, O3) -> R
+	) -> ArrayGetterFunc4<O0, O1, O2, O3, R> {
+		.init { input0, input1, input2, input3 in
+			[f(input0, input1, input2, input3)]
+		}
+	}
+	
+	public static func buildPartialBlock<O0, O1, O2, O3, O4, R>(
+		first f: @escaping (O0, O1, O2, O3, O4) -> R
+	) -> ArrayGetterFunc5<O0, O1, O2, O3, O4, R> {
+		.init { input0, input1, input2, input3, input4 in
+			[f(input0, input1, input2, input3, input4)]
+		}
+	}
+	
+	public static func buildPartialBlock<O0, O1, O2, O3, O4, O5, R>(
+		first f: @escaping (O0, O1, O2, O3, O4, O5) -> R
+	) -> ArrayGetterFunc6<O0, O1, O2, O3, O4, O5, R> {
+		.init { input0, input1, input2, input3, input4, input5 in
+			[f(input0, input1, input2, input3, input4, input5)]
+		}
+	}
+	
 	public static func buildPartialBlock<R>(
 		first f: @escaping () -> [R]
 	) -> ArrayGetterFunc0<R> {
@@ -56,16 +126,29 @@ public enum ArrayGetterOpticBuilder {
 		.init(run: f)
 	}
 	
-	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: GetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, ArrayGetterLiftOptic<O1>> {
-		ArrayGetterCombination(lhs: o0, rhs: .init(optic: o1))
+	// MARK: Combination with functions
+	public static func buildPartialBlock<O0: ArrayGetterOptic, R>(
+		accumulated o0: O0,
+		next f: @escaping (O0.Part) -> R
+	) -> ArrayGetterCombination<O0, ArrayGetterFunc1<O0.Part, R>> {
+		ArrayGetterCombination(
+			lhs: o0,
+			rhs: .init { input in
+				[f(input)]
+			}
+		)
 	}
 	
-	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: OptionalGetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, ArrayGetterOptionalLiftOptic<O1>> {
-		ArrayGetterCombination(lhs: o0, rhs: .init(optic: o1))
-	}
-	
-	public static func buildPartialBlock<O0: ArrayGetterOptic, O1: ArrayGetterOptic>(accumulated o0: O0, next o1: O1) -> ArrayGetterCombination<O0, O1> {
-		ArrayGetterCombination(lhs: o0, rhs: o1)
+	public static func buildPartialBlock<O0: ArrayGetterOptic, R>(
+		accumulated o0: O0,
+		next f: @escaping (O0.Part) -> [R]
+	) -> ArrayGetterCombination<O0, ArrayGetterFunc1<O0.Part, [R]>> {
+		ArrayGetterCombination(
+			lhs: o0,
+			rhs: .init { input in
+				[f(input)]
+			}
+		)
 	}
 }
 

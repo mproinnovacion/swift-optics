@@ -9,7 +9,7 @@ public enum ThrowingArrayOpticBuilder {
 	}
 	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> LiftArrayToThrowingArray<LiftLensToArray<O>> {
-		.init(optic: .init(lens: optic))
+		.init(optic: .init(optic: optic))
 	}
 	
 	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftArrayToThrowingArray<LiftOptionalToArray<LiftPrismToOptional<O>>> {
@@ -29,7 +29,7 @@ public enum ThrowingArrayOpticBuilder {
 	}
 	
 	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, LiftArrayToThrowingArray<LiftLensToArray<O1>>> {
-		CombineThrowingArray(lhs: o0, rhs: .init(optic: .init(lens: o1)))
+		CombineThrowingArray(lhs: o0, rhs: .init(optic: .init(optic: o1)))
 	}
 	
 	public static func buildPartialBlock<O0: ThrowingArrayOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> CombineThrowingArray<O0, LiftArrayToThrowingArray<LiftOptionalToArray<LiftPrismToOptional<O1>>>> {

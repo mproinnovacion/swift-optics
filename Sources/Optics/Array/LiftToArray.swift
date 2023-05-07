@@ -1,22 +1,26 @@
 import Foundation
 
 public struct LiftLensToArray<O: LensOptic>: ArrayOptic {
-	let lens: O
-	
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = O.Part
 	public typealias NewPart = O.NewPart
+
+	public let optic: O
+	
+	public init(optic: O) {
+		self.optic = optic
+	}
 	
 	public func getAll(_ whole: Whole) -> [Part] {
-		[lens.get(whole)]
+		[optic.get(whole)]
 	}
 	
 	public func updatingAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(whole, f)
+		optic.updating(whole, f)
 	}
 }
 
