@@ -62,4 +62,10 @@ extension ArrayOptic {
 	) -> MapArray<Self, MappedPart, MappedNewPart> {
 		MapArray({ self }, from: from, to: to)
 	}
+	
+	public func map<MappedPart>(
+		_ conversion: Conversion<Part, MappedPart>
+	) -> MapArray<Self, MappedPart, MappedPart> where NewPart == Part {
+		MapArray({ self }, from: conversion.to, to: conversion.from)
+	}
 }
