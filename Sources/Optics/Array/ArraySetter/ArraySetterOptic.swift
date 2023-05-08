@@ -58,6 +58,15 @@ extension ArraySetterOptic {
 		self.updateAll(&copy, f)
 		return copy
 	}
+	
+	@inlinable
+	public func updater(
+		_ f: @escaping (Part) -> NewPart
+	) -> (Whole) -> NewWhole {
+		{ whole in
+			self.updatingAll(whole, f)
+		}
+	}
 }
 
 public struct ArraySetterRawOptic<Whole, Part, NewWhole, NewPart>: ArraySetterOptic {

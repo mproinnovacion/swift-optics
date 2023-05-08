@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MapThrowingSetter0<S: ThrowingSetterOptic, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc0<S: ThrowingSetterOptic, Output>: ThrowingSetterOptic
 where S.Part == (() -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -26,7 +26,7 @@ where S.Part == (() -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapThrowingSetter1<S: ThrowingSetterOptic, Input, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc1<S: ThrowingSetterOptic, Input, Output>: ThrowingSetterOptic
 where S.Part == ((Input) -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -52,7 +52,7 @@ where S.Part == ((Input) -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapThrowingSetter2<S: ThrowingSetterOptic, Input0, Input1, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc2<S: ThrowingSetterOptic, Input0, Input1, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1) -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -77,7 +77,7 @@ where S.Part == ((Input0, Input1) -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapThrowingSetter3<S: ThrowingSetterOptic, Input0, Input1, Input2, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc3<S: ThrowingSetterOptic, Input0, Input1, Input2, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2) -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -102,7 +102,7 @@ where S.Part == ((Input0, Input1, Input2) -> Output), S.NewPart == S.Part {
 	}
 }
 
-public struct MapThrowingSetter4<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc4<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2, Input3) -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -127,7 +127,7 @@ where S.Part == ((Input0, Input1, Input2, Input3) -> Output), S.NewPart == S.Par
 	}
 }
 
-public struct MapThrowingSetter5<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Input4, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc5<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Input4, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -152,7 +152,7 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output), S.NewPart 
 	}
 }
 
-public struct MapThrowingSetter6<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: ThrowingSetterOptic
+public struct MapThrowingSetterFunc6<S: ThrowingSetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: ThrowingSetterOptic
 where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.NewPart == S.Part {
 	public typealias Whole = S.Whole
 	public typealias NewWhole = S.NewWhole
@@ -178,31 +178,31 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.
 }
 
 extension ThrowingSetterOptic {
-	public func map<Output>() -> MapThrowingSetter0<Self, Output> {
+	public func mapFunc<Output>() -> MapThrowingSetterFunc0<Self, Output> {
 		.init(optic: self)
 	}
 	
-	public func map<Input, Output>() -> MapThrowingSetter1<Self, Input, Output> {
+	public func mapFunc<Input, Output>() -> MapThrowingSetterFunc1<Self, Input, Output> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Output>() -> MapThrowingSetter2<Self, Input0, Input1, Output> {
+	public func mapFunc<Input0, Input1, Output>() -> MapThrowingSetterFunc2<Self, Input0, Input1, Output> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Output>() -> MapThrowingSetter3<Self, Input0, Input1, Input2, Output> {
+	public func mapFunc<Input0, Input1, Input2, Output>() -> MapThrowingSetterFunc3<Self, Input0, Input1, Input2, Output> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Output>() -> MapThrowingSetter4<Self, Input0, Input1, Input2, Input3, Output> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Output>() -> MapThrowingSetterFunc4<Self, Input0, Input1, Input2, Input3, Output> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Input4, Output>() -> MapThrowingSetter5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Input4, Output>() -> MapThrowingSetterFunc5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
 		.init(optic: self)
 	}
 	
-	public func map<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapThrowingSetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
+	public func mapFunc<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapThrowingSetterFunc6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
 		.init(optic: self)
 	}
 }

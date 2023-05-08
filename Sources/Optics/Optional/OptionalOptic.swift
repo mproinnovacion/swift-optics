@@ -128,7 +128,7 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 
 extension PrismOptic {
 	public func optional() -> LiftPrismToOptional<Self> {
-		.init(prism: self)
+		.init(optic: self)
 	}
 }
 

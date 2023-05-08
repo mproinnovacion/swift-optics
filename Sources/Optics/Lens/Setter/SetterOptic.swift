@@ -59,6 +59,15 @@ extension SetterOptic {
 		self.update(&copy, f)
 		return copy
 	}
+	
+	@inlinable
+	public func updater(
+		_ f: @escaping (Part) -> NewPart
+	) -> (Whole) -> NewWhole {
+		{ whole in
+			self.updating(whole, f)
+		}
+	}
 }
 
 public struct SetterProvidedWholeOptic<O: SetterOptic>: SetterOptic {

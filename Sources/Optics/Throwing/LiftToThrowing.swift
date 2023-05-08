@@ -41,15 +41,15 @@ public struct LiftPrismToThrowing<P: PrismOptic>: ThrowingOptic {
 	public typealias Part = P.Part
 	public typealias NewPart = Part
 	
-	public let prism: P
+	public let optic: P
 	
-	public init(prism: P) {
-		self.prism = prism
+	public init(optic: P) {
+		self.optic = optic
 	}
 	
 	@inlinable
 	public func get(_ whole: Whole) throws -> Part {
-		guard let part = prism.extract(from: whole) else {
+		guard let part = optic.extract(from: whole) else {
 			throw(ThrowingError.noData)
 		}
 		
@@ -60,13 +60,13 @@ public struct LiftPrismToThrowing<P: PrismOptic>: ThrowingOptic {
 	public func updating(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart) throws -> NewWhole {
-		guard var value = prism.extract(from: whole) else {
+		guard var value = optic.extract(from: whole) else {
 			throw(ThrowingError.noData)
 		}
 		
 		value = try f(value)
 		
-		return prism.embed(value)
+		return optic.embed(value)
 	}
 	
 	@inlinable
@@ -74,7 +74,7 @@ public struct LiftPrismToThrowing<P: PrismOptic>: ThrowingOptic {
 		_ whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		prism.embed(newValue)
+		optic.embed(newValue)
 	}
 }
 

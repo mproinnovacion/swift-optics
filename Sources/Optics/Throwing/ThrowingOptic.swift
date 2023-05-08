@@ -172,7 +172,7 @@ extension LensOptic {
 
 extension PrismOptic {
 	public func throwing() -> LiftPrismToThrowing<Self> {
-		.init(prism: self)
+		.init(optic: self)
 	}
 }
 
