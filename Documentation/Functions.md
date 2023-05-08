@@ -10,7 +10,21 @@ A function *type* can be seen as a setter, where the Whole is the function itsel
 
 ### Function as the first Whole
 
+There seems to be a bug in the swift compiler that prevents async functions to be treated in generic parameters. The workaround for this wraps the function in a struct, storing it into a property *run*. This way, if you need to modify a function in a variable, you will need to use the run property to assign it:
 
+```
+func f() async -> Int {
+	5
+}
+
+var myFunc = Setter {
+	f
+}.updating { number in
+	number * 2
+}.run
+```
+
+See tests like testFunc0InVariable for more examples.
 
 ### Function as a Part of another optic
 

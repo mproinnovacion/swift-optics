@@ -79,6 +79,15 @@ extension OptionalSetterOptic {
 		self.trySet(&copy, to: newValue)
 		return copy
 	}
+	
+	@inlinable
+	public func updater(
+		_ f: @escaping (Part) -> NewPart
+	) -> (Whole) -> NewWhole {
+		{ whole in
+			self.tryUpdating(whole, f)
+		}
+	}
 }
 
 public struct OptionalSetterProvidedWholeOptic<O: OptionalSetterOptic>: OptionalSetterOptic {

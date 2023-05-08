@@ -39,15 +39,15 @@ public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 	public typealias Part = P.Part
 	public typealias NewPart = Part
 	
-	public let prism: P
+	public let optic: P
 	
-	public init(prism: P) {
-		self.prism = prism
+	public init(optic: P) {
+		self.optic = optic
 	}
 	
 	@inlinable
 	public func tryGet(_ whole: Whole) -> Part? {
-		prism.extract(from: whole)
+		optic.extract(from: whole)
 	}
 	
 	@inlinable
@@ -55,13 +55,13 @@ public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 		_ whole: Whole,
 		_ f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		guard var value = prism.extract(from: whole) else {
+		guard var value = optic.extract(from: whole) else {
 			return whole
 		}
 		
 		value = f(value)
 		
-		return prism.embed(value)
+		return optic.embed(value)
 	}
 	
 	@inlinable
@@ -69,6 +69,6 @@ public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 		_ whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		prism.embed(newValue)
+		optic.embed(newValue)
 	}
 }

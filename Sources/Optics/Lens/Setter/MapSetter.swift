@@ -27,3 +27,41 @@ public struct MapSetter<O: SetterOptic, MappedPart, MappedNewPart>: SetterOptic 
 		}
 	}
 }
+
+extension SetterOptic {
+	public func map<MappedPart, MappedNewPart>(
+		from: @escaping (Part) -> MappedPart,
+		to: @escaping (Part, MappedNewPart) -> NewPart
+	) -> MapSetter<Self, MappedPart, MappedNewPart> {
+		MapSetter(
+			optic: self,
+			from: from,
+			to: to
+		)
+	}
+	
+	public func map<MappedPart, MappedNewPart>(
+		from: @escaping (Part) -> MappedPart,
+		to: @escaping (MappedNewPart) -> NewPart
+	) -> MapSetter<Self, MappedPart, MappedNewPart> {
+		MapSetter(
+			optic: self,
+			from: from,
+			to: { _, newPart in
+				to(newPart)
+			}
+		)
+	}
+	
+	public func map<MappedPart>(
+		_ conversion: Conversion<Part, MappedPart>
+	) -> MapSetter<Self, MappedPart, MappedPart> where NewPart == Part {
+		MapSetter(
+			optic: self,
+			from: conversion.to,
+			to: { _, newPart in
+				conversion.from(newPart)
+			}
+		)
+	}
+}

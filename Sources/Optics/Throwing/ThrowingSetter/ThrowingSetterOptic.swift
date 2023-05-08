@@ -10,20 +10,6 @@ public protocol ThrowingSetterOptic<Whole, Part, NewWhole, NewPart> {
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole
-	
-	func setting(
-		_ whole: Whole,
-		to newPart: NewPart
-	) throws -> NewWhole
-}
-
-extension ThrowingSetterOptic {
-	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
-	) throws -> NewWhole {
-		try self.updating(whole, f)
-	}
 }
 
 extension ThrowingSetterOptic {
@@ -90,6 +76,15 @@ extension ThrowingSetterOptic {
 		var copy = whole
 		try self.set(&copy, to: newValue)
 		return copy
+	}
+	
+	@inlinable
+	public func updater(
+		_ f: @escaping (Part) throws -> NewPart
+	) -> (Whole) throws -> NewWhole {
+		{ whole in
+			try self.updating(whole, f)
+		}
 	}
 }
 

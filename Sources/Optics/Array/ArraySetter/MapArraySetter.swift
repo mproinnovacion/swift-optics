@@ -30,3 +30,41 @@ public struct MapArraySetter<O: ArraySetterOptic, MappedPart, MappedNewPart>: Ar
 		}
 	}	
 }
+
+extension ArraySetterOptic {
+	public func map<MappedPart, MappedNewPart>(
+		from: @escaping (Part) -> MappedPart,
+		to: @escaping (Part, MappedNewPart) -> NewPart
+	) -> MapArraySetter<Self, MappedPart, MappedNewPart> {
+		MapArraySetter(
+			optic: self,
+			from: from,
+			to: to
+		)
+	}
+	
+	public func map<MappedPart, MappedNewPart>(
+		from: @escaping (Part) -> MappedPart,
+		to: @escaping (MappedNewPart) -> NewPart
+	) -> MapArraySetter<Self, MappedPart, MappedNewPart> {
+		MapArraySetter(
+			optic: self,
+			from: from,
+			to: { _, newPart in
+				to(newPart)
+			}
+		)
+	}
+	
+	public func map<MappedPart>(
+		_ conversion: Conversion<Part, MappedPart>
+	) -> MapArraySetter<Self, MappedPart, MappedPart> where NewPart == Part {
+		MapArraySetter(
+			optic: self,
+			from: conversion.to,
+			to: { _, newPart in
+				conversion.from(newPart)
+			}
+		)
+	}
+}

@@ -6,16 +6,10 @@ public protocol ThrowingArraySetterOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype NewWhole
 	associatedtype NewPart
 	
-	func updatingAll(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) throws -> NewWhole
-}
-
-extension ThrowingArraySetterOptic {
-	public func updatingAll(
+	func updatingAll(
 		_ whole: Whole,
 		_ f: @escaping (Part) throws -> NewPart
-	) throws -> NewWhole {
-		try self.updatingAll(whole, f)
-	}
+	) throws -> NewWhole
 }
 
 extension ThrowingArraySetterOptic {
@@ -85,6 +79,15 @@ extension ThrowingArraySetterOptic {
 		var copy = whole
 		try self.setAll(&copy, to: newValue)
 		return copy
+	}
+	
+	@inlinable
+	public func updater(
+		_ f: @escaping (Part) throws -> NewPart
+	) -> (Whole) throws -> NewWhole {
+		{ whole in
+			try self.updatingAll(whole, f)
+		}
 	}
 }
 

@@ -11,7 +11,7 @@ public struct Concat<Optics: ArrayOptic>: ArrayOptic {
 	
 	@inlinable
 	public init(
-		@ConcatLensesBuilder with build: () -> Optics
+		@ConcatArrayOpticsBuilder with build: () -> Optics
 	) {
 		self.lens = build()
 	}
@@ -28,7 +28,7 @@ public struct Concat<Optics: ArrayOptic>: ArrayOptic {
 	}
 }
 
-public struct ConcatLenses<LHS: ArrayOptic, RHS: ArrayOptic>: ArrayOptic
+public struct ConcatArrayOptics<LHS: ArrayOptic, RHS: ArrayOptic>: ArrayOptic
 where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, LHS.NewWhole == RHS.NewWhole, LHS.NewWhole == LHS.Whole {
 	let lhs: LHS
 	let rhs: RHS
@@ -53,7 +53,7 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 }
 
 @resultBuilder
-public enum ConcatLensesBuilder {
+public enum ConcatArrayOpticsBuilder {
 	public static func buildOptional<O: ArrayOptic>(
 		_ optic: O?
 	) -> ArrayOpticFromOptional<O.Whole, O.Part, O.NewPart, O> {
@@ -61,7 +61,11 @@ public enum ConcatLensesBuilder {
 	}
 	
 	public static func buildPartialBlock<O: LensOptic>(first optic: O) -> LiftLensToArray<O> {
-		LiftLensToArray(lens: optic)
+		LiftLensToArray(optic: optic)
+	}
+	
+	public static func buildPartialBlock<O: PrismOptic>(first optic: O) -> LiftPrismToArray<O> {
+		LiftPrismToArray(optic: optic)
 	}
 	
 	public static func buildPartialBlock<O: OptionalOptic>(first optic: O) -> LiftOptionalToArray<O> {
@@ -72,27 +76,32 @@ public enum ConcatLensesBuilder {
 		optic
 	}
 	
-	public static func buildPartialBlock<O0: ArrayOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, LiftLensToArray<O1>> {
-		ConcatLenses(
+	public static func buildPartialBlock<O0: ArrayOptic, O1: LensOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, LiftLensToArray<O1>> {
+		ConcatArrayOptics(
 			lhs: o0,
-			rhs: LiftLensToArray(lens: o1)
+			rhs: LiftLensToArray(optic: o1)
 		)
 	}
 	
-	public static func buildPartialBlock<O0: ArrayOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, LiftOptionalToArray<O1>> {
-		ConcatLenses(
+	public static func buildPartialBlock<O0: ArrayOptic, O1: PrismOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, LiftPrismToArray<O1>> {
+		ConcatArrayOptics(
+			lhs: o0,
+			rhs: LiftPrismToArray(optic: o1)
+		)
+	}
+	
+	public static func buildPartialBlock<O0: ArrayOptic, O1: OptionalOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, LiftOptionalToArray<O1>> {
+		ConcatArrayOptics(
 			lhs: o0,
 			rhs: LiftOptionalToArray(optic: o1)
 		)
 	}
 	
-	public static func buildPartialBlock<O0: ArrayOptic, O1: ArrayOptic>(accumulated o0: O0, next o1: O1) -> ConcatLenses<O0, O1> {
-		ConcatLenses(lhs: o0, rhs: o1)
+	public static func buildPartialBlock<O0: ArrayOptic, O1: ArrayOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, O1> {
+		ConcatArrayOptics(lhs: o0, rhs: o1)
 	}
 	
 	public static func buildExpression<O: ArrayOptic>(_ expression: O) -> O {
 		expression
 	}
 }
-
-//public typealias ConcatLensesBuilderOf<O: ArrayOptic> = ConcatLensesBuilder<O.Whole, O.Part, O.NewWhole, O.NewPart>
