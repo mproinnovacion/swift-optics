@@ -20,10 +20,10 @@ public struct Last<L: LensOptic, Element>: OptionalOptic where L.Part == [Elemen
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(whole) { elements in
+		lens.updating(in: whole) { elements in
 			guard let last = elements.last else {
 				return elements
 			}
@@ -35,10 +35,10 @@ public struct Last<L: LensOptic, Element>: OptionalOptic where L.Part == [Elemen
 	}
 	
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdating(whole) { _ in
+		tryUpdating(in: whole) { _ in
 			newValue
 		}
 	}

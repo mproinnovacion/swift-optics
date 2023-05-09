@@ -24,7 +24,7 @@ class AtTests: XCTestCase {
 		
 		var local = company
 		
-		personName.tryUpdate(&local) { $0 = $0.uppercased() }
+		personName.tryUpdate(in: &local) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			personName.tryGet(local),

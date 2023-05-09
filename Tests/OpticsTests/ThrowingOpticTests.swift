@@ -27,14 +27,14 @@ class ThrowingOpticTests: XCTestCase {
 		
 		XCTAssertEqual(
 			try optic.get(
-				try optic.setting(item, to: "James")
+				try optic.setting(in: item, to: "James")
 			),
 			"James"
 		)
 		
 		XCTAssertEqual(
 			try optic.get(
-				try optic.updating(item) { $0 += "!" }
+				try optic.updating(in: item) { $0 += "!" }
 			),
 			"John!"
 		)
@@ -58,14 +58,14 @@ class ThrowingOpticTests: XCTestCase {
 		
 		XCTAssertEqual(
 			try optic.get(
-				try optic.setting(item, to: "James")
+				try optic.setting(in: item, to: "James")
 			),
 			"James"
 		)
 		
 		XCTAssertEqual(
 			try optic.get(
-				try optic.updating(item) { $0 += "!" }
+				try optic.updating(in: item) { $0 += "!" }
 			),
 			"John!"
 		)
@@ -84,7 +84,7 @@ class ThrowingOpticTests: XCTestCase {
 		)
 			
 		XCTAssertEqual(
-			try optic.updating(string) {
+			try optic.updating(in: string) {
 				$0 + "!"
 			},
 			"hello!"
@@ -106,7 +106,7 @@ class ThrowingOpticTests: XCTestCase {
 		}
 		
 		do {
-			try optic.update(&string) { $0 + "!" }
+			try optic.update(in: &string) { $0 + "!" }
 			
 			XCTFail("Expected to throw")
 		} catch {

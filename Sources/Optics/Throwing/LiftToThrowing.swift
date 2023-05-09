@@ -17,19 +17,19 @@ public struct LiftLensToThrowing<O: LensOptic>: ThrowingOptic {
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		let part = lens.get(whole)
 		let newPart = try f(part)
-		return lens.setting(whole, to: newPart)
+		return lens.setting(in: whole, to: newPart)
 	}
 	
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try updating(whole) { _ in
+		try updating(in: whole) { _ in
 			newValue
 		}
 	}
@@ -58,8 +58,8 @@ public struct LiftPrismToThrowing<P: PrismOptic>: ThrowingOptic {
 	
 	@inlinable
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart) throws -> NewWhole {
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart) throws -> NewWhole {
 		guard var value = optic.extract(from: whole) else {
 			throw(ThrowingError.noData)
 		}
@@ -71,7 +71,7 @@ public struct LiftPrismToThrowing<P: PrismOptic>: ThrowingOptic {
 	
 	@inlinable
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
 		optic.embed(newValue)
@@ -101,8 +101,8 @@ public struct LiftOptionalToThrowing<O: OptionalOptic>: ThrowingOptic {
 	
 	@inlinable
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		guard let part = optic.tryGet(whole) else {
 			throw(ThrowingError.noData)
@@ -110,14 +110,14 @@ public struct LiftOptionalToThrowing<O: OptionalOptic>: ThrowingOptic {
 		
 		let newPart = try f(part)
 		
-		return optic.trySetting(whole, to: newPart)
+		return optic.trySetting(in: whole, to: newPart)
 	}
 	
 	@inlinable
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		optic.trySetting(whole, to: newValue)
+		optic.trySetting(in: whole, to: newValue)
 	}
 }

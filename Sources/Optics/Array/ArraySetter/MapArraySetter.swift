@@ -22,10 +22,10 @@ public struct MapArraySetter<O: ArraySetterOptic, MappedPart, MappedNewPart>: Ar
 	}
 	
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (MappedPart) -> MappedNewPart
+		in whole: O.Whole,
+		update f: @escaping (MappedPart) -> MappedNewPart
 	) -> O.NewWhole {
-		self.optic.updatingAll(whole) { part in
+		self.optic.updatingAll(in: whole) { part in
 			to(part, f(from(part)))
 		}
 	}	

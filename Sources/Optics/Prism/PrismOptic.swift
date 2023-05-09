@@ -48,20 +48,20 @@ extension PrismOptic where Body: PrismOptic, Body.Whole == Whole, Body.Part == P
 extension PrismOptic {
 	@inlinable
 	public func tryUpdate(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
+		in whole: inout Whole,
+		update f: @escaping (inout Part) throws -> Void
 	) rethrows {
-		whole = try tryUpdating(whole, { part in
+		whole = try tryUpdating(in: whole) { part in
 			var copy = part
 			try f(&copy)
 			return copy
-		})
+		}
 	}
 	
 	@inlinable
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> Part
+		in whole: Whole,
+		update f: @escaping (Part) throws -> Part
 	) rethrows -> Whole {
 		guard let part = extract(from: whole) else {
 			return whole
@@ -72,10 +72,10 @@ extension PrismOptic {
 	
 	@inlinable
 	public func trySet(
-		_ whole: inout Whole,
+		in whole: inout Whole,
 		to newValue: Part
 	) {
-		self.tryUpdate(&whole) { part in
+		self.tryUpdate(in: &whole) { part in
 			part = newValue
 		}
 	}
@@ -137,8 +137,8 @@ where Whole == O.Whole, Part == O.Part {
 	}
 
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		guard let part = self.optic?.extract(from: whole) else {
 			return whole
@@ -150,7 +150,7 @@ where Whole == O.Whole, Part == O.Part {
 	}
 
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newPart: NewPart
 	) -> NewWhole {
 		self.optic?.embed(newPart) ?? whole

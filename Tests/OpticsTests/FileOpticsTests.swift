@@ -79,7 +79,7 @@ class FileOpticsTests: XCTestCase {
 		
 		XCTAssertEqual(
 			try datesOptic.getAll(
-				try weekdayOptic.settingAll(targetUrl, to: .tuesday)
+				try weekdayOptic.settingAll(in: targetUrl, to: .tuesday)
 			),
 			[
 				Date(timeIntervalSinceReferenceDate: 702856800),

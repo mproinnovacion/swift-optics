@@ -24,11 +24,11 @@ public struct OnUpdateThrowingArraySetter<O: ThrowingArraySetterOptic>: Throwing
 	}
 
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) throws -> O.NewPart
 	) throws -> O.NewWhole {
 		self.onUpdate()
-		return try self.optic.updatingAll(whole, f)
+		return try self.optic.updatingAll(in: whole, update: f)
 	}
 }
 

@@ -1,5 +1,7 @@
 # Optional
 
+Targets zero or one value, allowing to update them one by one and retrieve all of them in an array. This is a traversal1 or affine traversal in the traditional literature.
+
 ## Protocol: OptionalOptic
 
 Protocol that represents a property that can be optionally read and modified. We might not be able to read it, and we also might not be able to modify it.

@@ -25,7 +25,7 @@ class FirstTests: XCTestCase {
 		
 		var local = company
 		
-		firstName.tryUpdate(&local) { $0 = $0.uppercased() }
+		firstName.tryUpdate(in: &local) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			firstName.tryGet(local),

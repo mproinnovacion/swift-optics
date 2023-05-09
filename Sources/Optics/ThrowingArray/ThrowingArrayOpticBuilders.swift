@@ -72,14 +72,14 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		guard let optic = self.optic else {
 			throw(ThrowingError.noData)
 		}
 		
-		return try optic.updatingAll(whole, f)
+		return try optic.updatingAll(in: whole, update: f)
 	}
 }
 
@@ -107,11 +107,11 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try lhs.updatingAll(whole) { lhsPart in
-			try rhs.updatingAll(lhsPart, f)
+		try lhs.updatingAll(in: whole) { lhsPart in
+			try rhs.updatingAll(in: lhsPart, update: f)
 		}
 	}
 }

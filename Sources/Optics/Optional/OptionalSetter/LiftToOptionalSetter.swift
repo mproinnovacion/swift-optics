@@ -13,14 +13,14 @@ public struct LiftSetterToOptional<O: SetterOptic>: OptionalSetterOptic {
 	}
 	
 	public func tryUpdating(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
-		self.optic.updating(whole, f)
+		self.optic.updating(in: whole, update: f)
 	}
 	
-	public func trySetting(_ whole: O.Whole, to newPart: O.NewPart) -> O.NewWhole {
-		self.optic.setting(whole, to: newPart)
+	public func trySetting(in whole: O.Whole, to newPart: O.NewPart) -> O.NewWhole {
+		self.optic.setting(in: whole, to: newPart)
 	}
 }
 

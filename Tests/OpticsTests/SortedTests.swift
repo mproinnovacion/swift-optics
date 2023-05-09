@@ -27,7 +27,7 @@ class SortedTests: XCTestCase {
 			]
 		)
 		
-		let modified = byAge.setting(company, to: [
+		let modified = byAge.setting(in: company, to: [
 			joe,
 			mike,
 			jessica,

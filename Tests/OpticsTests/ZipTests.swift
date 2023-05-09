@@ -22,7 +22,7 @@ class ZipTests: XCTestCase {
 			ageAndName.get(local) == (50, "Harvey")
 		)
 		
-		ageAndName.update(&local) {
+		ageAndName.update(in: &local) {
 			$0.0 += 1
 			$0.1 = $0.1.uppercased()
 		}

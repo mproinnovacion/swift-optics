@@ -27,7 +27,7 @@
 //	}
 //	
 //	public func trySet(
-//		_ whole: Whole,
+//		in whole: Whole,
 //		to newValue: NewPart
 //	) -> NewWhole {
 //		optics.trySet(whole, to: newValue)

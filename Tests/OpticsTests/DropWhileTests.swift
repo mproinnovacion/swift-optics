@@ -27,7 +27,7 @@ class DropWhileTests: XCTestCase {
 						person.age < 40
 					}
 					\Person.name
-				}.each().updatingAll(company) {
+				}.each().updatingAll(in: company) {
 					$0.uppercased()
 				}
 			),

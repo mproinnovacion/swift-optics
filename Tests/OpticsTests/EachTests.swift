@@ -17,7 +17,7 @@ class EachTests: XCTestCase {
 			}
 		}
 		
-		namesExceptFirst.updateAll(&uppercased, { $0 = $0.uppercased() })
+		namesExceptFirst.updateAll(in: &uppercased) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			namesExceptFirst.getAll(uppercased),
@@ -56,7 +56,7 @@ class EachTests: XCTestCase {
 			[ "one", "two", "three" ]
 		)
 		
-		optic.updateAll(&group, { $0 = $0.uppercased() })
+		optic.updateAll(in: &group) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			optic.getAll(group),

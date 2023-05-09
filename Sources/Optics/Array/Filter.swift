@@ -25,10 +25,10 @@ where O.NewPart == O.Part, O.NewWhole == O.Whole {
 	}
 
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updatingAll(whole) { part in
+		optic.updatingAll(in: whole) { part in
 			guard self.filter(part) else {
 				return part
 			}

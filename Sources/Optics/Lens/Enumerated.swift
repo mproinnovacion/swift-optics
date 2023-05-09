@@ -21,10 +21,10 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(whole, f)
+		lens.updating(in: whole, update: f)
 	}
 }
 
@@ -46,10 +46,10 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	}
 	
 	public func updating(
-		_ whole: L.Whole,
-		_ f: @escaping ([(Array.Index, Element)]) -> [(Array.Index, NewElement)]
+		in whole: L.Whole,
+		update f: @escaping ([(Array.Index, Element)]) -> [(Array.Index, NewElement)]
 	) -> L.NewWhole {
-		lens.updating(whole) { array in
+		lens.updating(in: whole) { array in
 			f(
 				array.enumerated().map { ($0.offset, $0.element) }
 			).map {$0.1 }

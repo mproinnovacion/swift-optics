@@ -39,10 +39,10 @@ public struct MapArray<O: ArrayOptic, MappedPart, MappedNewPart>: ArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updatingAll(whole) { oPart in
+		optic.updatingAll(in: whole) { oPart in
 			to(oPart, f(from(oPart)))
 		}
 	}

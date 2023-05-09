@@ -17,10 +17,10 @@ public struct ConcatSetters<Optics: ArraySetterOptic>: ArraySetterOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.optic.updatingAll(whole, f)
+		self.optic.updatingAll(in: whole, update: f)
 	}
 }
 
@@ -83,12 +83,12 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == RHS.NewPart, 
 	public typealias NewPart = LHS.NewPart
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		var result = whole
-		result = lhs.updatingAll(result, f)
-		return rhs.updatingAll(result, f)
+		result = lhs.updatingAll(in: result, update: f)
+		return rhs.updatingAll(in: result, update: f)
 	}
 }
 

@@ -39,10 +39,10 @@ public struct MapLens<O: LensOptic, MappedPart, MappedNewPart>: LensOptic {
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updating(whole) { oPart in
+		optic.updating(in: whole) { oPart in
 			to(oPart, f(from(oPart)))
 		}
 	}

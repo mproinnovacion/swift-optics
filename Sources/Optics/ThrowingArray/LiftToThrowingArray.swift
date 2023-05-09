@@ -20,10 +20,10 @@ where O.NewPart == O.Part {
 	
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try optic.updating(whole, f)
+		try optic.updating(in: whole, update: f)
 	}
 }
 
@@ -47,10 +47,10 @@ where O.NewPart == O.Part {
 
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		optic.updatingAll(whole) { part in
+		optic.updatingAll(in: whole) { part in
 			(try? f(part)) ?? part
 		}
 	}

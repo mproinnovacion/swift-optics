@@ -18,7 +18,7 @@ class RawRepresentableTests: XCTestCase {
 		)
 		
 		XCTAssertEqual(
-			Rep.rawValueOptic().tryUpdating(rep, { $0 + 1 }),
+			Rep.rawValueOptic().tryUpdating(in: rep) { $0 + 1 },
 			.two
 		)
 	}

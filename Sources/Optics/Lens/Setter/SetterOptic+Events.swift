@@ -24,11 +24,11 @@ public struct OnUpdateSetter<O: SetterOptic>: SetterOptic {
 	}
 
 	public func updating(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
 		self.onUpdate()
-		return self.optic.updating(whole, f)
+		return self.optic.updating(in: whole, update: f)
 	}
 }
 

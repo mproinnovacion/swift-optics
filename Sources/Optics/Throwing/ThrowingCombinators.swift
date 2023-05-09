@@ -20,16 +20,16 @@ public struct Throwing<O: ThrowingOptic>: ThrowingOptic {
 	}
 	
 	public func updating(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) throws -> O.NewPart
 	) throws -> O.NewWhole {
-		try optic.updating(whole, f)
+		try optic.updating(in: whole, update: f)
 	}
 	
 	public func setting(
-		_ whole: O.Whole,
+		in whole: O.Whole,
 		to newPart: O.NewPart
 	) throws -> O.NewWhole {
-		try optic.setting(whole, to: newPart)
+		try optic.setting(in: whole, to: newPart)
 	}
 }

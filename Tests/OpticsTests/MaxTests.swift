@@ -26,14 +26,14 @@ class MaxTests: XCTestCase {
 		
 		var local = company
 		
-		local = oldestName.tryUpdating(local) { $0.uppercased() }
+		local = oldestName.tryUpdating(in: local) { $0.uppercased() }
 		
 		XCTAssertEqual(
 			oldestName.tryGet(local),
 			"LOUIS"
 		)
 		
-		oldest.trySet(&local, to: mike)
+		oldest.trySet(in: &local, to: mike)
 		
 		XCTAssertEqual(
 			oldestName.tryGet(local),
@@ -62,7 +62,7 @@ class MaxTests: XCTestCase {
 		
 		XCTAssertEqual(
 			oldest.tryGet(
-				oldest.trySetting(empty, to: john)
+				oldest.trySetting(in: empty, to: john)
 			),
 			nil
 		)

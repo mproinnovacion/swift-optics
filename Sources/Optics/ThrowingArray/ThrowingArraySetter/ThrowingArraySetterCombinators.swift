@@ -16,9 +16,9 @@ public struct ThrowingArraySetter<O: ThrowingArraySetterOptic>: ThrowingArraySet
 	}
 	
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) throws -> O.NewPart
 	) throws -> O.NewWhole {
-		try setter.updatingAll(whole, f)
+		try setter.updatingAll(in: whole, update: f)
 	}
 }

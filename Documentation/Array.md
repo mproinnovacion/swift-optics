@@ -1,5 +1,7 @@
 # Array
 
+Targets many values, allowing to update them one by one and retrieve all of them in an array. This is a traversal in the traditional literature.
+
 ## Protocol: ArrayOptic
 
 Protocol that represents a property with many values that can be read into an array or updated one by one.

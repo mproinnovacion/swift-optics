@@ -68,31 +68,31 @@ class SetterFuncTests: XCTestCase {
 		}
 
 		
-		zeroOptic.update(&group) { bool in
+		zeroOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		oneOptic.update(&group) { bool in
+		oneOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		twoOptic.update(&group) { bool in
+		twoOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		threeOptic.update(&group) { bool in
+		threeOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		fourOptic.update(&group) { bool in
+		fourOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		fiveOptic.update(&group) { bool in
+		fiveOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		sixOptic.update(&group) { bool in
+		sixOptic.update(in: &group) { bool in
 			bool.toggle()
 		}
 		

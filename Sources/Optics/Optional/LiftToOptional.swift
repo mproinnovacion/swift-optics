@@ -17,17 +17,17 @@ public struct LiftLensToOptional<O: LensOptic>: OptionalOptic {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(whole, f)
+		lens.updating(in: whole, update: f)
 	}
 	
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdating(whole) { _ in
+		tryUpdating(in: whole) { _ in
 			newValue
 		}
 	}
@@ -52,8 +52,8 @@ public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 	
 	@inlinable
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		guard var value = optic.extract(from: whole) else {
 			return whole
@@ -66,7 +66,7 @@ public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 	
 	@inlinable
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
 		optic.embed(newValue)

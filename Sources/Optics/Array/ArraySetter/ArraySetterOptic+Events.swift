@@ -24,11 +24,11 @@ public struct OnUpdateArraySetter<O: ArraySetterOptic>: ArraySetterOptic {
 	}
 
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
 		self.onUpdate()
-		return self.optic.updatingAll(whole, f)
+		return self.optic.updatingAll(in: whole, update: f)
 	}
 }
 
