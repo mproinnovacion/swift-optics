@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MapThrowingArraySetter<O: ThrowingArraySetterOptic, MappedPart, MappedNewPart>: ThrowingArraySetterOptic {
+public struct MapThrowingSetter<O: ThrowingSetterOptic, MappedPart, MappedNewPart>: ThrowingSetterOptic {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = MappedPart
@@ -21,22 +21,22 @@ public struct MapThrowingArraySetter<O: ThrowingArraySetterOptic, MappedPart, Ma
 		self.to = to
 	}
 	
-	public func updatingAll(
+	public func updating(
 		in whole: Whole,
 		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.optic.updatingAll(in: whole) { part in
+		try self.optic.updating(in: whole) { part in
 			to(part, try f(from(part)))
 		}
 	}
 }
 
-extension ThrowingArraySetterOptic {
+extension ThrowingSetterOptic {
 	public func map<MappedPart, MappedNewPart>(
 		from: @escaping (Part) -> MappedPart,
 		to: @escaping (Part, MappedNewPart) -> NewPart
-	) -> MapThrowingArraySetter<Self, MappedPart, MappedNewPart> {
-		MapThrowingArraySetter(
+	) -> MapThrowingSetter<Self, MappedPart, MappedNewPart> {
+		MapThrowingSetter(
 			optic: self,
 			from: from,
 			to: to
@@ -46,8 +46,8 @@ extension ThrowingArraySetterOptic {
 	public func map<MappedPart, MappedNewPart>(
 		from: @escaping (Part) -> MappedPart,
 		to: @escaping (MappedNewPart) -> NewPart
-	) -> MapThrowingArraySetter<Self, MappedPart, MappedNewPart> {
-		MapThrowingArraySetter(
+	) -> MapThrowingSetter<Self, MappedPart, MappedNewPart> {
+		MapThrowingSetter(
 			optic: self,
 			from: from,
 			to: { _, newPart in
@@ -58,8 +58,8 @@ extension ThrowingArraySetterOptic {
 	
 	public func map<MappedPart>(
 		_ conversion: Conversion<Part, MappedPart>
-	) -> MapThrowingArraySetter<Self, MappedPart, MappedPart> where NewPart == Part {
-		MapThrowingArraySetter(
+	) -> MapThrowingSetter<Self, MappedPart, MappedPart> where NewPart == Part {
+		MapThrowingSetter(
 			optic: self,
 			from: conversion.to,
 			to: { _, newPart in
