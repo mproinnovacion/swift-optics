@@ -1,6 +1,6 @@
 import Foundation
 
-public struct First<L: LensOptic, Element>: OptionalOptic
+public struct FirstWhere<L: LensOptic, Element>: OptionalOptic
 where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 	public typealias Whole = L.Whole
 	public typealias NewWhole = L.NewWhole
@@ -8,16 +8,20 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 	public typealias NewPart = Element
 	
 	public let lens: L
+	public let filter: (Part) -> Bool
 	
 	@inlinable
 	public init(
-		@LensOpticBuilder with build: () -> L
+		@LensOpticBuilder with build: () -> L,
+		where filter: @escaping (Part) -> Bool
+
 	) {
 		self.lens = build()
+		self.filter = filter
 	}
 	
 	public func tryGet(_ whole: Whole) -> Part? {
-		lens.get(whole).first
+		lens.get(whole).first(where: self.filter)
 	}
 	
 	public func tryUpdating(
@@ -25,12 +29,15 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		lens.updating(in: whole) { elements in
-			guard elements.count > 0 else {
+			guard
+				elements.count > 0,
+				let index = elements.firstIndex(where: self.filter)
+			else {
 				return elements
 			}
-			
+						
 			var result = elements
-			result[0] = f(result[0])
+			result[index] = f(result[index])
 			return result
 		}
 	}
@@ -46,10 +53,14 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 }
 
 extension LensOptic {
-	public func first<Element>() -> First<Self, Element>
+	public func first<Element>(
+		where filter: @escaping (Element) -> Bool
+	) -> FirstWhere<Self, Element>
 	where Part == [Element], NewPart == Part, NewWhole == Whole {
-		First {
+		FirstWhere {
 			self
+		} where: { element in
+			filter(element)
 		}
 	}
 }

@@ -1,30 +1,30 @@
 import Foundation
 
-public struct First<L: LensOptic, Element>: OptionalOptic
+public struct FirstOptional<L: OptionalOptic, Element>: OptionalOptic
 where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 	public typealias Whole = L.Whole
 	public typealias NewWhole = L.NewWhole
 	public typealias Part = Element
 	public typealias NewPart = Element
 	
-	public let lens: L
+	public let optic: L
 	
 	@inlinable
 	public init(
-		@LensOpticBuilder with build: () -> L
+		@OptionalOpticBuilder with build: () -> L
 	) {
-		self.lens = build()
+		self.optic = build()
 	}
 	
 	public func tryGet(_ whole: Whole) -> Part? {
-		lens.get(whole).first
+		self.optic.tryGet(whole)?.first
 	}
 	
 	public func tryUpdating(
 		in whole: Whole,
 		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(in: whole) { elements in
+		optic.tryUpdating(in: whole) { elements in
 			guard elements.count > 0 else {
 				return elements
 			}
@@ -45,10 +45,10 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 	}
 }
 
-extension LensOptic {
-	public func first<Element>() -> First<Self, Element>
+extension OptionalOptic {
+	public func first<Element>() -> FirstOptional<Self, Element>
 	where Part == [Element], NewPart == Part, NewWhole == Whole {
-		First {
+		FirstOptional {
 			self
 		}
 	}
