@@ -37,3 +37,28 @@ public struct FoldMap<O: ArrayGetterOptic, Result>: GetterOptic {
 		self.optic.getAll(whole).foldMap(map, monoid)
 	}
 }
+
+extension ArrayGetterOptic {
+	public func foldMap<Result>(
+		_ monoid: Monoid<Result>,
+		map: @escaping (Part) -> Result
+	) -> FoldMap<Self, Result> {
+		FoldMap(monoid: monoid) { part in
+			map(part)
+		} with: {
+			self
+		}
+	}
+	
+	public func foldMap<Result>(
+		_ monoid: Monoid<Result>,
+		map: @escaping (Part) -> Result
+	) -> FoldMap<Self, Result>
+	where Result: Monoidal{
+		FoldMap { part in
+			map(part)
+		} with: {
+			self
+		}
+	}
+}

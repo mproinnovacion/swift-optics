@@ -3,9 +3,9 @@ import XCTest
 
 import Optics
 
-class FirstWhereTests: XCTestCase {
+class FirstOptionalTests: XCTestCase {
 	func testFirst() {
-		let people = Lens {
+		let people = Optionally {
 			\Company.employees
 		}
 		

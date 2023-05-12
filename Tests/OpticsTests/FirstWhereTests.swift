@@ -3,17 +3,17 @@ import XCTest
 
 import Optics
 
-class FirstWhereTests: XCTestCase {
+class FirstTests: XCTestCase {
 	func testFirst() {
 		let people = Lens {
 			\Company.employees
 		}
 		
-		let first = people.first()
+		let first = people.first(where: { $0.age > 50 })
 		
 		XCTAssertEqual(
 			first.tryGet(company),
-			mike
+			louis
 		)
 		
 		let firstName = Optionally {
@@ -27,7 +27,7 @@ class FirstWhereTests: XCTestCase {
 		
 		XCTAssertEqual(
 			firstName.tryGet(local),
-			"MIKE"
+			"LOUIS"
 		)
 	}
 }
