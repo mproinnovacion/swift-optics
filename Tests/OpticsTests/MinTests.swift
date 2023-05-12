@@ -26,14 +26,14 @@ class MinTests: XCTestCase {
 		
 		var local = company
 		
-		youngestName.tryUpdate(&local) { $0 = $0.uppercased() }
+		youngestName.tryUpdate(in: &local) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			youngestName.tryGet(local),
 			"MIKE"
 		)
 		
-		youngest.trySet(&local, to: louis)
+		youngest.trySet(in: &local, to: louis)
 		
 		XCTAssertEqual(
 			youngestName.tryGet(local),
@@ -62,7 +62,7 @@ class MinTests: XCTestCase {
 		
 		XCTAssertEqual(
 			youngest.tryGet(
-				youngest.trySetting(empty, to: john)
+				youngest.trySetting(in: empty, to: john)
 			),
 			nil
 		)

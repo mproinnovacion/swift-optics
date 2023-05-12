@@ -33,7 +33,7 @@ class TakeFirstTests: XCTestCase {
 		
 		people
 			.takeFirst()
-			.set(&updated, to: [ john ])
+			.set(in: &updated, to: [ john ])
 		
 		XCTAssertEqual(
 			updated.employees[0],

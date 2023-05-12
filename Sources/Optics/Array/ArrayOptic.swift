@@ -39,10 +39,10 @@ extension ArrayOptic where ArrayBody: ArrayOptic, ArrayBody.Whole == Whole, Arra
 	
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.body.updatingAll(whole, f)
+		self.body.updatingAll(in: whole, update: f)
 	}
 }
 
@@ -61,8 +61,8 @@ public struct ArrayDefaultOptic<Element, NewElement>: ArrayOptic {
 
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		whole.map(f)
 	}
@@ -81,8 +81,8 @@ public struct SetDefaultOptic<Element: Hashable, NewElement: Hashable>: ArrayOpt
 
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		Set(whole.map(f))
 	}
@@ -101,8 +101,8 @@ public struct DictionaryValuesOptic<Key: Hashable, Value, NewValue>: ArrayOptic 
 
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		whole.mapValues(f)
 	}
@@ -123,14 +123,14 @@ where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewP
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		guard let optic = self.optic else {
 			return whole
 		}
 		
-		return optic.updatingAll(whole, f)
+		return optic.updatingAll(in: whole, update: f)
 	}
 }
 
@@ -156,10 +156,10 @@ public struct ArrayProvidedWholeOptic<O: ArrayOptic>: ArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ void: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in void: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updatingAll(self.whole, f)
+		optic.updatingAll(in: self.whole, update: f)
 	}
 }
 
@@ -180,14 +180,14 @@ extension ArrayOptic where Whole == Void {
 	}
 	
 	public func updatingAll(
-		_ f: @escaping (Part) -> NewPart
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.updatingAll((), f)
+		self.updatingAll(in: (), update: f)
 	}
 	
 	public func settingAll(
 		to newValue: NewPart
 	) -> NewWhole {
-		self.settingAll((), to: newValue)
+		self.settingAll(in: (), to: newValue)
 	}
 }

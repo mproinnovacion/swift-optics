@@ -17,12 +17,12 @@ public protocol ThrowingOptic<Whole, Part, NewWhole, NewPart>: ThrowingGetterOpt
 	func get(_ whole: Whole) throws -> Part
 	
 	func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole
 	
 	func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to: NewPart
 	) throws -> NewWhole
 	
@@ -53,18 +53,18 @@ extension ThrowingOptic where Body: ThrowingOptic, Body.Whole == Whole, Body.Par
 	
 	@inlinable
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.body.updating(whole, f)
+		try self.body.updating(in: whole, update: f)
 	}
 	
 	@inlinable
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newPart: NewPart
 	) throws -> NewWhole {
-		try self.body.setting(whole, to: newPart)
+		try self.body.setting(in: whole, to: newPart)
 	}
 }
 
@@ -73,24 +73,24 @@ public typealias SimpleThrowingOptic<Whole, Part> = ThrowingOptic<Whole, Part, W
 extension ThrowingOptic {
 	@inlinable
 	public func update(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
+		in whole: inout Whole,
+		update f: @escaping (inout Part) throws -> Void
 	) throws
 	where Part == NewPart, Whole == NewWhole {
-		whole = try self.updating(whole, { part in
+		whole = try self.updating(in: whole) { part in
 			var copy = part
 			try f(&copy)
 			return copy
-		})
+		}
 	}
 	
 	@inlinable
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
+		in whole: Whole,
+		update f: @escaping (inout Part) throws -> Void
 	) throws -> Whole
 	where Part == NewPart, Whole == NewWhole {
-		try self.updating(whole) { part in
+		try self.updating(in: whole) { part in
 			var result = part
 			try f(&result)
 			return result
@@ -99,30 +99,30 @@ extension ThrowingOptic {
 	
 	@inlinable
 	public func update(
-		_ whole: inout Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: inout Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws
 	where Part == NewPart, Whole == NewWhole {
-		try self.update(&whole) { part in
+		try self.update(in: &whole) { part in
 			part = try f(part)
 		}
 	}
 	
 	@inlinable
 	public func set(
-		_ whole: inout Whole,
+		in whole: inout Whole,
 		to newPart: NewPart
 	) throws where Part == NewPart, Whole == NewWhole {
-		whole = try self.setting(whole, to: newPart)
+		whole = try self.setting(in: whole, to: newPart)
 	}
 	
 	@inlinable
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> Whole where Part == NewPart, Whole == NewWhole {
 		var copy = whole
-		try self.set(&copy, to: newValue)
+		try self.set(in: &copy, to: newValue)
 		return copy
 	}
 }
@@ -149,15 +149,15 @@ public struct ThrowingRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingOptic {
 
 	@inlinable
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		try _updating(whole, f)
 	}
 	
 	@inlinable
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
 		try _setting(whole, newValue)
@@ -204,10 +204,10 @@ public struct ThrowingProvidedWholeOptic<O: ThrowingOptic>: ThrowingOptic {
 	}
 	
 	public func updating(
-		_ void: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in void: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try optic.updating(self.whole, f)
+		try optic.updating(in: self.whole, update: f)
 	}
 }
 
@@ -228,14 +228,14 @@ extension ThrowingOptic where Whole == Void {
 	}
 	
 	public func updating(
-		_ f: @escaping (Part) throws -> NewPart
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.updating((), f)
+		try self.updating(in: (), update: f)
 	}
 
 	public func setting(
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try self.setting((), to: newValue)
+		try self.setting(in: (), to: newValue)
 	}
 }

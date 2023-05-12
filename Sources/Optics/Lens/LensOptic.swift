@@ -32,10 +32,10 @@ extension LensOptic where LensBody: LensOptic, LensBody.Whole == Whole, LensBody
 	}
 	@inlinable
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.body.updating(whole, f)
+		self.body.updating(in: whole, update: f)
 	}
 }
 
@@ -57,8 +57,8 @@ extension WritableKeyPath: LensOptic {
 	
 	@inlinable
 	public func updating(
-		_ whole: Root,
-		_ f: @escaping (Value) -> Value
+		in whole: Root,
+		update f: @escaping (Value) -> Value
 	) -> Root {
 		var result = whole
 		result[keyPath: self] = f(result[keyPath: self])
@@ -88,10 +88,10 @@ public struct LensProvidedWholeOptic<O: LensOptic>: LensOptic {
 	}
 	
 	public func updating(
-		_ void: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in void: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updating(self.whole, f)
+		optic.updating(in: self.whole, update: f)
 	}
 }
 
@@ -112,14 +112,14 @@ extension LensOptic where Whole == Void {
 	}
 	
 	public func updating(
-		_ f: @escaping (Part) -> NewPart
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.updating((), f)
+		self.updating(in: (), update: f)
 	}
 	
 	public func setting(
 		to newValue: NewPart
 	) -> NewWhole {
-		self.setting((), to: newValue)
+		self.setting(in: (), to: newValue)
 	}
 }

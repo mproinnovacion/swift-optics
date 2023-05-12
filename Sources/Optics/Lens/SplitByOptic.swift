@@ -21,8 +21,8 @@ public struct SplitByOptic: LensOptic {
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		let components = whole.components(separatedBy: separator)
 		return String(

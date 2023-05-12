@@ -16,13 +16,13 @@ public struct ThrowingSetter<O: ThrowingSetterOptic>: ThrowingSetterOptic {
 	}
 	
 	public func updating(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) throws -> O.NewPart
 	) throws -> O.NewWhole {
-		try setter.updating(whole, f)
+		try setter.updating(in: whole, update: f)
 	}
 	
-	public func setting(_ whole: O.Whole, to newPart: O.NewPart) throws -> O.NewWhole {
-		try setter.setting(whole, to: newPart)
+	public func setting(in whole: O.Whole, to newPart: O.NewPart) throws -> O.NewWhole {
+		try setter.setting(in: whole, to: newPart)
 	}
 }

@@ -48,17 +48,17 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic?.tryUpdating(whole, f) ?? whole
+		optic?.tryUpdating(in: whole, update: f) ?? whole
 	}
 	
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		optic?.trySetting(whole, to: newValue) ?? whole
+		optic?.trySetting(in: whole, to: newValue) ?? whole
 	}
 }
 
@@ -82,20 +82,20 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lhs.updating(whole) { lhsPart in
-			rhs.tryUpdating(lhsPart, f)
+		lhs.updating(in: whole) { lhsPart in
+			rhs.tryUpdating(in: lhsPart, update: f)
 		}
 	}
 	
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		tryUpdating(whole) { _ in
-			newValue
+		lhs.updating(in: whole) { lhsPart in
+			rhs.trySetting(in: lhsPart, to: newValue)
 		}
 	}
 }
@@ -120,20 +120,20 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lhs.tryUpdating(whole) { lhsPart in
-			rhs.tryUpdating(lhsPart, f)
+		lhs.tryUpdating(in: whole) { lhsPart in
+			rhs.tryUpdating(in: lhsPart, update: f)
 		}
 	}
 	
 	public func trySetting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) -> NewWhole {
-		lhs.tryUpdating(whole) { part in
-			rhs.trySetting(part, to: newValue)
+		lhs.tryUpdating(in: whole) { part in
+			rhs.trySetting(in: part, to: newValue)
 		}
 	}
 }

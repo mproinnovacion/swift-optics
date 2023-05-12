@@ -22,10 +22,10 @@ where L.Part == [Element], L.NewPart == [NewElement] {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updating(whole) { parts in
+		optic.updating(in: whole) { parts in
 			parts.map(f)
 		}
 	}

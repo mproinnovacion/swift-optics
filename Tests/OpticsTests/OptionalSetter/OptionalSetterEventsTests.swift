@@ -33,12 +33,12 @@ class OptionalSetterEventsTests: XCTestCase {
 		let userNoAddress = User()
 		let userWithAddress = User(address: .init(number: 7))
 		
-		_ = setter.tryUpdating(userNoAddress) { $0 + 1 }
+		_ = setter.tryUpdating(in: userNoAddress) { $0 + 1 }
 		
 		XCTAssertEqual(userUpdated, true)
 		XCTAssertEqual(addressUpdated, false)
 		
-		_ = setter.tryUpdating(userWithAddress) { $0 + 1 }
+		_ = setter.tryUpdating(in: userWithAddress) { $0 + 1 }
 		
 		XCTAssertEqual(userUpdated, true)
 		XCTAssertEqual(addressUpdated, true)

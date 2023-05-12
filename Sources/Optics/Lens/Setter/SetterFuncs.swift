@@ -9,8 +9,8 @@ public struct SetterFunc0<R, NewPart>: SetterOptic {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{
 			f(whole())
@@ -27,8 +27,8 @@ public struct SetterFunc1<Input, R, NewPart>: SetterOptic {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{ input in
 			f(whole(input))
@@ -45,8 +45,8 @@ public struct SetterFunc2<Input0, Input1, R, NewPart>: SetterOptic {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{ input0, input1 in
 			f(whole(input0, input1))
@@ -63,8 +63,8 @@ public struct SetterFunc3<Input0, Input1, Input2, R, NewPart>: SetterOptic {
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{ input0, input1, input2 in
 			f(whole(input0, input1, input2))
@@ -81,8 +81,8 @@ public struct SetterFunc4<Input0, Input1, Input2, Input3, R, NewPart>: SetterOpt
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{ input0, input1, input2, input3 in
 			f(whole(input0, input1, input2, input3))
@@ -99,8 +99,8 @@ public struct SetterFunc5<Input0, Input1, Input2, Input3, Input4, R, NewPart>: S
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{ input0, input1, input2, input3, input4 in
 			f(whole(input0, input1, input2, input3, input4))
@@ -117,8 +117,8 @@ public struct SetterFunc6<Input0, Input1, Input2, Input3, Input4, Input5, R, New
 	}
 	
 	public func updating(
-		_ whole: @escaping Whole,
-		_ f: @escaping (R) -> NewPart
+		in whole: @escaping Whole,
+		update f: @escaping (R) -> NewPart
 	) -> NewWhole {
 		{ input0, input1, input2, input3, input4, input5 in
 			f(whole(input0, input1, input2, input3, input4, input5))

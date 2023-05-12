@@ -99,4 +99,17 @@ class FoldTests: XCTestCase {
 			true
 		)
 	}
+	
+	func testFunc() {
+		let optic = Many {
+			\Company.employees
+			[Person].optic()
+			\Person.age
+		}.fold(Monoid.max)
+		
+		XCTAssertEqual(
+			optic.tryGet(company),
+			65
+		)
+	}
 }

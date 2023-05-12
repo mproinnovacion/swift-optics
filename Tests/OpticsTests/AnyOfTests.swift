@@ -31,21 +31,21 @@ class AnyOfTests: XCTestCase {
 		
 		XCTAssertEqual(
 			optic.tryGet(
-				optic.trySetting(local, to: 12)
+				optic.trySetting(in: local, to: 12)
 			),
 			12
 		)
 		
 		XCTAssertEqual(
 			optic.tryGet(
-				optic.trySetting(remote, to: 20)
+				optic.trySetting(in: remote, to: 20)
 			),
 			20
 		)
 		
 		XCTAssertEqual(
 			optic.tryGet(
-				optic.tryUpdating(remote) { $0 + 1 }
+				optic.tryUpdating(in: remote) { $0 + 1 }
 			),
 			15
 		)
@@ -76,14 +76,14 @@ class AnyOfTests: XCTestCase {
 		
 		XCTAssertEqual(
 			optic.tryGet(
-				optic.trySetting(local, to: 12)
+				optic.trySetting(in: local, to: 12)
 			),
 			12
 		)
 		
 		XCTAssertEqual(
-			optic.trySetting(remote, to: 20),
-			State<Int>.loadedLocal(20)
+			optic.trySetting(in: remote, to: 20),
+			remote
 		)
 	}
 }

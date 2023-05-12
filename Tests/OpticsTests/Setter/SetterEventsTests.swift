@@ -19,7 +19,7 @@ class SetterEventsTests: XCTestCase {
 		
 		let user = User(name: "john")
 		
-		_ = setter.updating(user) { $0.uppercased() }
+		_ = setter.updating(in: user) { $0.uppercased() }
 		
 		XCTAssert(updated)
 	}

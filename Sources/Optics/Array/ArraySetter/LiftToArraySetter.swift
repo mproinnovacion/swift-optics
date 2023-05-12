@@ -13,10 +13,10 @@ public struct LiftSetterToArray<O: SetterOptic>: ArraySetterOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
-		self.optic.updating(whole, f)
+		self.optic.updating(in: whole, update: f)
 	}
 }
 
@@ -33,9 +33,9 @@ public struct LiftOptionalSetterToArray<O: OptionalSetterOptic>: ArraySetterOpti
 	}
 	
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
-		self.optic.tryUpdating(whole, f)
+		self.optic.tryUpdating(in: whole, update: f)
 	}
 }

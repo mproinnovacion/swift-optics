@@ -7,14 +7,17 @@ public protocol ThrowingArraySetterOptic<Whole, Part, NewWhole, NewPart> {
 	associatedtype NewPart
 	
 	func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole
 }
 
 extension ThrowingArraySetterOptic {
-	public func settingAll(_ whole: Whole, to newPart: NewPart) throws -> NewWhole {
-		try self.updatingAll(whole) { _ in
+	public func settingAll(
+		in whole: Whole,
+		to newPart: NewPart
+	) throws -> NewWhole {
+		try self.updatingAll(in: whole) { _ in
 			newPart
 		}
 	}
@@ -24,10 +27,10 @@ public typealias SimpleThrowingArraySetterOptic<Whole, Part> = ThrowingArraySett
 extension ThrowingArraySetterOptic where NewWhole == Whole {
 	@inlinable
 	public func setAll(
-		_ whole: inout Whole,
+		in whole: inout Whole,
 		to newPart: NewPart
 	) throws {
-		whole = try self.updatingAll(whole) { _ in
+		whole = try self.updatingAll(in: whole) { _ in
 			newPart
 		}
 	}
@@ -36,24 +39,24 @@ extension ThrowingArraySetterOptic where NewWhole == Whole {
 extension ThrowingArraySetterOptic {
 	@inlinable
 	public func updateAll(
-		_ whole: inout Whole,
-		_ f: @escaping (inout Part) throws -> Void
+		in whole: inout Whole,
+		update f: @escaping (inout Part) throws -> Void
 	) throws -> Void
 	where Part == NewPart, Whole == NewWhole {
-		whole = try self.updatingAll(whole, { part in
+		whole = try self.updatingAll(in: whole) { part in
 			var copy = part
 			try f(&copy)
 			return copy
-		})
+		}
 	}
 	
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (inout Part) throws -> Void
+		in whole: Whole,
+		update f: @escaping (inout Part) throws -> Void
 	) throws -> Whole
 	where Part == NewPart, Whole == NewWhole {
-		try self.updatingAll(whole) { part in
+		try self.updatingAll(in: whole) { part in
 			var result = part
 			try f(&result)
 			return result
@@ -62,31 +65,31 @@ extension ThrowingArraySetterOptic {
 	
 	@inlinable
 	public func updateAll(
-		_ whole: inout Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: inout Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> Void
 	where Part == NewPart, Whole == NewWhole {
-		try self.updateAll(&whole) { part in
+		try self.updateAll(in: &whole) { part in
 			part = try f(part)
 		}
 	}
 	
 	@inlinable
 	public func settingAll(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> Whole where Part == NewPart, Whole == NewWhole {
 		var copy = whole
-		try self.setAll(&copy, to: newValue)
+		try self.setAll(in: &copy, to: newValue)
 		return copy
 	}
 	
 	@inlinable
 	public func updater(
-		_ f: @escaping (Part) throws -> NewPart
+		update f: @escaping (Part) throws -> NewPart
 	) -> (Whole) throws -> NewWhole {
 		{ whole in
-			try self.updatingAll(whole, f)
+			try self.updatingAll(in: whole, update: f)
 		}
 	}
 }
@@ -109,10 +112,10 @@ public struct ThrowingArraySetterProvidedWholeOptic<O: ThrowingArraySetterOptic>
 	}
 
 	public func updatingAll(
-		_ void: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in void: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try optic.updatingAll(self.whole, f)
+		try optic.updatingAll(in: self.whole, update: f)
 	}
 }
 
@@ -129,14 +132,14 @@ extension ThrowingArraySetterOptic {
 
 extension ThrowingArraySetterOptic where Whole == Void {
 	public func updatingAll(
-		_ f: @escaping (Part) throws -> NewPart
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.updatingAll((), f)
+		try self.updatingAll(in: (), update: f)
 	}
 
 	public func settingAll(
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try self.settingAll((), to: newValue)
+		try self.settingAll(in: (), to: newValue)
 	}
 }

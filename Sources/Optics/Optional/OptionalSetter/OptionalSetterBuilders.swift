@@ -210,11 +210,11 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	public typealias NewPart = RHS.NewPart
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lhs.tryUpdating(whole) { lhsPart in
-			rhs.tryUpdating(lhsPart, f)
+		lhs.tryUpdating(in: whole) { lhsPart in
+			rhs.tryUpdating(in: lhsPart, update: f)
 		}
 	}
 }

@@ -30,10 +30,10 @@ where L.Part == [SortPropertyOptic.Whole], SortPropertyOptic.Part: Comparable, L
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(whole) { (parts: Part) -> NewPart in
+		lens.updating(in: whole) { (parts: Part) -> NewPart in
 			let sortedIndexed = parts.enumerated().sorted {
 				self.by.get($0.1) < self.by.get($1.1)
 			}

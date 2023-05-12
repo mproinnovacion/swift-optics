@@ -17,10 +17,10 @@ public struct LiftLensToArray<O: LensOptic>: ArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updating(whole, f)
+		optic.updating(in: whole, update: f)
 	}
 }
 
@@ -41,10 +41,10 @@ public struct LiftPrismToArray<O: PrismOptic>: ArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.optic.updatingAll(whole, f)
+		self.optic.updatingAll(in: whole, update: f)
 	}
 }
 
@@ -61,9 +61,9 @@ public struct LiftOptionalToArray<O: OptionalOptic>: ArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.tryUpdating(whole, f)
+		optic.tryUpdating(in: whole, update: f)
 	}
 }

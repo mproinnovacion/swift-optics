@@ -20,7 +20,7 @@ class MapLensTests: XCTestCase {
 		
 		XCTAssertEqual(
 			optic.setting(
-				("hello", 7),
+				in: ("hello", 7),
 				to: 3
 			).0,
 			"hel"

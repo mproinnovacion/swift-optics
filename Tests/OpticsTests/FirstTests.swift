@@ -3,15 +3,13 @@ import XCTest
 
 import Optics
 
-class FirstTests: XCTestCase {
+class FirstWhereTests: XCTestCase {
 	func testFirst() {
 		let people = Lens {
 			\Company.employees
 		}
 		
-		let first = First {
-			people
-		}
+		let first = people.first()
 		
 		XCTAssertEqual(
 			first.tryGet(company),
@@ -25,7 +23,7 @@ class FirstTests: XCTestCase {
 		
 		var local = company
 		
-		firstName.tryUpdate(&local) { $0 = $0.uppercased() }
+		firstName.tryUpdate(in: &local) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			firstName.tryGet(local),

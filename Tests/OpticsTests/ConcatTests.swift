@@ -30,7 +30,7 @@ class ConcatTests: XCTestCase {
 		
 		var local = company
 		
-		names.updateAll(&local, { $0 = $0.uppercased() })
+		names.updateAll(in: &local) { $0 = $0.uppercased() }
 		
 		includeFreelance = true
 		

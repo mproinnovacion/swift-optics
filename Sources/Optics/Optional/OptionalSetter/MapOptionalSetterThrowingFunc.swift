@@ -14,10 +14,10 @@ where S.Part == (() throws -> Output), S.NewPart == (() throws -> NewOutput) {
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{
 				let output = try part()
 				return f(output)
@@ -40,10 +40,10 @@ where S.Part == ((Input) throws -> Output), S.NewPart == ((Input) throws -> NewO
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{ input in
 				let output = try part(input)
 				return f(output)
@@ -67,10 +67,10 @@ where S.Part == ((Input0, Input1) throws -> Output),
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{ input0, input1 in
 				let output = try part(input0, input1)
 				return f(output)
@@ -94,10 +94,10 @@ where S.Part == ((Input0, Input1, Input2) throws -> Output),
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{ input0, input1, input2 in
 				let output = try part(input0, input1, input2)
 				return f(output)
@@ -121,10 +121,10 @@ where S.Part == ((Input0, Input1, Input2, Input3) throws -> Output),
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{ input0, input1, input2, input3 in
 				let output = try part(input0, input1, input2, input3)
 				return f(output)
@@ -148,10 +148,10 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4) throws -> Output),
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{ input0, input1, input2, input3, input4 in
 				let output = try part(input0, input1, input2, input3, input4)
 				return f(output)
@@ -175,10 +175,10 @@ where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) throws -> Outp
 	}
 	
 	public func tryUpdating(
-		_ whole: S.Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: S.Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> S.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			{ input0, input1, input2, input3, input4, input5 in
 				let output = try part(input0, input1, input2, input3, input4, input5)
 				return f(output)

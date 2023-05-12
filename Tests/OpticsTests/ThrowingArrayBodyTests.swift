@@ -35,14 +35,14 @@ class ThrowingArrayBodyTests: XCTestCase {
 		
 		XCTAssertEqual(
 			try ItemStringsOptic().getAll(
-				try ItemStringsOptic().updatingAll(item, { $0 + "!" })
+				try ItemStringsOptic().updatingAll(in: item) { $0 + "!" }
 			),
 			["hello!", "world!", "bye!", "earth!"]
 		)
 		
 		XCTAssertEqual(
 			try ItemStringsOptic().getAll(
-				try ItemStringsOptic().settingAll(item, to: "fix")
+				try ItemStringsOptic().settingAll(in: item, to: "fix")
 			),
 			["fix", "fix", "fix", "fix"]
 		)
@@ -65,7 +65,7 @@ class ThrowingArrayBodyTests: XCTestCase {
 		
 		XCTAssertEqual(
 			try optic.getAll(
-				try optic.settingAll(item, to: "fix")
+				try optic.settingAll(in: item, to: "fix")
 			),
 			["fix", "fix", "fix", "fix"]
 		)

@@ -20,10 +20,10 @@ public struct Zip<L: LensOptic>: LensOptic {
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updating(whole, f)
+		lens.updating(in: whole, update: f)
 	}
 }
 
@@ -64,17 +64,17 @@ where LHS.Whole == RHS.Whole, LHS.NewWhole == RHS.NewWhole, LHS.NewWhole == LHS.
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		let lhsPart = lhs.get(whole)
 		let rhsPart = rhs.get(whole)
 		
-		let updated = lhs.updating(whole) { lhsPart in
+		let updated = lhs.updating(in: whole) { lhsPart in
 			f((lhsPart, rhsPart)).0
 		}
 				
-		return rhs.updating(updated) { rhsPart in
+		return rhs.updating(in: updated) { rhsPart in
 			f((lhsPart, rhsPart)).1
 		}
 	}
@@ -100,22 +100,22 @@ where O0.Whole == O1.Whole, O0.NewWhole == O1.NewWhole, O0.NewWhole == O0.Whole,
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		let o0Part = o0.get(whole)
 		let o1Part = o1.get(whole)
 		let o2Part = o2.get(whole)
 		
-		var updated = o0.updating(whole) { o0Part in
+		var updated = o0.updating(in: whole) { o0Part in
 			f((o0Part, o1Part, o2Part)).0
 		}
 				
-		updated = o1.updating(updated) { o1Part in
+		updated = o1.updating(in: updated) { o1Part in
 			f((o0Part, o1Part, o2Part)).1
 		}
 		
-		updated = o2.updating(updated) { o2Part in
+		updated = o2.updating(in: updated) { o2Part in
 			f((o0Part, o1Part, o2Part)).2
 		}
 		

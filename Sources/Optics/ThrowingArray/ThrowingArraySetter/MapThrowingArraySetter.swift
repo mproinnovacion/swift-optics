@@ -1,208 +1,70 @@
 import Foundation
 
-public struct MapThrowingArraySetter0<S: ThrowingArraySetterOptic, Output>: ThrowingArraySetterOptic
-where S.Part == (() -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
+public struct MapThrowingArraySetter<O: ThrowingArraySetterOptic, MappedPart, MappedNewPart>: ThrowingArraySetterOptic {
+	public typealias Whole = O.Whole
+	public typealias NewWhole = O.NewWhole
+	public typealias Part = MappedPart
+	public typealias NewPart = MappedNewPart
 	
-	let optic: S
-	
-	public init(optic: S) {
-		self.optic = optic
-	}
-	
-	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output
-	) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{
-				let output = part()
-				return (try? f(output)) ?? output
-			}
-		}
-	}
-}
+	public let optic: O
+	@usableFromInline let from: (O.Part) -> MappedPart
+	@usableFromInline let to: (O.Part, MappedNewPart) -> O.NewPart
 
-public struct MapThrowingArraySetter1<S: ThrowingArraySetterOptic, Input, Output>: ThrowingArraySetterOptic
-where S.Part == ((Input) -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
-	
-	let optic: S
-	
-	public init(optic: S) {
-		self.optic = optic
-	}
-	
-	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output
-	) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{ input in
-				let output = part(input)
-				return (try? f(output)) ?? output
-			}
-		}
-	}
-}
+	public init(
+		optic: O,
+		from: @escaping (O.Part) -> MappedPart,
+		to: @escaping (O.Part, MappedNewPart) -> O.NewPart
 
-public struct MapThrowingArraySetter2<S: ThrowingArraySetterOptic, Input0, Input1, Output>: ThrowingArraySetterOptic
-where S.Part == ((Input0, Input1) -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
-	
-	let optic: S
-	
-	public init(optic: S) {
+	) {
 		self.optic = optic
+		self.from = from
+		self.to = to
 	}
 	
 	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{ input0, input1 in
-				let output = part(input0, input1)
-				return (try? f(output)) ?? output
-			}
-		}
-	}
-}
-
-public struct MapThrowingArraySetter3<S: ThrowingArraySetterOptic, Input0, Input1, Input2, Output>: ThrowingArraySetterOptic
-where S.Part == ((Input0, Input1, Input2) -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
-	
-	let optic: S
-	
-	public init(optic: S) {
-		self.optic = optic
-	}
-	
-	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{ input0, input1, input2 in
-				let output = part(input0, input1, input2)
-				return (try? f(output)) ?? output
-			}
-		}
-	}
-}
-
-public struct MapThrowingArraySetter4<S: ThrowingArraySetterOptic, Input0, Input1, Input2, Input3, Output>: ThrowingArraySetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3) -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
-	
-	let optic: S
-	
-	public init(optic: S) {
-		self.optic = optic
-	}
-	
-	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{ input0, input1, input2, input3 in
-				let output = part(input0, input1, input2, input3)
-				return (try? f(output)) ?? output
-			}
-		}
-	}
-}
-
-public struct MapThrowingArraySetter5<S: ThrowingArraySetterOptic, Input0, Input1, Input2, Input3, Input4, Output>: ThrowingArraySetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3, Input4) -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
-	
-	let optic: S
-	
-	public init(optic: S) {
-		self.optic = optic
-	}
-	
-	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{ input0, input1, input2, input3, input4 in
-				let output = part(input0, input1, input2, input3, input4)
-				return (try? f(output)) ?? output
-			}
-		}
-	}
-}
-
-public struct MapThrowingArraySetter6<S: ThrowingArraySetterOptic, Input0, Input1, Input2, Input3, Input4, Input5, Output>: ThrowingArraySetterOptic
-where S.Part == ((Input0, Input1, Input2, Input3, Input4, Input5) -> Output), S.NewPart == S.Part {
-	public typealias Whole = S.Whole
-	public typealias NewWhole = S.NewWhole
-	public typealias Part = Output
-	public typealias NewPart = Output
-	
-	let optic: S
-	
-	public init(optic: S) {
-		self.optic = optic
-	}
-	
-	public func updatingAll(
-		_ whole: S.Whole,
-		_ f: @escaping (Output) throws -> Output) throws -> S.NewWhole {
-		try self.optic.updatingAll(whole) { part in
-			{ input0, input1, input2, input3, input4, input5 in
-				let output = part(input0, input1, input2, input3, input4, input5)
-				return (try? f(output)) ?? output
-			}
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
+	) throws -> NewWhole {
+		try self.optic.updatingAll(in: whole) { part in
+			to(part, try f(from(part)))
 		}
 	}
 }
 
 extension ThrowingArraySetterOptic {
-	public func map<Output>() -> MapThrowingArraySetter0<Self, Output> {
-		.init(optic: self)
+	public func map<MappedPart, MappedNewPart>(
+		from: @escaping (Part) -> MappedPart,
+		to: @escaping (Part, MappedNewPart) -> NewPart
+	) -> MapThrowingArraySetter<Self, MappedPart, MappedNewPart> {
+		MapThrowingArraySetter(
+			optic: self,
+			from: from,
+			to: to
+		)
 	}
 	
-	public func map<Input, Output>() -> MapThrowingArraySetter1<Self, Input, Output> {
-		.init(optic: self)
+	public func map<MappedPart, MappedNewPart>(
+		from: @escaping (Part) -> MappedPart,
+		to: @escaping (MappedNewPart) -> NewPart
+	) -> MapThrowingArraySetter<Self, MappedPart, MappedNewPart> {
+		MapThrowingArraySetter(
+			optic: self,
+			from: from,
+			to: { _, newPart in
+				to(newPart)
+			}
+		)
 	}
 	
-	public func map<Input0, Input1, Output>() -> MapThrowingArraySetter2<Self, Input0, Input1, Output> {
-		.init(optic: self)
-	}
-	
-	public func map<Input0, Input1, Input2, Output>() -> MapThrowingArraySetter3<Self, Input0, Input1, Input2, Output> {
-		.init(optic: self)
-	}
-	
-	public func map<Input0, Input1, Input2, Input3, Output>() -> MapThrowingArraySetter4<Self, Input0, Input1, Input2, Input3, Output> {
-		.init(optic: self)
-	}
-	
-	public func map<Input0, Input1, Input2, Input3, Input4, Output>() -> MapThrowingArraySetter5<Self, Input0, Input1, Input2, Input3, Input4, Output> {
-		.init(optic: self)
-	}
-	
-	public func map<Input0, Input1, Input2, Input3, Input4, Input5, Output>() -> MapThrowingArraySetter6<Self, Input0, Input1, Input2, Input3, Input4, Input5, Output> {
-		.init(optic: self)
+	public func map<MappedPart>(
+		_ conversion: Conversion<Part, MappedPart>
+	) -> MapThrowingArraySetter<Self, MappedPart, MappedPart> where NewPart == Part {
+		MapThrowingArraySetter(
+			optic: self,
+			from: conversion.to,
+			to: { _, newPart in
+				conversion.from(newPart)
+			}
+		)
 	}
 }

@@ -24,11 +24,11 @@ public struct OnUpdateOptionalSetter<O: OptionalSetterOptic>: OptionalSetterOpti
 	}
 
 	public func tryUpdating(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
 		self.onUpdate()
-		return self.optic.tryUpdating(whole, f)
+		return self.optic.tryUpdating(in: whole, update: f)
 	}
 }
 

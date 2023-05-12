@@ -30,11 +30,11 @@ class FilterTests: XCTestCase {
 		)
 
 		var local = company
-		local = even.updatingAll(local, { person in
+		local = even.updatingAll(in: local) { person in
 			var result = person
 			result.name = result.name.uppercased()
 			return result
-		})
+		}
 
 		let evenNames = Many {
 			even
@@ -43,9 +43,9 @@ class FilterTests: XCTestCase {
 
 		XCTAssertEqual(
 			evenNames.getAll(
-				evenNames.updatingAll(company, { name in
+				evenNames.updatingAll(in: company) { name in
 					name = name.uppercased()
-				})
+				}
 			),
 			[ "JOHN", "MIKE" ]
 		)
@@ -62,11 +62,11 @@ class FilterTests: XCTestCase {
 		)
 
 		var local = company
-		local = even.updatingAll(local, { person in
+		local = even.updatingAll(in: local) { person in
 			var result = person
 			result.name = result.name.uppercased()
 			return result
-		})
+		}
 
 		let evenNames = Many {
 			even
@@ -75,9 +75,9 @@ class FilterTests: XCTestCase {
 
 		XCTAssertEqual(
 			evenNames.getAll(
-				evenNames.updatingAll(company, { name in
+				evenNames.updatingAll(in: company) { name in
 					name = name.uppercased()
-				})
+				}
 			),
 			[ "JOHN", "MIKE" ]
 		)
@@ -103,7 +103,7 @@ class FilterTests: XCTestCase {
 			[ "hello" ]
 		)
 
-		even.updateAll(&group) { $0 = $0.uppercased() }
+		even.updateAll(in: &group) { $0 = $0.uppercased() }
 		
 		XCTAssertEqual(
 			group.strings,

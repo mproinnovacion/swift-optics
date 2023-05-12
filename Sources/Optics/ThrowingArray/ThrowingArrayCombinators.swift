@@ -20,9 +20,9 @@ public struct ManyThrowing<O: ThrowingArrayOptic>: ThrowingArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) throws -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) throws -> O.NewPart
 	) throws -> O.NewWhole {
-		try optic.updatingAll(whole, f)
+		try optic.updatingAll(in: whole, update: f)
 	}
 }

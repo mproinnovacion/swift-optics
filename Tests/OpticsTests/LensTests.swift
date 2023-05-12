@@ -16,7 +16,7 @@ class LensTests: XCTestCase {
 			50
 		)
 
-		ceoAge.update(&local, { $0 += 1 })
+		ceoAge.update(in: &local) { $0 += 1 }
 
 		XCTAssertEqual(
 			ceoAge.get(local),
@@ -25,14 +25,14 @@ class LensTests: XCTestCase {
 
 		XCTAssertEqual(
 			ceoAge.get(
-				ceoAge.updating(local, { $0 += 1 })
+				ceoAge.updating(in: local) { $0 += 1 }
 			),
 			52
 		)
 
 		XCTAssertEqual(
 			ceoAge.get(
-				ceoAge.setting(local, to: 22)
+				ceoAge.setting(in: local, to: 22)
 			),
 			22
 		)
@@ -60,7 +60,7 @@ class LensTests: XCTestCase {
 
 		var local = company
 
-		names.updateAll(&local, { $0 = $0.uppercased() })
+		names.updateAll(in: &local) { $0 = $0.uppercased() }
 
 		XCTAssertEqual(
 			names.getAll(local),

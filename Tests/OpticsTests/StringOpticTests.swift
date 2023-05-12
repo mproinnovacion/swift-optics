@@ -17,7 +17,7 @@ class StringOpticTests: XCTestCase {
 		)
 			
 		XCTAssertEqual(
-			optic.updating(value) {
+			optic.updating(in: value) {
 				$0 + [ "I", "am", "Groot!" ]
 			},
 			"hello world! I am Groot!"
@@ -38,7 +38,7 @@ class StringOpticTests: XCTestCase {
 		)
 			
 		XCTAssertEqual(
-			optic.updating(value) {
+			optic.updating(in: value) {
 				$0 + " I am Groot!"
 			},
 			[ "hello", "world!", "I", "am", "Groot!" ]

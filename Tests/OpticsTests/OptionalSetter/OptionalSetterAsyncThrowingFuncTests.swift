@@ -17,7 +17,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 
@@ -38,7 +38,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 
@@ -59,7 +59,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 
@@ -80,7 +80,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 
@@ -101,7 +101,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 
@@ -122,7 +122,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 
@@ -143,7 +143,7 @@ class OptionalSetterAsyncThrowingFuncTests: XCTestCase {
 			true
 		}
 
-		group = zeroOptic.tryUpdating(group) { bool in
+		group = zeroOptic.tryUpdating(in: group) { bool in
 			bool == false
 		}
 

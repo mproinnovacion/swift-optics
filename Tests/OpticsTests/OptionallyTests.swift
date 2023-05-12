@@ -22,25 +22,25 @@ class OptionallyTests: XCTestCase {
 		
 		XCTAssertNil(advisorName.tryGet(local))
 
-		advisorName.trySet(&local, to: "Joe")
+		advisorName.trySet(in: &local, to: "Joe")
 		
 		XCTAssertNil(advisorName.tryGet(local))
 		
-		advisor.trySet(&local, to: joe)
+		advisor.trySet(in: &local, to: joe)
 
 		XCTAssertEqual(
 			advisor.tryGet(local),
 			joe
 		)
 		
-		advisorName.trySet(&local, to: "John")
+		advisorName.trySet(in: &local, to: "John")
 		
 		XCTAssertEqual(
 			advisorName.tryGet(local),
 			"John"
 		)
 		
-		advisorName.tryUpdate(&local) { $0 + "!" }
+		advisorName.tryUpdate(in: &local) { $0 + "!" }
 
 		XCTAssertEqual(
 			advisorName.tryGet(local),
@@ -49,7 +49,7 @@ class OptionallyTests: XCTestCase {
 		
 		XCTAssertEqual(
 			advisorName.tryGet(
-				advisorName.tryUpdating(local) { $0 = $0.uppercased() }
+				advisorName.tryUpdating(in: local) { $0 = $0.uppercased() }
 			),
 			"JOHN!"
 		)
@@ -73,14 +73,14 @@ class OptionallyTests: XCTestCase {
 			string.replacingOccurrences(of: "!", with: "")
 		}
 
-		var updated = advisor.trySetting(company, to: john)
+		var updated = advisor.trySetting(in: company, to: john)
 		
 		XCTAssertEqual(
 			advisorNameShouted.tryGet(updated),
 			"John!"
 		)
 		
-		updated = advisorNameShouted.trySetting(updated, to: "Tony")
+		updated = advisorNameShouted.trySetting(in: updated, to: "Tony")
 		
 		XCTAssertEqual(
 			advisorNameShouted.tryGet(updated),
@@ -109,7 +109,7 @@ class OptionallyTests: XCTestCase {
 			}
 		}
 		
-		let updated = advisor.trySetting(company, to: john)
+		let updated = advisor.trySetting(in: company, to: john)
 		
 		let includeAdvisor = false
 		let noAdvisor = Optionally {

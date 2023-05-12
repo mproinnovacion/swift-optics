@@ -81,7 +81,7 @@ class MaxRecursionTests: XCTestCase {
 		XCTAssertEqual(
 			GroupLeafsOptic(maxRecursion: 4).getAll(
 				GroupLeafsOptic(maxRecursion: 1)
-					.updatingAll(group, { $0 + "!" })
+					.updatingAll(in: group) { $0 + "!" }
 			),
 			[ "leaf0", "leaf1", "leaf2", "leaf3!" ]
 		)

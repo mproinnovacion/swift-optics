@@ -33,7 +33,7 @@ class DropFirstTests: XCTestCase {
 		
 		people
 			.dropFirst()
-			.set(&updated, to: [ john ])
+			.set(in: &updated, to: [ john ])
 		
 		XCTAssertEqual(
 			updated.employees[1],

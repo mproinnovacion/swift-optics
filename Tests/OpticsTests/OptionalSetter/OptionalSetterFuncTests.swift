@@ -65,31 +65,31 @@ class OptionalSetterFuncTests: XCTestCase {
 			p0 == p1 && p1 == p2 && p2 == p3 && p3 == p4 && p4 == p5
 		}
 		
-		zeroOptic.tryUpdate(&group) { bool in
+		zeroOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		oneOptic.tryUpdate(&group) { bool in
+		oneOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		twoOptic.tryUpdate(&group) { bool in
+		twoOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		threeOptic.tryUpdate(&group) { bool in
+		threeOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		fourOptic.tryUpdate(&group) { bool in
+		fourOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		fiveOptic.tryUpdate(&group) { bool in
+		fiveOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		sixOptic.tryUpdate(&group) { bool in
+		sixOptic.tryUpdate(in: &group) { bool in
 			bool.toggle()
 		}
 		

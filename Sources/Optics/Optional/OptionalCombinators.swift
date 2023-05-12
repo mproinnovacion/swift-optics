@@ -20,14 +20,17 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optics.tryUpdating(whole, f)
+		optics.tryUpdating(in: whole, update: f)
 	}
 	
-	public func trySetting(_ whole: Whole, to newValue: NewPart) -> NewWhole {
-		optics.trySetting(whole, to: newValue)
+	public func trySetting(
+		in whole: Whole,
+		to newValue: NewPart
+	) -> NewWhole {
+		optics.trySetting(in: whole, to: newValue)
 	}
 }
 

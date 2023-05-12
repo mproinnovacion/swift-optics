@@ -24,10 +24,10 @@ where L.Part == [Element], L.NewWhole == L.Whole, L.NewPart == L.Part {
 	}
 
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.updating(whole) { elements in
+		optic.updating(in: whole) { elements in
 			let toUpdate = Array(elements.drop(while: condition))
 			let toKeep = elements.prefix(elements.count - toUpdate.count)
 			

@@ -33,7 +33,7 @@ class OptionalBodyOpticTests: XCTestCase {
 		
 		XCTAssertEqual(
 			GroupNameOptic().tryGet(
-				GroupNameOptic().trySetting(withName, to: "item")
+				GroupNameOptic().trySetting(in: withName, to: "item")
 			),
 			"item"
 		)
@@ -45,14 +45,14 @@ class OptionalBodyOpticTests: XCTestCase {
 		
 		XCTAssertEqual(
 			GroupNameOptic().tryGet(
-				GroupNameOptic().tryUpdating(noName) { $0 + "!" }
+				GroupNameOptic().tryUpdating(in: noName) { $0 + "!" }
 			),
 			nil
 		)
 		
 		XCTAssertEqual(
 			GroupNameOptic().tryGet(
-				GroupNameOptic().trySetting(noName, to: "item")
+				GroupNameOptic().trySetting(in: noName, to: "item")
 			),
 			"item"
 		)
