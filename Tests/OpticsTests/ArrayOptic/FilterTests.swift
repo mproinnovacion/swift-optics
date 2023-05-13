@@ -117,12 +117,12 @@ class FilterTests: XCTestCase {
 		let odd = (\Company.freelance).onlyOdd()
 
 		XCTAssertEqual(
-			even.getAll(company),
+			odd.getAll(company),
 			[ joe ]
 		)
 
 		var local = company
-		local = even.updatingAll(in: local) { person in
+		local = odd.updatingAll(in: local) { person in
 			var result = person
 			result.name = result.name.uppercased()
 			return result
