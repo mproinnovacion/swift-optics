@@ -2,10 +2,11 @@ import Foundation
 import Optics
 import XCTest
 
-class AtTests: XCTestCase {
+class ArrayAtTests: XCTestCase {
 	func testAt() {
-		let people = Lens {
+		let people = Many {
 			\Company.employees
+			[Person].optic()
 		}
 		
 		let person = people.at(2)
@@ -31,8 +32,9 @@ class AtTests: XCTestCase {
 	}
 	
 	func testAtSubscript() {
-		let people = Lens {
+		let people = Many {
 			\Company.employees
+			[Person].optic()
 		}
 		
 		let person = people[2]
