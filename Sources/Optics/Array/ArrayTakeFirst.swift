@@ -32,8 +32,8 @@ where O.NewWhole == O.Whole, O.NewPart == O.Part {
 		var updated = 0
 		
 		return optic.updatingAll(in: whole) { element in
-			defer { updated += 1}
-			guard updated <= count else {
+			defer { updated += 1 }
+			guard updated < count else {
 				return element
 			}
 			
