@@ -67,4 +67,19 @@ extension ThrowingOptic {
 		
 		return result
 	}
+	
+	
+	public func selectEven() -> MapThrowingArraySetter<ThrowingArrayFilter<ThrowingArrayEnumerated<LiftThrowingToThrowingArray<Self>>>, Self.NewPart, Self.NewPart>
+	where NewPart == Part, NewWhole == Whole {
+		self.filterIndexed { index, _ in
+			index % 2 == 0
+		}
+	}
+	
+	public func selectOdd() -> MapThrowingArraySetter<ThrowingArrayFilter<ThrowingArrayEnumerated<LiftThrowingToThrowingArray<Self>>>, Self.NewPart, Self.NewPart>
+	where NewPart == Part, NewWhole == Whole {
+		self.filterIndexed { index, _ in
+			index % 2 != 0
+		}
+	}
 }
