@@ -63,14 +63,14 @@ extension LensOptic {
 	}
 	
 	
-	public func onlyEven<Element>() -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
+	public func selectEven<Element>() -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
 	where Part == [Element], NewPart == Part, NewWhole == Whole {
 		self.filterIndexed { index, _ in
 			index % 2 == 0
 		}
 	}
 	
-	public func onlyOdd<Element>() -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
+	public func selectOdd<Element>() -> MapArray<Filter<Each<Enumerated<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
 	where Part == [Element], NewPart == Part, NewWhole == Whole {
 		self.filterIndexed { index, _ in
 			index % 2 != 0
@@ -102,14 +102,14 @@ extension OptionalOptic {
 			}
 	}
 	
-	public func onlyEven<Element>() -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
+	public func selectEven<Element>() -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
 	where Part == [Element], NewPart == Part, NewWhole == Whole {
 		self.filterIndexed { index, _ in
 			index % 2 == 0
 		}
 	}
 	
-	public func onlyOdd<Element>() -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
+	public func selectOdd<Element>() -> MapArray<Filter<EachOptional<EnumeratedOptionally<Self, Element, Element>, (Int, Element), (Int, Element)>>, Element, Element>
 	where Part == [Element], NewPart == Part, NewWhole == Whole {
 		self.filterIndexed { index, _ in
 			index % 2 != 0
@@ -137,14 +137,14 @@ extension ArrayOptic {
 			}
 	}
 	
-	public func onlyEven() -> MapArray<Filter<ArrayEnumerated<Self>>, Part, Part>
+	public func selectEven() -> MapArray<Filter<ArrayEnumerated<Self>>, Part, Part>
 	where NewPart == Part, NewWhole == Whole {
 		self.filterIndexed { index, _ in
 			index % 2 == 0
 		}
 	}
 	
-	public func onlyOdd() -> MapArray<Filter<ArrayEnumerated<Self>>, Part, Part>
+	public func selectOdd() -> MapArray<Filter<ArrayEnumerated<Self>>, Part, Part>
 	where NewPart == Part, NewWhole == Whole {
 		self.filterIndexed { index, _ in
 			index % 2 != 0

@@ -16,12 +16,11 @@ public struct ArrayEnumerated<O: ArrayOptic>: ArrayOptic {
 	}
 	
 	public func getAll(_ whole: Whole) -> [Part] {
-		let r = optic.getAll(whole)
+		optic.getAll(whole)
 			.enumerated()
 			.map { index, part in
 				(index, part)
 			}
-		return r
 	}
 	
 	public func updatingAll(

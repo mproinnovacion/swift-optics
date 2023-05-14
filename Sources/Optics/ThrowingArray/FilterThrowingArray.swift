@@ -52,4 +52,19 @@ extension ThrowingOptic {
 	) -> ThrowingArrayFilter<LiftThrowingToThrowingArray<Self>> where NewPart == Part {
 		ThrowingArrayFilter(filter: filter, with: { self })
 	}
+	
+	public func filterIndexed(
+		_ filter: @escaping (Int, Part) -> Bool
+	) -> MapThrowingArraySetter<ThrowingArrayFilter<ThrowingArrayEnumerated<LiftThrowingToThrowingArray<Self>>>, LiftThrowingToThrowingArray<Self>.Part, LiftThrowingToThrowingArray<Self>.NewPart>
+	where NewPart == Part, NewWhole == Whole {
+		let result = ThrowingArrayEnumerated { self }
+			.filter(filter)
+			.map { pair in
+				pair.1
+			} to: { current, updated in
+				(current.0, updated)
+			}
+		
+		return result
+	}
 }

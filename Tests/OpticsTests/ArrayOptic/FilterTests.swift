@@ -84,7 +84,7 @@ class FilterTests: XCTestCase {
 	}
 	
 	func testEven() {
-		let even = (\Company.freelance).onlyEven()
+		let even = (\Company.freelance).selectEven()
 
 		XCTAssertEqual(
 			even.getAll(company),
@@ -114,7 +114,7 @@ class FilterTests: XCTestCase {
 	}
 	
 	func testOdd() {
-		let odd = (\Company.freelance).onlyOdd()
+		let odd = (\Company.freelance).selectOdd()
 
 		XCTAssertEqual(
 			odd.getAll(company),
