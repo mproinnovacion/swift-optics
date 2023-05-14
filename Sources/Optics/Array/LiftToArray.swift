@@ -24,6 +24,12 @@ public struct LiftLensToArray<O: LensOptic>: ArrayOptic {
 	}
 }
 
+extension LensOptic {
+	public func array() -> LiftLensToArray<Self> {
+		.init(optic: self)
+	}
+}
+
 public struct LiftPrismToArray<O: PrismOptic>: ArrayOptic {
 	public typealias Whole = O.Whole
 	public typealias Part = O.Part
@@ -48,6 +54,12 @@ public struct LiftPrismToArray<O: PrismOptic>: ArrayOptic {
 	}
 }
 
+extension PrismOptic {
+	public func array() -> LiftPrismToArray<Self> {
+		.init(optic: self)
+	}
+}
+
 public struct LiftOptionalToArray<O: OptionalOptic>: ArrayOptic {
 	let optic: O
 	
@@ -65,5 +77,11 @@ public struct LiftOptionalToArray<O: OptionalOptic>: ArrayOptic {
 		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		optic.tryUpdating(in: whole, update: f)
+	}
+}
+
+extension OptionalOptic {
+	public func array() -> LiftOptionalToArray<Self> {
+		.init(optic: self)
 	}
 }

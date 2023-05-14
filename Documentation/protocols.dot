@@ -3,37 +3,33 @@ digraph protocols {
 	rank2 [style=invisible];
 
 	rank1 -> rank2 [color=white];
-
-	GetterOptic -> AsyncGetterOptic [label="async"];
 	
-	OptionalGetter -> AsyncOptionalGetterOptic [label="async"];
-
 	LensOptic -> GetterOptic [style=dotted, arrowhead=open];
 	LensOptic -> SetterOptic [style=dotted, arrowhead=open];
 	LensOptic -> ArrayOptic [label="each"];
+	LensOptic -> ArrayOptic [label="array"];
 	LensOptic -> ThrowingOptic [label="throwing"];
-	LensOptic -> AsyncLensOptic [label="async"];
 
 	PrismOptic -> OptionalOptic [label="optional"];
+	PrismOptic -> ArrayOptic [label="array"];
 	PrismOptic -> ThrowingOptic [label="throwing"];
 
 	OptionalOptic -> OptionalGetter [style=dotted, arrowhead=open];
 	OptionalOptic -> OptionalSetter [style=dotted, arrowhead=open];
+	OptionalOptic -> ArrayOptic [label="array"];
 	OptionalOptic -> ThrowingOptic [label="throwing"];
-	OptionalOptic -> AsyncOptionalOptic [label="async"];
 
 	ThrowingOptic -> ThrowingGetter [style=dotted, arrowhead=open];
 	ThrowingOptic -> ThrowingSetter [style=dotted, arrowhead=open];
-	
-	AsyncLensOptic -> AsyncGetterOptic [style=dotted, arrowhead=open];
-	AsyncLensOptic -> AsyncSetterOptic [style=dotted, arrowhead=open];
-	
-	AsyncOptionalOptic -> AsyncOptionalGetterOptic [style=dotted, arrowhead=open];
-	AsyncOptionalOptic -> AsyncOptionalSetterOptic [style=dotted, arrowhead=open];
-
+		
+		
 	ArrayOptic -> ThrowingArrayOptic [label="throwing"];
+	ThrowingOptic -> ThrowingArrayOptic [label="array"];
+	
+	ThrowingArrayOptic -> ThrowingArrayGetter [style=dotted, arrowhead=open];
+	ThrowingArrayOptic -> ThrowingArraySetter [style=dotted, arrowhead=open];
 
-	{ rank = min; GetterOptic ; SetterOptic ; OptionalGetter ; OptionalSetter ; ThrowingGetter ; ThrowingSetter ; AsyncGetterOptic ; AsyncSetterOptic; AsyncOptionalGetterOptic; AsyncOptionalSetterOptic }
+	{ rank = min; GetterOptic ; SetterOptic ; OptionalGetter ; OptionalSetter ; ThrowingGetter ; ThrowingSetter ; ThrowingArrayGetter; ThrowingArraySetter }
 	{
 		rank = same;
 		rank2 -> LensOptic -> PrismOptic [ style=invis ];

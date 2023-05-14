@@ -34,11 +34,3 @@ public struct Optionally<Optics: OptionalOptic>: OptionalOptic {
 	}
 }
 
-extension OptionalOptic {
-	public func each<Element, NewElement>() -> EachOptional<Self, Element, NewElement>
-	where Part == [Element], NewPart == [NewElement] {
-		EachOptional {
-			self
-		}
-	}
-}

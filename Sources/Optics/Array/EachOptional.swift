@@ -30,3 +30,12 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 		}
 	}
 }
+
+extension OptionalOptic {
+	public func each<Element, NewElement>() -> EachOptional<Self, Element, NewElement>
+	where Part == [Element], NewPart == [NewElement] {
+		EachOptional {
+			self
+		}
+	}
+}
