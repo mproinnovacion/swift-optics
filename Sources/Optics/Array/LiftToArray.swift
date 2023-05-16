@@ -78,6 +78,13 @@ public struct LiftOptionalToArray<O: OptionalOptic>: ArrayOptic {
 	) -> NewWhole {
 		optic.tryUpdating(in: whole, update: f)
 	}
+	
+	public func settingAll(
+		in whole: Whole,
+		to newValue: NewPart
+	) -> NewWhole {
+		optic.trySetting(in: whole, to: newValue)
+	}
 }
 
 extension OptionalOptic {
