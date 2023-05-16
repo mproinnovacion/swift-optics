@@ -1,12 +1,6 @@
 import Foundation
 import CasePaths
 
-extension Array {
-	public static func optic() -> ArrayDefaultOptic<Element, Element> {
-		.init()
-	}
-}
-
 extension Set {
 	public static func optic() -> SetDefaultOptic<Element, Element> {
 		.init()
