@@ -1,7 +1,6 @@
 import Foundation
 
-public struct LiftThrowingToThrowingArray<O: ThrowingOptic>: ThrowingArrayOptic
-where O.NewPart == O.Part {
+public struct LiftThrowingToThrowingArray<O: ThrowingOptic>: ThrowingArrayOptic {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
 	public typealias Part = O.Part
@@ -20,10 +19,16 @@ where O.NewPart == O.Part {
 	
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try optic.updating(whole, f)
+		try optic.updating(in: whole, update: f)
+	}
+}
+
+extension ThrowingOptic {
+	public func array() -> LiftThrowingToThrowingArray<Self> {
+		.init(optic: self)
 	}
 }
 
@@ -47,11 +52,18 @@ where O.NewPart == O.Part {
 
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		optic.updatingAll(whole) { part in
+		optic.updatingAll(in: whole) { part in
 			(try? f(part)) ?? part
 		}
+	}
+}
+
+extension ArrayOptic {
+	public func throwing() -> LiftArrayToThrowingArray<Self>
+	where NewPart == Part {
+		.init(optic: self)
 	}
 }

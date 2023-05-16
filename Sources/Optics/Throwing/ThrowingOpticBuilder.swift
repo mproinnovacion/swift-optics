@@ -56,25 +56,25 @@ where Whole == O.Whole, Part == O.Part, NewPart == O.NewPart, O.NewWhole == O.Wh
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		guard let optic = self.optic else {
 			throw(ThrowingError.noData)
 		}
 		
-		return try optic.updating(whole, f)
+		return try optic.updating(in: whole, update: f)
 	}
 	
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
 		guard let optic = self.optic else {
 			throw(ThrowingError.noData)
 		}
 		
-		return try optic.setting(whole, to: newValue)
+		return try optic.setting(in: whole, to: newValue)
 	}
 }
 
@@ -99,20 +99,20 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 	}
 	
 	public func updating(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try lhs.updating(whole) { lhsPart in
-			try rhs.updating(lhsPart, f)
+		try lhs.updating(in: whole) { lhsPart in
+			try rhs.updating(in: lhsPart, update: f)
 		}
 	}
 	
 	public func setting(
-		_ whole: Whole,
+		in whole: Whole,
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try lhs.updating(whole) { part in
-			try rhs.setting(part, to: newValue)
+		try lhs.updating(in: whole) { part in
+			try rhs.setting(in: part, to: newValue)
 		}
 	}
 }

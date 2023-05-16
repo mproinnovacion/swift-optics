@@ -21,14 +21,14 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.tryUpdating(whole, f)
+		optic.tryUpdating(in: whole, update: f)
 	}
 	
-	public func trySetting(_ whole: Whole, to newPart: NewPart) -> NewWhole {
-		optic.trySetting(whole, to: newPart)
+	public func trySetting(in whole: Whole, to newPart: NewPart) -> NewWhole {
+		optic.trySetting(in: whole, to: newPart)
 	}
 }
 
@@ -50,17 +50,17 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.tryUpdating(whole) { array in
+		optic.tryUpdating(in: whole) { array in
 			f(
 				array.enumerated().map { ($0.offset, $0.element) }
 			).map { $0.1 }
 		}
 	}
 	
-	public func trySetting(_ whole: Whole, to newPart: NewPart) -> NewWhole {
-		optic.trySetting(whole, to: newPart.map { $0.1 })
+	public func trySetting(in whole: Whole, to newPart: NewPart) -> NewWhole {
+		optic.trySetting(in: whole, to: newPart.map { $0.1 })
 	}
 }

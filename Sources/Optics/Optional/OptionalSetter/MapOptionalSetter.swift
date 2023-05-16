@@ -22,10 +22,10 @@ public struct MapOptionalSetter<O: OptionalSetterOptic, MappedPart, MappedNewPar
 	}
 	
 	public func tryUpdating(
-		_ whole: O.Whole,
-		_ f: @escaping (MappedPart) -> MappedNewPart
+		in whole: O.Whole,
+		update f: @escaping (MappedPart) -> MappedNewPart
 	) -> O.NewWhole {
-		self.optic.tryUpdating(whole) { part in
+		self.optic.tryUpdating(in: whole) { part in
 			to(part, f(from(part)))
 		}
 	}

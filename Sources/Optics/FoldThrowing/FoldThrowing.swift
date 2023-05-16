@@ -32,3 +32,19 @@ public struct FoldThrowing<O: ThrowingArrayGetterOptic>: ThrowingGetterOptic {
 		try self.optic.getAll(whole).reduced(monoid)
 	}
 }
+
+extension ThrowingArrayGetterOptic {
+	public func fold(
+		_ monoid: Monoid<Part>
+	) -> FoldThrowing<Self> {
+		FoldThrowing(monoid: monoid) {
+			self
+		}
+	}
+	
+	public func fold() -> FoldThrowing<Self> where Part: Monoidal {
+		FoldThrowing {
+			self
+		}
+	}
+}

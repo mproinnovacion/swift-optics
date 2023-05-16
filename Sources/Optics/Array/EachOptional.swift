@@ -22,11 +22,20 @@ where O.Part == [Element], O.NewPart == [NewElement] {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.tryUpdating(whole) { parts in
+		optic.tryUpdating(in: whole) { parts in
 			parts.map(f)
+		}
+	}
+}
+
+extension OptionalOptic {
+	public func each<Element, NewElement>() -> EachOptional<Self, Element, NewElement>
+	where Part == [Element], NewPart == [NewElement] {
+		EachOptional {
+			self
 		}
 	}
 }

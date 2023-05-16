@@ -16,9 +16,9 @@ public struct ManySetter<O: ArraySetterOptic>: ArraySetterOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
-		setter.updatingAll(whole, f)
+		setter.updatingAll(in: whole, update: f)
 	}
 }

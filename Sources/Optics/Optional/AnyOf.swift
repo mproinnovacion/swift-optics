@@ -20,17 +20,17 @@ public struct AnyOf<P: OptionalOptic>: OptionalOptic {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		self.optics.tryUpdating(whole, f)
+		self.optics.tryUpdating(in: whole, update: f)
 	}
 	
 	public func trySetting(
-		_ whole: Whole,
-		to newValue: NewPart
+		in whole: Whole,
+		updateo newValue: NewPart
 	) -> NewWhole {
-		optics.trySetting(whole, to: newValue)
+		optics.trySetting(in: whole, to: newValue)
 	}
 }
 
@@ -95,15 +95,15 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		var result = whole
 		
-		lhs.tryUpdate(&result) { part in
+		lhs.tryUpdate(in: &result) { part in
 			part = f(part)
 		}
-		rhs.tryUpdate(&result) { part in
+		rhs.tryUpdate(in: &result) { part in
 			part = f(part)
 		}
 		
@@ -115,8 +115,8 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part {
 		to newValue: RHS.Part
 	) -> LHS.Whole {
 		var copy = whole
-		lhs.trySet(&copy, to: newValue)
-		rhs.trySet(&copy, to: newValue)
+		lhs.trySet(in: &copy, to: newValue)
+		rhs.trySet(in: &copy, to: newValue)
 		return copy
 	}
 }
@@ -136,16 +136,16 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewWhole == LHS.Whole, L
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		var result = whole
 		
-		result = lhs.tryUpdating(result) { part in
+		result = lhs.tryUpdating(in: result) { part in
 			f(part)
 		}
 		
-		result = rhs.tryUpdating(result) { part in
+		result = rhs.tryUpdating(in: result) { part in
 			f(part)
 		}
 		
@@ -153,12 +153,12 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewWhole == LHS.Whole, L
 	}
 
 	public func trySetting(
-		_ whole: LHS.Whole,
+		in whole: LHS.Whole,
 		to newValue: RHS.Part
 	) -> LHS.Whole {
 		var copy = whole
-		lhs.trySet(&copy, to: newValue)
-		rhs.trySet(&copy, to: newValue)
+		lhs.trySet(in: &copy, to: newValue)
+		rhs.trySet(in: &copy, to: newValue)
 		return copy
 	}
 }
@@ -178,23 +178,23 @@ where LHS.Whole == RHS.Whole, LHS.Part == RHS.Part, LHS.NewPart == LHS.Part, LHS
 	}
 	
 	public func tryUpdating(
-		_ whole: LHS.Whole,
-		_ f: @escaping (RHS.Part) -> RHS.Part
+		in whole: LHS.Whole,
+		update f: @escaping (RHS.Part) -> RHS.Part
 	) -> NewWhole {
 		var result = whole
-		lhs.tryUpdate(&result) { part in
+		lhs.tryUpdate(in: &result) { part in
 			part = f(part)
 		}
-		rhs.tryUpdate(&result) { part in
+		rhs.tryUpdate(in: &result) { part in
 			part = f(part)
 		}
 		return result
 	}
 	
-	public func trySetting(_ whole: LHS.Whole, to newValue: RHS.Part) -> LHS.NewWhole {
+	public func trySetting(in whole: LHS.Whole, to newValue: RHS.Part) -> LHS.NewWhole {
 		var copy = whole
-		lhs.trySet(&copy, to: newValue)
-		rhs.trySet(&copy, to: newValue)
+		lhs.trySet(in: &copy, to: newValue)
+		rhs.trySet(in: &copy, to: newValue)
 		return copy
 	}
 }

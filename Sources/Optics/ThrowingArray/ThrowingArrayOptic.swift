@@ -9,10 +9,6 @@ public protocol ThrowingArrayOptic<Whole, Part, NewWhole, NewPart>: ThrowingArra
 	associatedtype _Body
 	
 	typealias Body = _Body
-		
-	func getAll(_ whole: Whole) throws -> [Part]
-	
-	func updatingAll(_ whole: Whole, _ f: @escaping (Part) throws -> NewPart) throws -> NewWhole
 	
 	@ThrowingArrayOpticBuilder
 	var body: Body { get }
@@ -41,18 +37,18 @@ extension ThrowingArrayOptic where Body: ThrowingArrayOptic, Body.Whole == Whole
 	
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.body.updatingAll(whole, f)
+		try self.body.updatingAll(in: whole, update: f)
 	}
 	
 	@inlinable
 	public func settingAll(
-		_ whole: Whole,
+		in whole: Whole,
 		to newPart: NewPart
 	) throws -> NewWhole {
-		try self.body.updatingAll(whole) { _ in
+		try self.body.updatingAll(in: whole) { _ in
 			newPart
 		}
 	}
@@ -79,16 +75,10 @@ public struct ThrowingArrayRawOptic<Whole, Part, NewWhole, NewPart>: ThrowingArr
 
 	@inlinable
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
 		try _updatingAll(whole, f)
-	}
-}
-
-extension ArrayOptic where NewPart == Part {
-	public func throwing() -> LiftArrayToThrowingArray<Self> {
-		.init(optic: self)
 	}
 }
 
@@ -114,10 +104,10 @@ public struct ThrowingArrayProvidedWholeOptic<O: ThrowingArrayOptic>: ThrowingAr
 	}
 	
 	public func updatingAll(
-		_ void: Whole,
-		_ f: @escaping (Part) throws -> NewPart
+		in void: Whole,
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try optic.updatingAll(self.whole, f)
+		try optic.updatingAll(in: self.whole, update: f)
 	}
 }
 
@@ -138,14 +128,14 @@ extension ThrowingArrayOptic where Whole == Void {
 	}
 	
 	public func updatingAll(
-		_ f: @escaping (Part) throws -> NewPart
+		update f: @escaping (Part) throws -> NewPart
 	) throws -> NewWhole {
-		try self.updatingAll((), f)
+		try self.updatingAll(in: (), update: f)
 	}
 
 	public func settingAll(
 		to newValue: NewPart
 	) throws -> NewWhole {
-		try self.settingAll((), to: newValue)
+		try self.settingAll(in: (), to: newValue)
 	}
 }

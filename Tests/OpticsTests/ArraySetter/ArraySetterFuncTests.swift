@@ -65,31 +65,31 @@ class ManySetterFuncTests: XCTestCase {
 			p0 == p1 && p1 == p2 && p2 == p3 && p3 == p4 && p4 == p5
 		}
 		
-		zeroOptic.updateAll(&group) { bool in
+		zeroOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		oneOptic.updateAll(&group) { bool in
+		oneOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		twoOptic.updateAll(&group) { bool in
+		twoOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		threeOptic.updateAll(&group) { bool in
+		threeOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		fourOptic.updateAll(&group) { bool in
+		fourOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		fiveOptic.updateAll(&group) { bool in
+		fiveOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		
-		sixOptic.updateAll(&group) { bool in
+		sixOptic.updateAll(in: &group) { bool in
 			bool.toggle()
 		}
 		

@@ -32,3 +32,20 @@ public struct Fold<O: ArrayGetterOptic>: GetterOptic {
 		self.optic.getAll(whole).reduced(monoid)
 	}
 }
+
+extension ArrayGetterOptic {
+	public func fold(
+		_ monoid: Monoid<Part>
+	) -> Fold<Self> {
+		Fold(monoid: monoid) {
+			self
+		}
+	}
+	
+	public func fold() -> Fold<Self>
+	where Part: Monoidal {
+		Fold {
+			self
+		}
+	}
+}

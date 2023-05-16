@@ -21,8 +21,8 @@ public struct MapSetter<O: SetterOptic, MappedPart, MappedNewPart>: SetterOptic 
 		self.to = to
 	}
 	
-	public func updating(_ whole: Whole, _ f: @escaping (Part) -> NewPart) -> NewWhole {
-		self.optic.updating(whole) { part in
+	public func updating(in whole: Whole, update f: @escaping (Part) -> NewPart) -> NewWhole {
+		self.optic.updating(in: whole) { part in
 			to(part, f(from(part)))
 		}
 	}

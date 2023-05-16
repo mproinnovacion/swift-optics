@@ -37,3 +37,16 @@ public struct FoldMapThrowing<O: ThrowingArrayGetterOptic, Result>: ThrowingGett
 		try self.optic.getAll(whole).foldMap(map, monoid)
 	}
 }
+
+extension ThrowingArrayGetterOptic {
+	public func foldMap<Result>(
+		_ monoid: Monoid<Result>,
+		_ map: @escaping (Part) -> Result
+	) -> FoldMapThrowing<Self, Result> {
+		FoldMapThrowing(monoid: monoid) {
+			map($0)
+		} with: {
+			self
+		}
+	}
+}

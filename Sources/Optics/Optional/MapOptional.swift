@@ -39,18 +39,18 @@ public struct MapOptional<O: OptionalOptic, MappedPart>: OptionalOptic {
 	}
 	
 	public func tryUpdating(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optic.tryUpdating(whole) { oPart in
+		optic.tryUpdating(in: whole) { oPart in
 			to(oPart, f(from(oPart)))
 		}
 	}
 	
-	public func trySetting(_ whole: O.Whole, to newValue: MappedPart) -> O.NewWhole {
-		optic.tryUpdating(whole, { oPart in
+	public func trySetting(in whole: O.Whole, to newValue: MappedPart) -> O.NewWhole {
+		optic.tryUpdating(in: whole) { oPart in
 			to(oPart, newValue)
-		})
+		}
 	}
 }
 

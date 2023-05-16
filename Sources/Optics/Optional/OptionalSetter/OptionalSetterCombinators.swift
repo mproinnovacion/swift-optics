@@ -16,13 +16,16 @@ public struct OptionalSetter<O: OptionalSetterOptic>: OptionalSetterOptic {
 	}
 	
 	public func tryUpdating(
-		_ whole: O.Whole,
-		_ f: @escaping (O.Part) -> O.NewPart
+		in whole: O.Whole,
+		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
-		setter.tryUpdating(whole, f)
+		setter.tryUpdating(in: whole, update: f)
 	}
 	
-	public func trySetting(_ whole: O.Whole, to newPart: O.NewPart) -> O.NewWhole {
-		setter.trySetting(whole, to: newPart)
+	public func trySetting(
+		in whole: O.Whole,
+		to newPart: O.NewPart
+	) -> O.NewWhole {
+		setter.trySetting(in: whole, to: newPart)
 	}
 }

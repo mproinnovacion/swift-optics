@@ -21,9 +21,9 @@ public struct Many<Optics: ArrayOptic>: ArrayOptic {
 	}
 	
 	public func updatingAll(
-		_ whole: Whole,
-		_ f: @escaping (Part) -> NewPart
+		in whole: Whole,
+		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		optics.updatingAll(whole, f)
+		optics.updatingAll(in: whole, update: f)
 	}
 }
