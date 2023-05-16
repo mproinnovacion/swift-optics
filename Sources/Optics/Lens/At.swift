@@ -53,3 +53,19 @@ where L.Part == [Element], L.NewPart == L.Part, L.NewWhole == L.Whole {
 		}
 	}
 }
+
+extension LensOptic {
+	public func at<Element>(_ index: Int) -> At<Self, Element>
+	where Part == [Element], NewPart == Part, NewWhole == Whole {
+		At(index) {
+			self
+		}
+	}
+	
+	public subscript<Element>(_ index: Int) -> At<Self, Element>
+	where Part == [Element], NewPart == Part, NewWhole == Whole {
+		At(index) {
+			self
+		}
+	}
+}
