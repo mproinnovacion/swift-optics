@@ -18,6 +18,13 @@ public struct LiftSetterToArray<O: SetterOptic>: ArraySetterOptic {
 	) -> O.NewWhole {
 		self.optic.updating(in: whole, update: f)
 	}
+	
+	public func settingAll(
+		in whole: O.Whole,
+		to newValue: O.NewPart
+	) -> O.NewWhole {
+		self.optic.setting(in: whole, to: newValue)
+	}
 }
 
 public struct LiftOptionalSetterToArray<O: OptionalSetterOptic>: ArraySetterOptic {
@@ -37,5 +44,12 @@ public struct LiftOptionalSetterToArray<O: OptionalSetterOptic>: ArraySetterOpti
 		update f: @escaping (O.Part) -> O.NewPart
 	) -> O.NewWhole {
 		self.optic.tryUpdating(in: whole, update: f)
+	}
+	
+	public func settingAll(
+		in whole: O.Whole,
+		to newValue: O.NewPart
+	) -> O.NewWhole {
+		self.optic.trySetting(in: whole, to: newValue)
 	}
 }

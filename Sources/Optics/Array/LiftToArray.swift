@@ -22,6 +22,13 @@ public struct LiftLensToArray<O: LensOptic>: ArrayOptic {
 	) -> NewWhole {
 		optic.updating(in: whole, update: f)
 	}
+	
+	public func settingAll(
+		in whole: O.Whole,
+		to newValue: O.NewPart
+	) -> O.NewWhole {
+		optic.setting(in: whole, to: newValue)
+	}
 }
 
 extension LensOptic {
@@ -51,6 +58,13 @@ public struct LiftPrismToArray<O: PrismOptic>: ArrayOptic {
 		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
 		self.optic.updatingAll(in: whole, update: f)
+	}
+	
+	public func settingAll(
+		in whole: O.Whole,
+		to newValue: O.Part
+	) -> O.Whole {
+		self.optic.settingAll(in: whole, to: newValue)
 	}
 }
 

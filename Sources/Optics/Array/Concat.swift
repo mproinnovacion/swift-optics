@@ -7,24 +7,31 @@ public struct Concat<Optics: ArrayOptic>: ArrayOptic {
 	public typealias Part = Optics.Part
 	public typealias NewPart = Optics.NewPart
 	
-	public let lens: Optics
+	public let optic: Optics
 	
 	@inlinable
 	public init(
 		@ConcatArrayOpticsBuilder with build: () -> Optics
 	) {
-		self.lens = build()
+		self.optic = build()
 	}
 	
 	public func getAll(_ whole: Whole) -> [Part] {
-		lens.getAll(whole)
+		optic.getAll(whole)
 	}
 	
 	public func updatingAll(
 		in whole: Whole,
 		update f: @escaping (Part) -> NewPart
 	) -> NewWhole {
-		lens.updatingAll(in: whole, update: f)
+		optic.updatingAll(in: whole, update: f)
+	}
+	
+	public func settingAll(
+		in whole: Optics.Whole,
+		to newValue: Optics.NewPart
+	) -> Optics.NewWhole {
+		optic.settingAll(in: whole, to: newValue)
 	}
 }
 

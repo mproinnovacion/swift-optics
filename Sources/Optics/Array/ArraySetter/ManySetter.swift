@@ -21,4 +21,11 @@ public struct ManySetter<O: ArraySetterOptic>: ArraySetterOptic {
 	) -> O.NewWhole {
 		setter.updatingAll(in: whole, update: f)
 	}
+	
+	public func settingAll(
+		in whole: O.Whole,
+		to newValue: O.NewPart
+	) -> O.NewWhole {
+		setter.settingAll(in: whole, to: newValue)
+	}
 }
