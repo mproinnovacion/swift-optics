@@ -225,4 +225,13 @@ where LHS.Part == RHS.Whole, LHS.NewPart == RHS.NewWhole {
 			rhs.updatingAll(in: lhsPart, update: f)
 		}
 	}
+	
+	public func settingAll(
+		in whole: LHS.Whole,
+		to newValue: RHS.NewPart
+	) -> LHS.NewWhole {
+		lhs.updatingAll(in: whole) { part in
+			rhs.settingAll(in: part, to: newValue)
+		}
+	}
 }
