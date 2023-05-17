@@ -45,6 +45,13 @@ where ArrayBody: ArrayOptic, ArrayBody.Whole == Whole, ArrayBody.Part == Part, A
 	) -> NewWhole {
 		self.body.updatingAll(in: whole, update: f)
 	}
+	
+	public func settingAll(
+		in whole: Whole,
+		to newValue: NewPart
+	) -> NewWhole {
+		self.body.settingAll(in: whole, to: newValue)
+	}
 }
 
 public typealias SimpleArrayOptic<Whole, Part> = ArrayOptic<Whole, Part, Whole, Part>
@@ -72,5 +79,16 @@ where O.NewWhole == O.Whole, Whole == O.Whole, Part == O.Part, NewPart == O.NewP
 		}
 		
 		return optic.updatingAll(in: whole, update: f)
+	}
+	
+	public func settingAll(
+		in whole: Whole,
+		to newValue: NewPart
+	) -> O.NewWhole {
+		guard let optic = self.optic else {
+			return whole
+		}
+		
+		return optic.settingAll(in: whole, to: newValue)
 	}
 }

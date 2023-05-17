@@ -28,7 +28,7 @@ public struct MapArraySetter<O: ArraySetterOptic, MappedPart, MappedNewPart>: Ar
 		self.optic.updatingAll(in: whole) { part in
 			to(part, f(from(part)))
 		}
-	}	
+	}
 }
 
 extension ArraySetterOptic {
