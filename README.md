@@ -16,7 +16,7 @@ Status: Alpha. Feedback Needed.
 
 ## Introduction
 
-You can think of optics as queries for your own models. You can use them to read or modify many values across different properties in any place of a structure. Optics are also composable, which means you can easily extract some components of an optic to use them in many places. 
+You can think of optics as SQL queries for your own models. You can use them to read or modify many values across different properties in any place of a structure. Optics are also composable, which means you can easily extract some components of an optic to use them in many places. 
 
 Types of optics:
 
@@ -60,7 +60,7 @@ The driving idea behind the library is to provide with powerful tools to target 
 Specify it as a dependency in your Package.swift:
 
 ```
-.package(url: "https://bitbucket.org/damonfer/swift-optics.git", from: "0.1.8")
+.package(url: "https://bitbucket.org/damonfer/swift-optics.git", from: "0.1.9")
 ```
 
 Check the documentation or the tests for a better understanding on how to use it, and all the utilities that come with it.
