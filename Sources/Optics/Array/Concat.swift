@@ -100,4 +100,20 @@ public enum ConcatArrayOpticsBuilder {
 	public static func buildPartialBlock<O0: ArrayOptic, O1: ArrayOptic>(accumulated o0: O0, next o1: O1) -> ConcatArrayOptics<O0, O1> {
 		ConcatArrayOptics(lhs: o0, rhs: o1)
 	}
+	
+	public static func buildExpression<O: LensOptic>(_ expression: O) -> LiftLensToArray<O> {
+		.init(optic: expression)
+	}
+	
+	public static func buildExpression<O: PrismOptic>(_ expression: O) -> LiftPrismToArray<O> {
+		.init(optic: expression)
+	}
+	
+	public static func buildExpression<O: OptionalOptic>(_ expression: O) -> LiftOptionalToArray<O> {
+		.init(optic: expression)
+	}
+	
+	public static func buildExpression<O: ArrayOptic>(_ expression: O) -> O {
+		expression
+	}
 }

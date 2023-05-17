@@ -37,3 +37,17 @@ MyEnum.prismOptic().embed(.one) // Returns 1
 MyEnum.prismOptic().extract(3) // Returns nil
 
 ```
+
+## Array
+
+### singleOptic
+
+This optic allows to treat the array as a collection of a single element. If you embed a new element the resulting array will only contain it. If you extract from it only the first element will be retrieved.
+
+### firstElementOptic
+
+This prism targets the first element of the array. It returns a tuple, with the first element in the left side and the rest on the right side.
+
+### lastElementOptic
+
+This prism targets the last element of the array. It returns a tuple, with the last element in the right side and the rest on the left side.
