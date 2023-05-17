@@ -60,7 +60,7 @@ The driving idea behind the library is to provide with powerful tools to target 
 Specify it as a dependency in your Package.swift:
 
 ```
-.package(url: "https://bitbucket.org/damonfer/swift-optics.git", from: "0.1.9")
+.package(url: "https://bitbucket.org/damonfer/swift-optics.git", from: "0.2.0")
 ```
 
 Check the documentation or the tests for a better understanding on how to use it, and all the utilities that come with it.
