@@ -67,6 +67,18 @@ public enum ConcatSettersBuilder {
 		ConcatArraySetters(lhs: o0, rhs: o1)
 	}
 	
+	public static func buildExpression<O: SetterOptic>(_ expression: O) -> LiftSetterToArray<O> {
+		.init(optic: expression)
+	}
+	
+	public static func buildExpression<O: PrismOptic>(_ expression: O) -> LiftPrismToArray<O> {
+		.init(optic: expression)
+	}
+	
+	public static func buildExpression<O: OptionalSetterOptic>(_ expression: O) -> LiftOptionalSetterToArray<O> {
+		.init(optic: expression)
+	}
+	
 	public static func buildExpression<O: ArraySetterOptic>(_ expression: O) -> O {
 		expression
 	}

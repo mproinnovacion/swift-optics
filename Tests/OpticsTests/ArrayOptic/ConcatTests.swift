@@ -54,4 +54,43 @@ class ConcatTests: XCTestCase {
 			[ "MIKE", "LOUIS", "JESSICA", "John", "Joe", "Mike" ]
 		)
 	}
+	
+	func testConcatLenses() {
+		struct Group {
+			var admin: String
+			var user: String
+			var name: String
+		}
+		
+		let optic = Concat {
+			\Group.admin
+			\Group.user
+			\Group.name
+		}
+		
+		let group = Group(
+			admin: "Admin",
+			user: "User",
+			name: "Name"
+		)
+		
+		XCTAssertEqual(
+			optic.getAll(group),
+			[ "Admin", "User", "Name" ]
+		)
+	
+		XCTAssertEqual(
+			optic.getAll(
+				optic.updatingAll(in: group, update: { $0.uppercased() })
+			),
+			[ "ADMIN", "USER", "NAME" ]
+		)
+		
+		XCTAssertEqual(
+			optic.getAll(
+				optic.settingAll(in: group, to: "value")
+			),
+			[ "value", "value", "value" ]
+		)
+	}
 }
