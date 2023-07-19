@@ -33,6 +33,12 @@ public struct LiftLensToOptional<O: LensOptic>: OptionalOptic {
 	}
 }
 
+extension LensOptic {
+	public func optional() -> LiftLensToOptional<Self> {
+		.init(optic: self)
+	}
+}
+
 public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 	public typealias Whole = P.Whole
 	public typealias NewWhole = Whole
@@ -70,5 +76,11 @@ public struct LiftPrismToOptional<P: PrismOptic>: OptionalOptic {
 		to newValue: NewPart
 	) -> NewWhole {
 		optic.embed(newValue)
+	}
+}
+
+extension PrismOptic {
+	public func optional() -> LiftPrismToOptional<Self> {
+		.init(optic: self)
 	}
 }

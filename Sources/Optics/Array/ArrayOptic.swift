@@ -54,6 +54,29 @@ where ArrayBody: ArrayOptic, ArrayBody.Whole == Whole, ArrayBody.Part == Part, A
 	}
 }
 
+public struct EmptyArrayOptic<Whole, Part>: ArrayOptic {
+	public typealias NewWhole = Whole
+	public typealias NewPart = Part
+	
+	public func getAll(_ whole: Whole) -> [Part] {
+		[]
+	}
+	
+	public func updatingAll(in whole: Whole, update f: @escaping (Part) -> NewPart) -> NewWhole {
+		whole
+	}
+	
+	public func settingAll(in whole: Whole, to newValue: NewPart) -> NewWhole {
+		whole
+	}
+}
+
+extension ArrayOptic where NewWhole == Whole, NewPart == Part {
+	public static func empty() -> EmptyArrayOptic<Whole, Part> {
+		.init()
+	}
+}
+
 public typealias SimpleArrayOptic<Whole, Part> = ArrayOptic<Whole, Part, Whole, Part>
 
 public struct ArrayOpticFromOptional<Whole, Part, NewPart, O: ArrayOptic>: ArrayOptic

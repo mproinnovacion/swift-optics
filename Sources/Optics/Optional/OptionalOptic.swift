@@ -91,6 +91,18 @@ public struct OptionalRawOptic<Whole, Part, NewWhole, NewPart>: OptionalOptic {
 	}
 }
 
+extension OptionalOptic where NewWhole == Whole, NewPart == Part {
+	public static func none() -> OptionalRawOptic<Whole, Part, NewWhole, NewPart> {
+		.init(
+			tryGet: { _ in nil }
+		) { whole, _ in
+			whole
+		} trySetting: { whole, _ in
+			whole
+		}
+	}
+}
+
 public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 	public typealias Whole = Optional<Wrapped>
 	public typealias NewWhole = Optional<NewWrapped>
@@ -123,12 +135,6 @@ public struct OptionalDefaultOptic<Wrapped, NewWrapped>: OptionalOptic {
 		tryUpdating(in: whole) { _ in
 			newValue
 		}
-	}
-}
-
-extension PrismOptic {
-	public func optional() -> LiftPrismToOptional<Self> {
-		.init(optic: self)
 	}
 }
 
