@@ -3,18 +3,18 @@ import XCTest
 
 import Optics
 
-class ArrayFirstWhereTests: XCTestCase {
+class ArrayFirstTests: XCTestCase {
 	func testFirst() {
 		let people = Many {
 			\Company.employees
 			[Person].optic()
 		}
 		
-		let first = people.first(where: { $0.age > 50 })
+		let first = people.first()
 		
 		XCTAssertEqual(
 			first.tryGet(company),
-			louis
+			mike
 		)
 		
 		let firstName = Optionally {
@@ -28,7 +28,7 @@ class ArrayFirstWhereTests: XCTestCase {
 		
 		XCTAssertEqual(
 			firstName.tryGet(local),
-			"LOUIS"
+			"MIKE"
 		)
 	}
 }

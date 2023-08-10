@@ -1,6 +1,6 @@
 import Foundation
 
-public struct FirstArray<O: ArrayOptic>: OptionalOptic
+public struct ArrayFirst<O: ArrayOptic>: OptionalOptic
 where O.NewPart == O.Part, O.NewWhole == O.Whole {
 	public typealias Whole = O.Whole
 	public typealias NewWhole = O.NewWhole
@@ -36,9 +36,9 @@ where O.NewPart == O.Part, O.NewWhole == O.Whole {
 }
 
 extension ArrayOptic {
-	public func first() -> FirstArray<Self>
+	public func first() -> ArrayFirst<Self>
 	where NewPart == Part, NewWhole == Whole {
-		FirstArray {
+		ArrayFirst {
 			self
 		}
 	}
