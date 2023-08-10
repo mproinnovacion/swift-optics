@@ -16,7 +16,7 @@ let package = Package(
 		)
 	],
 	dependencies: [
-		.package(url: "https://github.com/pointfreeco/swift-case-paths", from: "0.14.0"),
+		.package(url: "https://github.com/pointfreeco/swift-case-paths", from: "1.0.0"),
 		.package(url: "https://bitbucket.org/damonfer/swift-algebra", from: "0.1.0")
 	],
 	targets: [
